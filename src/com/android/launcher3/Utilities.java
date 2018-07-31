@@ -182,6 +182,7 @@ public final class Utilities {
     public static final String KEY_APP_DRAWER_OPACITY = "pref_app_drawer_opacity";
     public static final String KEY_FORCE_MONOCHROME_ICONS = "pref_forced_monochrome_icons";
     public static final String KEY_BLUR_DEPTH = "pref_blur_depth";
+    public static final String KEY_MINUS_ONE = "pref_enable_minus_one";
 
     /**
      * Returns true if theme is dark.

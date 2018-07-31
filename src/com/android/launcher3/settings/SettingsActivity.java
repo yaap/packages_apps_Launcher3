@@ -283,6 +283,11 @@ public class SettingsActivity extends FragmentActivity
                     mShowGoogleBarPref = preference;
                     updateIsGoogleAppEnabled();
                     return true;
+
+                case Utilities.KEY_MINUS_ONE:
+                    mShowGoogleAppPref = preference;
+                    updateIsGoogleAppEnabled();
+                    return true;
             }
 
             return true;
