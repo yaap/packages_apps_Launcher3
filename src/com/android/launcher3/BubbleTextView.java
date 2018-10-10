@@ -19,6 +19,8 @@ package com.android.launcher3;
 import static android.text.Layout.Alignment.ALIGN_NORMAL;
 
 import static com.android.launcher3.Flags.enableCursorHoverStates;
+import static com.android.launcher3.InvariantDeviceProfile.KEY_SHOW_DESKTOP_LABELS;
+import static com.android.launcher3.InvariantDeviceProfile.KEY_SHOW_DRAWER_LABELS;
 import static com.android.launcher3.graphics.PreloadIconDrawable.newPendingIcon;
 import static com.android.launcher3.icons.BitmapInfo.FLAG_NO_BADGE;
 import static com.android.launcher3.icons.BitmapInfo.FLAG_SKIP_USER_BADGE;
@@ -210,6 +212,8 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
 
     private CancellableTask mIconLoadRequest;
 
+    private boolean mShouldShowLabel;
+
     private boolean mEnableIconUpdateAnimation = false;
 
     public BubbleTextView(Context context) {
@@ -261,6 +265,9 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
             // widget_selection or shortcut_popup
             defaultIconSize = mDeviceProfile.iconSizePx;
         }
+
+        mShouldShowLabel = mDisplay != DISPLAY_TASKBAR && LauncherPrefs.getPrefs(
+                context.getApplicationContext()).getBoolean(KEY_SHOW_DESKTOP_LABELS, true);
 
 
         mIconSize = a.getDimensionPixelSize(R.styleable.BubbleTextView_iconSizeOverride,
@@ -478,13 +485,16 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
     }
 
     @UiThread
-    public void applyLabel(ItemInfo info) {
-        CharSequence label = info.title;
-        if (label != null) {
-            mLastOriginalText = label;
-            mLastModifiedText = mLastOriginalText;
-            mBreakPointsIntArray = StringMatcherUtility.getListOfBreakpoints(label, MATCHER);
-            setText(label);
+    @VisibleForTesting
+    public void applyLabel(ItemInfoWithIcon info) {
+        if (mShouldShowLabel) {
+            CharSequence label = info.title;
+            if (label != null) {
+                mLastOriginalText = label;
+                mLastModifiedText = mLastOriginalText;
+                mBreakPointsIntArray = StringMatcherUtility.getListOfBreakpoints(label, MATCHER);
+                setText(label);
+            }
         }
         if (info.contentDescription != null) {
             setContentDescription(info.isDisabled()
@@ -824,6 +834,10 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
         } else {
             super.setTextColor(getModifiedColor());
         }
+    }
+
+    public boolean shouldShowLabel() {
+        return mShouldShowLabel;
     }
 
     public boolean shouldTextBeVisible() {

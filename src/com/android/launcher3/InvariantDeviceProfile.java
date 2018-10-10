@@ -28,12 +28,9 @@ import static com.android.launcher3.util.Executors.MAIN_EXECUTOR;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-<<<<<<< HEAD
-=======
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
->>>>>>> 8d98074274 (Launcher3: Add icon and icon text size customizations)
 import android.content.res.Resources;
 import android.content.res.TypedArray;
 import android.content.res.XmlResourceParser;
@@ -100,6 +97,8 @@ public class InvariantDeviceProfile implements SafeCloseable, OnSharedPreference
 
     private static final float ICON_SIZE_DEFINED_IN_APP_DP = 48;
 
+    public static final String KEY_SHOW_DESKTOP_LABELS = "pref_desktop_show_labels";
+    public static final String KEY_SHOW_DRAWER_LABELS = "pref_drawer_show_labels";
     public static final String KEY_WORKSPACE_LOCK = "pref_workspace_lock";
     public static final String KEY_ICON_SIZE = "pref_custom_icon_size";
     public static final String KEY_FONT_SIZE = "pref_custom_font_size";
@@ -348,8 +347,13 @@ public class InvariantDeviceProfile implements SafeCloseable, OnSharedPreference
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        if (KEY_ICON_SIZE.equals(key) || KEY_FONT_SIZE.equals(key)) {
-            onConfigChanged(mContext);
+        switch (key) {
+            case KEY_ICON_SIZE:
+            case KEY_FONT_SIZE:
+            case KEY_SHOW_DESKTOP_LABELS:
+            case KEY_SHOW_DRAWER_LABELS:
+                onConfigChanged(mContext);
+                break;
         }
     }
 
