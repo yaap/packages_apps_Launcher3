@@ -20,6 +20,8 @@ import static android.text.Layout.Alignment.ALIGN_NORMAL;
 
 import static com.android.launcher3.Flags.enableCursorHoverStates;
 import static com.android.launcher3.InvariantDeviceProfile.KEY_ALLAPPS_THEMED_ICONS;
+import static com.android.launcher3.InvariantDeviceProfile.KEY_SHOW_DESKTOP_LABELS;
+import static com.android.launcher3.InvariantDeviceProfile.KEY_SHOW_DRAWER_LABELS;
 import static com.android.launcher3.graphics.PreloadIconDrawable.newPendingIcon;
 import static com.android.launcher3.icons.BitmapInfo.FLAG_NO_BADGE;
 import static com.android.launcher3.icons.BitmapInfo.FLAG_SKIP_USER_BADGE;
@@ -211,6 +213,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
     private boolean mDisableRelayout = false;
 
     private boolean mThemeAllAppsIcons;
+    private boolean mShouldShowLabel;
 
     private CancellableTask mIconLoadRequest;
 
@@ -246,27 +249,33 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
             setCompoundDrawablePadding(mDeviceProfile.iconDrawablePaddingPx);
             defaultIconSize = mDeviceProfile.iconSizePx;
             setCenterVertically(mDeviceProfile.iconCenterVertically);
+            mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DESKTOP_LABELS, true);
         } else if (mDisplay == DISPLAY_ALL_APPS || mDisplay == DISPLAY_PREDICTION_ROW
                 || mDisplay == DISPLAY_SEARCH_RESULT_APP_ROW) {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, mDeviceProfile.allAppsIconTextSizePx);
             setCompoundDrawablePadding(mDeviceProfile.allAppsIconDrawablePaddingPx);
             defaultIconSize = mDeviceProfile.allAppsIconSizePx;
             mThemeAllAppsIcons = prefs.getBoolean(KEY_ALLAPPS_THEMED_ICONS, false);
+            mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DRAWER_LABELS, true);
         } else if (mDisplay == DISPLAY_FOLDER) {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, mDeviceProfile.folderChildTextSizePx);
             setCompoundDrawablePadding(mDeviceProfile.folderChildDrawablePaddingPx);
             defaultIconSize = mDeviceProfile.folderChildIconSizePx;
+            mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DESKTOP_LABELS, true);
         } else if (mDisplay == DISPLAY_SEARCH_RESULT) {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, mDeviceProfile.allAppsIconTextSizePx);
             defaultIconSize = getResources().getDimensionPixelSize(R.dimen.search_row_icon_size);
+            mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DESKTOP_LABELS, true);
         } else if (mDisplay == DISPLAY_SEARCH_RESULT_SMALL) {
             defaultIconSize = getResources().getDimensionPixelSize(
                     R.dimen.search_row_small_icon_size);
+            mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DESKTOP_LABELS, true);
         } else if (mDisplay == DISPLAY_TASKBAR) {
             defaultIconSize = mDeviceProfile.taskbarIconSize;
         } else {
             // widget_selection or shortcut_popup
             defaultIconSize = mDeviceProfile.iconSizePx;
+            mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DESKTOP_LABELS, true);
         }
 
 
@@ -486,12 +495,14 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
 
     @UiThread
     public void applyLabel(ItemInfo info) {
-        CharSequence label = info.title;
-        if (label != null) {
-            mLastOriginalText = label;
-            mLastModifiedText = mLastOriginalText;
-            mBreakPointsIntArray = StringMatcherUtility.getListOfBreakpoints(label, MATCHER);
-            setText(label);
+        if (mShouldShowLabel) {
+            CharSequence label = info.title;
+            if (label != null) {
+                mLastOriginalText = label;
+                mLastModifiedText = mLastOriginalText;
+                mBreakPointsIntArray = StringMatcherUtility.getListOfBreakpoints(label, MATCHER);
+                setText(label);
+            }
         }
         if (info.contentDescription != null) {
             setContentDescription(info.isDisabled()
@@ -831,6 +842,10 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
         } else {
             super.setTextColor(getModifiedColor());
         }
+    }
+
+    public boolean shouldShowLabel() {
+        return mShouldShowLabel;
     }
 
     public boolean shouldTextBeVisible() {
