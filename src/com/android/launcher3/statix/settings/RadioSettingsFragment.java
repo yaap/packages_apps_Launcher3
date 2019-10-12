@@ -24,6 +24,8 @@ import androidx.preference.PreferenceFragment;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
 
+import com.android.launcher3.LauncherAppState;
+
 import java.util.List;
 
 public abstract class RadioSettingsFragment extends PreferenceFragment implements
@@ -68,6 +70,7 @@ public abstract class RadioSettingsFragment extends PreferenceFragment implement
     public void onDestroyView() {
         selectedPreference = null;
         headerPref = null;
+        LauncherAppState.getInstanceNoCreate().checkIfRestartNeeded();
         super.onDestroyView();
     }
 

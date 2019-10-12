@@ -52,6 +52,7 @@ import androidx.preference.SwitchPreference;
 import com.android.launcher3.R;
 import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.config.FlagTogglerPrefUi;
+import com.android.launcher3.LauncherAppState;
 import com.android.launcher3.uioverrides.plugins.PluginManagerWrapper;
 
 import java.util.ArrayList;
@@ -103,6 +104,7 @@ public class DeveloperOptionsFragment extends PreferenceFragmentCompat {
     public void onDestroy() {
         super.onDestroy();
         getContext().unregisterReceiver(mPluginReceiver);
+        LauncherAppState.getInstanceNoCreate().checkIfRestartNeeded();
     }
 
     private PreferenceCategory newCategory(String title) {
