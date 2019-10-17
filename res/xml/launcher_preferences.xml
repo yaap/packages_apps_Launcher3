@@ -30,6 +30,12 @@
         </intent>
     </com.android.launcher3.settings.NotificationDotsPreference>
 
+    <com.android.launcher3.settings.IconPackPreference
+        android:key="pref_iconPackPackage"
+        android:title="@string/icon_pack"
+        android:summary="@string/icon_pack_summary"
+        android:persistent="true" />
+
     <SwitchPreference
         android:defaultValue="true"
         android:key="pref_workspace_edit"
