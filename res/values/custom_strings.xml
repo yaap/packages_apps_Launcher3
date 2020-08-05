@@ -66,4 +66,10 @@
     <string name="pref_notification_gesture_summary">Swipe vertically downward on the home screen to show the notifications panel</string>
     <string name="pref_dt_gesture_title">Double tap gesture</string>
     <string name="pref_dt_gesture_summary">Double tap on empty space for power-off</string>
+
+    <!-- Icon pack -->
+    <string name="icon_pack_title">Icon pack</string>
+    <string name="icon_pack_default_label">Default</string>
+    <string name="icon_pack_add">Install more</string>
+    <string name="icon_pack_no_market">There\'s no available app store</string>
 </resources>

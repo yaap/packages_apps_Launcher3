@@ -61,6 +61,10 @@
         android:key="icon_category"
         android:title="@string/category_icon">
 
+        <Preference
+        android:key="pref_icon_pack"
+        android:title="@string/icon_pack_title" />
+
         <SwitchPreference
             android:key="pref_add_icon_to_home"
             android:title="@string/auto_add_shortcuts_label"
