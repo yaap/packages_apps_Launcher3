@@ -240,7 +240,10 @@ public class AnimatorPlaybackController implements ValueAnimator.AnimatorUpdateL
     }
 
     public float getProgressFraction() {
-        return mCurrentFraction;
+        if(mCurrentFraction == null)
+            return 0;
+        else
+            return mCurrentFraction;
     }
 
     public float getInterpolatedProgress() {
