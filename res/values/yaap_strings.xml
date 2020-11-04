@@ -43,4 +43,7 @@
     <!-- Recents -->
     <string name="action_lens">Lens</string>
 
+    <!-- Suggestions -->
+    <string name="suggestion_pref_screen_title">Suggestions</string>
+    <string name="suggestion_pref_screen_desc">For All Apps &amp; Home screen suggestions</string>
 </resources>
