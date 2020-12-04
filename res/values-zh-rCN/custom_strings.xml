@@ -25,10 +25,6 @@
     <string name="msg_minus_one_on_left">当你从主屏幕向左滑动时</string>
     <!-- Settings message explaining when the -1 screen is available on an RTL device. [CHAR LIMIT=100] -->
     <string name="msg_minus_one_on_right">当你从主屏幕向右滑动时</string>
-    <string name="pref_show_google_now_summary" translatable="false">@string/msg_minus_one_on_left</string>
-
-    <!-- SmartSpace -->
-    <string name="smartspace_preferences" translatable="false">Preferences</string>
 
     <!-- Show labels on icon -->
     <string name="desktop_show_qsb_title">一目了然</string>
@@ -38,9 +34,6 @@
     <string name="desktop_show_labels">在桌面上显示图标标签</string>
     <string name="drawer_show_labels">在抽屉中显示图标标签</string>
     <string name="show_labels_landscape">在横向模式下显示图标标签</string>
-
-    <!-- Folder titles -->
-    <string name="google_folder_title" translatable="false">Google</string>
 
     <!-- Suggestions -->
     <string name="suggestion_pref_screen_title">建议</string>

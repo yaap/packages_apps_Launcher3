@@ -145,7 +145,6 @@
     <string name="work_switch_tip" msgid="808075064383839144">"暂停工作应用及其通知"</string>
     <string name="remote_action_failed" msgid="1383965239183576790">"失败：<xliff:g id="WHAT">%1$s</xliff:g>"</string>
     <!-- Icon packs -->
-    <string name="iconPackPackageDefault" translatable="false">""</string>
     <string name="icon_pack">图标包</string>
     <string name="icon_pack_summary">选择你的图标包</string>
 </resources>
