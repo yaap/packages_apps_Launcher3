@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+* Copyright (C) 2016 The Android Open Source Project
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+-->
+
+<resources>
+
+    <!-- Settings title to show Google Now at -1 screen on launcher. [CHAR LIMIT=50] -->
+    <string name="title_show_google_app">显示谷歌应用程序</string>
+    <!-- Settings message explaining when the -1 screen is available on an LTR device. [CHAR LIMIT=100] -->
+    <string name="msg_minus_one_on_left">当你从主屏幕向左滑动时</string>
+    <!-- Settings message explaining when the -1 screen is available on an RTL device. [CHAR LIMIT=100] -->
+    <string name="msg_minus_one_on_right">当你从主屏幕向右滑动时</string>
+
+    <!-- Hide labels -->
+    <string name="desktop_show_labels">在桌面上显示图标标签</string>
+    <string name="drawer_show_labels">在抽屉中显示图标标签</string>
+    <string name="show_labels_landscape">在横向模式下显示图标标签</string>
+
+    <!-- Suggestions -->
+    <string name="suggestion_pref_screen_title">建议</string>
+    <string name="suggestion_pref_screen_desc">适用于所有应用程序和主屏幕的建议</string>
+
+    <!-- Trust apps -->
+    <string name="trust_apps_manager_name">隐藏和受保护的应用</string>
+    <string name="trust_apps_auth_manager">解锁来管理隐藏和受保护的应用程序</string>
+    <string name="trust_apps_auth_open_app">通过身份验证打开 %1$s </string>
+    <string name="trust_apps_loading">加载中\u2026</string>
+    <string name="trust_apps_no_lock_error">请设置一个安全锁屏来限制应用程序的访问</string>
+    <string name="trust_apps_help">帮助</string>
+    <string name="trust_apps_info_hidden">隐藏的应用程序和它们的小部件隐藏在抽屉里</string>
+    <string name="trust_apps_info_protected">受保护的应用程序需要身份验证才能从启动器打开</string>
+
+    <!-- Edit workspace -->
+    <string name="settings_edit_allow_title">允许编辑</string>
+    <string name="settings_edit_allow_summary_on">图标和小部件可以在主屏幕上添加、删除和移动</string>
+    <string name="settings_edit_allow_summary_off">图标和小部件不能在主屏幕上添加、删除和移动</string>
+    <string name="settings_edit_widgets_error">不可能将添加小部件到主屏幕</string>
+</resources>
