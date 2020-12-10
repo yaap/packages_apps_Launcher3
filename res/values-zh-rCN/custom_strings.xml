@@ -19,6 +19,12 @@
 
 <resources>
 
+    <!-- Settings Categories -->
+    <string name="category_home">主页</string>
+    <string name="category_icon">图标</string>
+    <string name="category_gestures">手势</string>
+    <string name="category_misc">其他</string>
+
     <!-- Settings title to show Google Now at -1 screen on launcher. [CHAR LIMIT=50] -->
     <string name="title_show_google_app">显示谷歌应用程序</string>
     <!-- Settings message explaining when the -1 screen is available on an LTR device. [CHAR LIMIT=100] -->
@@ -50,4 +56,10 @@
     <string name="settings_edit_allow_summary_on">图标和小部件可以在主屏幕上添加、删除和移动</string>
     <string name="settings_edit_allow_summary_off">图标和小部件不能在主屏幕上添加、删除和移动</string>
     <string name="settings_edit_widgets_error">不可能将添加小部件到主屏幕</string>
+
+    <!-- Gestures -->
+    <string name="pref_notification_gesture_title">向下滑动手势</string>
+    <string name="pref_notification_gesture_summary">在主屏幕上垂直向下滑动可以显示通知面板</string>
+    <string name="pref_dt_gesture_title">双击动作</string>
+    <string name="pref_dt_gesture_summary">双击空白区域，锁定屏幕</string>
 </resources>
