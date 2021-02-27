@@ -134,6 +134,7 @@ public final class Utilities {
     public static final String KEY_NOTIFICATION_GESTURE = "pref_notification_gesture";
 
     public static final String ICON_SIZE = "pref_custom_icon_size";
+    public static final String FONT_SIZE = "pref_custom_font_size";
 
     /**
      * Indicates if the device has a debug build. Should only be used to store additional info or
@@ -709,6 +710,11 @@ public final class Utilities {
     public static int getIconSizeModifier(Context context) {
         SharedPreferences prefs = getPrefs(context.getApplicationContext());
         return prefs.getInt(ICON_SIZE, 100);
+    }
+
+    public static int getFontSizeModifier(Context context) {
+        SharedPreferences prefs = getPrefs(context.getApplicationContext());
+        return prefs.getInt(FONT_SIZE, 100);
     }
 
     public static boolean isNotificationGestureEnabled(Context context) {
