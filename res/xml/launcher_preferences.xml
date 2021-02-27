@@ -15,7 +15,8 @@
 -->
 
 <androidx.preference.PreferenceScreen
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:settings="http://schemas.android.com/apk/res/com.android.launcher3">
 
     <androidx.preference.PreferenceCategory
         android:key="home_category"
@@ -65,14 +66,15 @@
             android:key="pref_icon_pack"
             android:title="@string/icon_pack_title" />
 
-        <DropDownPreference
-                android:key="pref_icon_size"
-                android:title="@string/icon_size_title"
-                android:summary="%s"
-                android:entries="@array/icon_size_names"
-                android:entryValues="@array/icon_size_values"
-                android:defaultValue="average"
-                android:persistent="true" />
+        <com.android.launcher3.settings.preferences.CustomSeekBarPreference
+            android:key="pref_custom_icon_size"
+            android:title="@string/icon_size_title"
+            android:persistent="true"
+            android:max="120"
+            settings:min="80"
+            settings:units="%"
+            settings:interval="5"
+            android:defaultValue="100" />
 
         <SwitchPreference
             android:key="pref_add_icon_to_home"

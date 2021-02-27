@@ -133,7 +133,7 @@ public final class Utilities {
     public static final String KEY_DT_GESTURE = "pref_dt_gesture";
     public static final String KEY_NOTIFICATION_GESTURE = "pref_notification_gesture";
 
-    public static final String ICON_SIZE = "pref_icon_size";
+    public static final String ICON_SIZE = "pref_custom_icon_size";
 
     /**
      * Indicates if the device has a debug build. Should only be used to store additional info or
@@ -706,30 +706,9 @@ public final class Utilities {
         return prefs.getBoolean(InvariantDeviceProfile.KEY_WORKSPACE_EDIT, true);
     }
 
-    public static float getIconSizeModifier(Context context) {
-        String saved = getPrefs(context).getString(ICON_SIZE, "average");
-        float offset;
-        switch (saved) {
-            case "extrasmall":
-                offset = 0.75F;
-                break;
-            case "small":
-                offset = 0.90F;
-                break;
-            case "average":
-                offset = 1.00F;
-                break;
-            case "large":
-                offset = 1.10F;
-                break;
-            case "extralarge":
-                offset = 1.25F;
-                break;
-            default:
-                offset = 1.00F;
-                break;
-        }
-        return offset;
+    public static int getIconSizeModifier(Context context) {
+        SharedPreferences prefs = getPrefs(context.getApplicationContext());
+        return prefs.getInt(ICON_SIZE, 100);
     }
 
     public static boolean isNotificationGestureEnabled(Context context) {
