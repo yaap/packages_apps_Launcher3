@@ -26,6 +26,8 @@ import static com.android.launcher3.util.Executors.MAIN_EXECUTOR;
 
 import android.annotation.TargetApi;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
@@ -73,7 +75,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class InvariantDeviceProfile {
+public class InvariantDeviceProfile implements OnSharedPreferenceChangeListener {
 
     public static final String TAG = "IDP";
     // We do not need any synchronization for this variable as its only written on UI thread.
@@ -91,6 +93,8 @@ public class InvariantDeviceProfile {
     private static final float ICON_SIZE_DEFINED_IN_APP_DP = 48;
 
     public static final String KEY_WORKSPACE_LOCK = "pref_workspace_lock";
+    public static final String KEY_ICON_SIZE = "pref_custom_icon_size";
+    public static final String KEY_FONT_SIZE = "pref_custom_font_size";
 
     // Constants that affects the interpolation curve between statically defined device profile
     // buckets.
@@ -207,6 +211,8 @@ public class InvariantDeviceProfile {
 
     public Point defaultWallpaperSize;
 
+    private Context mContext;
+
     private final ArrayList<OnIDPChangeListener> mChangeListeners = new ArrayList<>();
 
     @VisibleForTesting
@@ -214,6 +220,9 @@ public class InvariantDeviceProfile {
 
     @TargetApi(23)
     private InvariantDeviceProfile(Context context) {
+        mContext = context;
+        SharedPreferences prefs = LauncherPrefs.getPrefs(context);
+        prefs.registerOnSharedPreferenceChangeListener(this);
         String gridName = getCurrentGridName(context);
         String newGridName = initGrid(context, gridName);
         if (!newGridName.equals(gridName)) {
@@ -324,6 +333,13 @@ public class InvariantDeviceProfile {
             return TYPE_TABLET;
         } else {
             return TYPE_PHONE;
+        }
+    }
+
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
+        if (KEY_ICON_SIZE.equals(key) || KEY_FONT_SIZE.equals(key)) {
+            onConfigChanged(mContext);
         }
     }
 
@@ -987,6 +1003,11 @@ public class InvariantDeviceProfile {
 
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ProfileDisplayOption);
 
+            float iconSizeModifier =
+                    (float) LauncherPrefs.getPrefs(context).getInt(KEY_ICON_SIZE, 100) / 100F;
+            float fontSizeModifier =
+                    (float) LauncherPrefs.getPrefs(context).getInt(KEY_FONT_SIZE, 100) / 100F;
+
             minWidthDps = a.getFloat(R.styleable.ProfileDisplayOption_minWidthDps, 0);
             minHeightDps = a.getFloat(R.styleable.ProfileDisplayOption_minHeightDps, 0);
 
@@ -1116,7 +1137,7 @@ public class InvariantDeviceProfile {
             allAppsBorderSpaces[INDEX_TWO_PANEL_LANDSCAPE] = new PointF(x, y);
 
             iconSizes[INDEX_DEFAULT] =
-                    a.getFloat(R.styleable.ProfileDisplayOption_iconImageSize, 0);
+                    a.getFloat(R.styleable.ProfileDisplayOption_iconImageSize, 0) * iconSizeModifier;
             iconSizes[INDEX_LANDSCAPE] =
                     a.getFloat(R.styleable.ProfileDisplayOption_iconSizeLandscape,
                             iconSizes[INDEX_DEFAULT]);
@@ -1140,7 +1161,7 @@ public class InvariantDeviceProfile {
                     allAppsIconSizes[INDEX_DEFAULT]);
 
             textSizes[INDEX_DEFAULT] =
-                    a.getFloat(R.styleable.ProfileDisplayOption_iconTextSize, 0);
+                    a.getFloat(R.styleable.ProfileDisplayOption_iconTextSize, 0) * fontSizeModifier;
             textSizes[INDEX_LANDSCAPE] =
                     a.getFloat(R.styleable.ProfileDisplayOption_iconTextSizeLandscape,
                             textSizes[INDEX_DEFAULT]);
