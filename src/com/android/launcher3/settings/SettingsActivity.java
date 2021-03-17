@@ -289,7 +289,6 @@ public class SettingsActivity extends FragmentActivity
                 SettingsCache.INSTANCE.get(getContext())
                         .unregister(Settings.Global.getUriFor(DEVELOPMENT_SETTINGS_ENABLED), this);
             }
-            LauncherAppState.getInstance(this).setNeedsRestart();
         }
 
         /**

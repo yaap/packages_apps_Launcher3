@@ -1299,6 +1299,8 @@ public class Launcher extends StatefulActivity<LauncherState>
         } else {
             mOverlayManager.onActivityResumed();
         }
+                        
+        LauncherAppState.getInstance(mWorkspace.getContext()).checkIfRestartNeeded();
 
         DragView.removeAllViews(this);
         TraceHelper.INSTANCE.endSection();
