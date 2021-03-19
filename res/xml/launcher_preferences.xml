@@ -61,12 +61,6 @@
         android:key="icon_category"
         android:title="@string/category_icon">
 
-        <com.android.launcher3.settings.IconPackPreference
-            android:key="pref_iconPackPackage"
-            android:title="@string/icon_pack"
-            android:summary="@string/icon_pack_summary"
-            android:persistent="true" />
-
         <SwitchPreference
             android:key="pref_add_icon_to_home"
             android:title="@string/auto_add_shortcuts_label"
