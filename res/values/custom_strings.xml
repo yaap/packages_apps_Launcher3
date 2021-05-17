@@ -22,7 +22,6 @@
     <!-- Settings Categories -->
     <string name="category_home">HOME</string>
     <string name="category_icon">ICON</string>
-    <string name="category_gestures">GESTURES</string>
     <string name="category_misc">MISC</string>
 
     <!-- Settings title to show Google Now at -1 screen on launcher. [CHAR LIMIT=50] -->
@@ -62,8 +61,6 @@
     <string name="settings_edit_widgets_error">It\'s not possible to add widgets to the home screen</string>
 
     <!-- Gestures -->
-    <string name="pref_notification_gesture_title">Swipe down gesture</string>
-    <string name="pref_notification_gesture_summary">Swipe vertically downward on the home screen to show the notifications panel</string>
     <string name="pref_dt_gesture_title">Double tap gesture</string>
     <string name="pref_dt_gesture_summary">Double tap on empty space for power-off</string>
 

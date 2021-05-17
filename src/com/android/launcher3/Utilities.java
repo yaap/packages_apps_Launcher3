@@ -131,7 +131,6 @@ public final class Utilities {
     public static final int EDGE_NAV_BAR = 1 << 8;
 
     public static final String KEY_DT_GESTURE = "pref_dt_gesture";
-    public static final String KEY_NOTIFICATION_GESTURE = "pref_notification_gesture";
 
     public static final String ICON_SIZE = "pref_custom_icon_size";
     public static final String FONT_SIZE = "pref_custom_font_size";
@@ -715,11 +714,6 @@ public final class Utilities {
     public static int getFontSizeModifier(Context context) {
         SharedPreferences prefs = getPrefs(context.getApplicationContext());
         return prefs.getInt(FONT_SIZE, 100);
-    }
-
-    public static boolean isNotificationGestureEnabled(Context context) {
-        SharedPreferences prefs = getPrefs(context.getApplicationContext());
-        return prefs.getBoolean(KEY_NOTIFICATION_GESTURE, true);
     }
 
     public static boolean isDoubleTapGestureEnabled(Context context) {

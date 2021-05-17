@@ -114,8 +114,8 @@
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
-        android:key="gestures_category"
-        android:title="@string/category_gestures">
+        android:key="misc_category"
+        android:title="@string/category_misc">
 
         <SwitchPreference
             android:key="pref_dt_gesture"
@@ -123,19 +123,6 @@
             android:summary="@string/pref_dt_gesture_summary"
             android:defaultValue="true"
             android:persistent="true"/>
-
-        <SwitchPreference
-            android:key="pref_notification_gesture"
-            android:title="@string/pref_notification_gesture_title"
-            android:summary="@string/pref_notification_gesture_summary"
-            android:defaultValue="true"
-            android:persistent="true"/>
-
-    </androidx.preference.PreferenceCategory>
-
-    <androidx.preference.PreferenceCategory
-        android:key="misc_category"
-        android:title="@string/category_misc">
 
         <Preference
             android:key="pref_trust_apps"
