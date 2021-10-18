@@ -36,4 +36,11 @@
     <string name="pref_dt_gesture_title">Double tap to sleep</string>
     <string name="pref_dt_gesture_summary">Double tap on empty space to turn screen off</string>
 
+    <!-- Settings Categories -->
+    <string name="category_icon">Icons</string>
+    <string name="category_misc">Misc</string>
+
+    <!-- Recents -->
+    <string name="action_lens">Lens</string>
+
 </resources>
