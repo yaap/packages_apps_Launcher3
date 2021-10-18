@@ -22,4 +22,7 @@
     <!-- Folder titles -->
     <string name="google_folder_title" translatable="false">Google</string>
 
+    <!-- Recents -->
+    <string name="action_lens">Lens</string>
+
 </resources>
