@@ -46,8 +46,6 @@ import com.android.launcher3.testing.TestProtocol;
 
 import com.android.launcher3.Utilities;
 
-import app.lawnchair.gestures.SwipeDownGesture;
-
 /**
  * Helper class to handle touch on empty space in workspace and show options popup on long press
  */
@@ -76,7 +74,6 @@ public class WorkspaceTouchListener extends GestureDetector.SimpleOnGestureListe
     private final PowerManager mPm;
 
     private final GestureDetector mGestureDetector;
-    private final SwipeDownGesture mSwipeDown;
 
     public WorkspaceTouchListener(Launcher launcher, Workspace workspace) {
         mLauncher = launcher;
@@ -87,12 +84,10 @@ public class WorkspaceTouchListener extends GestureDetector.SimpleOnGestureListe
         mPm = (PowerManager) workspace.getContext().getSystemService(Context.POWER_SERVICE);
         mGestureDetector = new GestureDetector(workspace.getContext(), this);
         mDoubleTapEnabled = Utilities.isDoubleTapGestureEnabled(workspace.getContext());
-        mSwipeDown = new SwipeDownGesture(workspace.getContext());
     }
 
     @Override
     public boolean onTouch(View view, MotionEvent ev) {
-        mSwipeDown.onTouch(view, ev);
         mGestureDetector.onTouchEvent(ev);
         int action = ev.getActionMasked();
         if (action == ACTION_DOWN) {
