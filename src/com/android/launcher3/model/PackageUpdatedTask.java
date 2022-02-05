@@ -39,6 +39,7 @@ import com.android.launcher3.LauncherAppState;
 import com.android.launcher3.LauncherModel.ModelUpdateTask;
 import com.android.launcher3.LauncherSettings;
 import com.android.launcher3.LauncherSettings.Favorites;
+import com.android.launcher3.Utilities;
 import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.icons.IconCache;
 import com.android.launcher3.logging.FileLog;
@@ -464,5 +465,9 @@ public class PackageUpdatedTask implements ModelUpdateTask {
             case OP_USER_AVAILABILITY_CHANGE -> "USER_AVAILABILITY_CHANGE";
             default -> "UNKNOWN";
         };
+    }
+
+    private boolean isTargetPackage(String packageName) {
+        return packageName.equals(Utilities.GSA_PACKAGE);
     }
 }
