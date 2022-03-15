@@ -182,6 +182,7 @@ public class OverviewActionsView<T extends OverlayUICallbacks> extends FrameLayo
         mSplitButton = findViewById(R.id.action_split);
         mSplitButton.setOnClickListener(this);
         mSaveAppPairButton.setOnClickListener(this);
+        findViewById(R.id.action_clear_all).setOnClickListener(this);
 
         if (Utilities.isGSAEnabled(getContext())) {
             View lens = findViewById(R.id.action_lens);
@@ -204,7 +205,7 @@ public class OverviewActionsView<T extends OverlayUICallbacks> extends FrameLayo
         if (mCallbacks == null) {
             return;
         }
-        int id = view.getId();
+        final int id = view.getId();
         if (id == R.id.action_screenshot) {
             mCallbacks.onScreenshot();
         } else if (id == R.id.action_split) {
@@ -213,6 +214,8 @@ public class OverviewActionsView<T extends OverlayUICallbacks> extends FrameLayo
             mCallbacks.onSaveAppPair();
         } else if (id == R.id.action_lens) {
             mCallbacks.onLens();
+        } else if (id == R.id.action_clear_all) {
+            mCallbacks.onClearAllTasksRequested();
         }
     }
 
