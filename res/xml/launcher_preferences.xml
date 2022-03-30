@@ -91,6 +91,12 @@
         android:defaultValue="false"
         android:persistent="true" />
 
+    <SwitchPreference
+        android:key="pref_allapps_themed_icons"
+        android:title="@string/pref_themed_icons_title"
+        android:summary="@string/pref_themed_icons_summary"
+        android:persistent="true" />
+
     <com.android.launcher3.settings.preferences.CustomSeekBarPreference
         android:key="pref_custom_icon_size"
         android:title="@string/icon_size_title"
