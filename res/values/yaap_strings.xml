@@ -54,4 +54,6 @@
     <!-- Font size -->
     <string name="font_size_title">Font size</string>
 
+    <!-- Background opacity -->
+    <string name="background_opacity_title">App drawer opacity</string>
 </resources>
