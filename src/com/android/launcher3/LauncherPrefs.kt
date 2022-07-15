@@ -262,6 +262,8 @@ constructor(@ApplicationContext private val encryptedContext: Context) {
         @JvmField
         val ENABLE_TWOLINE_ALLAPPS_TOGGLE = backedUpItem("pref_enable_two_line_toggle", false)
         @JvmField val ALLAPPS_ICON_CUSTOMIZATION = backedUpItem("pref_allapps_icon_customization", true)
+        @JvmField val APP_DRAWER_OPACITY = backedUpItem("pref_app_drawer_opacity", 60)
+        @JvmField val RECENTS_OPACITY = backedUpItem("pref_recents_opacity", 40)
         @JvmField
         val PROMISE_ICON_IDS = nonRestorableItem(InstallSessionHelper.PROMISE_ICON_IDS, "")
         @JvmField val BLUR_DEPTH = backedUpItem("pref_blur_depth", 48)

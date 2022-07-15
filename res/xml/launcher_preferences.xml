@@ -150,21 +150,28 @@
             android:persistent="true"
             launcher:iconSpaceReserved="false" />
 
-<!--
         <com.android.launcher3.settings.preferences.CustomSeekBarPreference
             android:key="pref_app_drawer_opacity"
-            android:title="@string/background_opacity_title"
+            android:title="@string/drawer_opacity_title"
             android:persistent="true"
             android:max="100"
             android:min="0"
             settings:units="%"
-            android:defaultValue="100" />
--->
+            android:defaultValue="60" />
     </androidx.preference.PreferenceCategory>
 
     <androidx.preference.PreferenceCategory
         android:key="misc_category"
         android:title="@string/category_misc">
+
+        <com.android.launcher3.settings.preferences.CustomSeekBarPreference
+            android:key="pref_recents_opacity"
+            android:title="@string/recents_opacity_title"
+            android:persistent="true"
+            android:max="100"
+            android:min="0"
+            settings:units="%"
+            android:defaultValue="40" />
 
         <com.android.launcher3.settings.preferences.CustomSeekBarPreference
             android:key="pref_blur_depth"
