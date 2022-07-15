@@ -47,6 +47,24 @@
         android:defaultValue="true"
         android:persistent="true"/>
 
+    <com.android.launcher3.settings.preferences.CustomSeekBarPreference
+        android:key="pref_app_drawer_opacity"
+        android:title="@string/app_background_opacity_title"
+        android:persistent="true"
+        android:max="100"
+        android:min="0"
+        settings:units="%"
+        android:defaultValue="100" />
+
+    <com.android.launcher3.settings.preferences.CustomSeekBarPreference
+        android:key="pref_recents_opacity"
+        android:title="@string/recent_background_opacity_title"
+        android:persistent="true"
+        android:max="100"
+        android:min="0"
+        settings:units="%"
+        android:defaultValue="100" />
+
     <androidx.preference.PreferenceCategory
         android:key="google_category"
         android:title="@string/category_google">
