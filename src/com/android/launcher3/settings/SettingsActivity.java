@@ -152,6 +152,7 @@ public class SettingsActivity extends FragmentActivity
         switch (key) {
             case Utilities.KEY_DOCK_SEARCH:
             case Utilities.KEY_SMARTSPACE:
+            case Utilities.KEY_BLUR_DEPTH:
                 LauncherAppState.getInstanceNoCreate().setNeedsRestart();
                 break;
             default:
