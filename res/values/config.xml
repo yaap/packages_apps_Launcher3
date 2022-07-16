@@ -188,6 +188,8 @@
     <dimen name="iconSize110dp">121dp</dimen>
     <dimen name="iconSize144dp">158dp</dimen>
 
+    <dimen name="max_depth_blur_radius">23px</dimen>
+
 
     <!--  Icon size steps in dp  -->
     <integer-array name="icon_size_steps">
