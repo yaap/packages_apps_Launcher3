@@ -166,8 +166,10 @@ android_library {
         "com.google.android.material_material",
         "iconloader_base",
         "view_capture",
+        "animationlib",
         "libGoogleFeed",
-        "animationlib"
+        "bcsmartspace-google",
+        "SystemUIPluginLib"
     ],
     manifest: "AndroidManifest-common.xml",
     sdk_version: "current",
