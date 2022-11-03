@@ -53,10 +53,13 @@
     <!-- Settings Categories -->
     <string name="category_icon">Icons</string>
     <string name="category_misc">Misc</string>
+    <string name="category_recents">Recents</string>
     <string name="category_google">Google</string>
 
-    <!-- Recents -->
+    <!-- Recents Lens -->
     <string name="action_lens">Lens</string>
+    <string name="show_lens_button_title">Show lens button</string>
+    <string name="show_lens_button_summary">Replace screenshot button with Google Lens button, if available</string>
 
     <!-- Hotseat searchbar -->
     <string name="label_search">Search</string>
