@@ -25,6 +25,7 @@ import static com.android.launcher3.InvariantDeviceProfile.INDEX_TWO_PANEL_LANDS
 import static com.android.launcher3.InvariantDeviceProfile.INDEX_TWO_PANEL_PORTRAIT;
 import static com.android.launcher3.Utilities.dpiFromPx;
 import static com.android.launcher3.Utilities.pxFromSp;
+import static com.android.launcher3.Utilities.showQSB;
 import static com.android.launcher3.config.FeatureFlags.ENABLE_MULTI_DISPLAY_PARTIAL_DEPTH;
 import static com.android.launcher3.folder.ClippedFolderIconLayoutRule.ICON_OVERLAP_FACTOR;
 import static com.android.launcher3.icons.GraphicsUtils.getShapePath;
@@ -548,7 +549,7 @@ public class DeviceProfile {
         boolean canQsbInline = (isTwoPanels ? inv.inlineQsb[INDEX_TWO_PANEL_PORTRAIT]
                 || inv.inlineQsb[INDEX_TWO_PANEL_LANDSCAPE]
                 : inv.inlineQsb[INDEX_DEFAULT] || inv.inlineQsb[INDEX_LANDSCAPE])
-                && hotseatQsbHeight > 0;
+                && hotseatQsbHeight > 0 && showQSB(context);
         isQsbInline = inv.inlineQsb[mTypeIndex] && canQsbInline;
 
         areNavButtonsInline = isTaskbarPresent && !isGestureMode;
@@ -586,8 +587,10 @@ public class DeviceProfile {
             mResponsiveWorkspaceCellSpec = workspaceCellSpecs.getCalculatedSpec(
                     responsiveAspectRatio, heightPx);
         } else {
-            hotseatQsbSpace = pxFromDp(inv.hotseatQsbSpace[mTypeIndex], mMetrics);
-            hotseatBarBottomSpace = pxFromDp(inv.hotseatBarBottomSpace[mTypeIndex], mMetrics);
+            hotseatQsbSpace = showQSB(context)
+                    ? pxFromDp(inv.hotseatQsbSpace[mTypeIndex], mMetrics) : 0;
+            hotseatBarBottomSpace = showQSB(context)
+                    ? pxFromDp(inv.hotseatBarBottomSpace[mTypeIndex], mMetrics) : 0;
             mHotseatBarEdgePaddingPx =
                     isVerticalBarLayout() ? workspacePageIndicatorHeight : 0;
             mHotseatBarWorkspaceSpacePx =
@@ -596,7 +599,7 @@ public class DeviceProfile {
 
         if (!isVerticalBarLayout()) {
             // Have a little space between the inset and the QSB
-            if (mInsets.bottom + minQsbMargin > hotseatBarBottomSpace) {
+            if (showQSB(context) && mInsets.bottom + minQsbMargin > hotseatBarBottomSpace) {
                 int availableSpace = hotseatQsbSpace - (mInsets.bottom - hotseatBarBottomSpace);
 
                 // Only change the spaces if there is space
