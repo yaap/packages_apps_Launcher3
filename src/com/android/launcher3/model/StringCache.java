@@ -199,7 +199,7 @@ public class StringCache {
                 WORK_PROFILE_PAUSED_DESCRIPTION,
                 () -> getDefaultWorkProfilePausedDescriptionString(context));
         workProfilePauseButton = getEnterpriseString(
-                context, WORK_PROFILE_PAUSE_BUTTON, R.string.work_apps_pause_btn_text);
+                context, WORK_PROFILE_PAUSE_BUTTON, R.string.work_apps_pause_btn_text_calyx);
         workProfileEnableButton = getEnterpriseString(
                 context, WORK_PROFILE_ENABLE_BUTTON, R.string.work_apps_enable_btn_text);
         allAppsWorkTab = getEnterpriseString(
