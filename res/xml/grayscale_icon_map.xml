@@ -395,6 +395,7 @@
     <icon drawable="@drawable/themed_icon_firefox" name="Firefox Focus" package="org.mozilla.focus" />
     <icon drawable="@drawable/themed_icon_firefox" name="Firefox for Android Beta" package="org.mozilla.firefox" />
     <icon drawable="@drawable/themed_icon_firefox" name="Firefox for Android Beta" package="org.mozilla.firefox_beta" />
+    <icon drawable="@drawable/themed_icon_mull" package="us.spotco.fennec_dos" name="Mull" />
     <icon drawable="@drawable/themed_icon_fitbit" name="MISSING" package="com.fitbit.FitbitMobile" />
     <icon drawable="@drawable/themed_icon_fiverr" name="Fiverr" package="com.fiverr.fiverr" />
     <icon drawable="@drawable/themed_icon_flamingo" name="MISSING" package="com.samrustan.twitter" />
