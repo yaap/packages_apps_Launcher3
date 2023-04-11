@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+* Copyright (C) 2022 Paranoid Android
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+-->
+
+<resources>
+
+    <!-- Folder titles -->
+    <string name="google_folder_title" translatable="false">Google</string>
+
+    <!-- Settings title to show Google Now at -1 screen on launcher. [CHAR LIMIT=50] -->
+    <string name="title_show_google_feed">Свайп для доступу до Google feed</string>
+
+    <!-- Settings message explaining when the -1 screen is available on an LTR device. [CHAR LIMIT=100] -->
+    <string name="msg_minus_one_on_left">Свайпнути вліво на головному екрані, щоб відкрити Google feed</string>
+    <string name="pref_show_google_now_summary" translatable="false">@string/msg_minus_one_on_left</string>
+
+    <!-- Settings message explaining when the -1 screen is available on an RTL device. [CHAR LIMIT=100] -->
+    <string name="msg_minus_one_on_right">Свайпнути вправо на головному екрані, щоб відкрити Google feed</string>
+
+    <!-- Gestures -->
+    <string name="pref_dt_gesture_title">Подвійне натискання для сну</string>
+    <string name="pref_dt_gesture_summary">Подвійне натискання на пустому місці для вимкнення екрану</string>
+
+    <!-- Suggestions -->
+    <string name="suggestion_pref_screen_title">Рекомендації</string>
+    <string name="suggestion_pref_screen_desc">Рекомендації в списку додатків і на головному екрані</string>
+
+    <!-- Edit workspace -->
+    <string name="settings_lock_layout_title">Заблокувати головний екран</string>
+    <string name="settings_lock_layout_summary_on">Іконки та віджети не можуть бути додані, прибрані або переміщені на головному екрані</string>
+    <string name="settings_lock_layout_summary_off">Іконки та віджети можуть бути додані, прибрані або переміщені на головному екрані</string>
+    <string name="settings_edit_widgets_error">Неможливо додати віджет на головний екран</string>
+
+    <!-- Hide labels -->
+    <string name="desktop_show_labels">Показувати назви під іконками на головному екрані</string>
+    <string name="drawer_show_labels">Показувати назви під іконками у списку додатків</string>
+
+    <!-- Settings Categories -->
+    <string name="category_icon">Іконки</string>
+    <string name="category_misc">Інше</string>
+    <string name="category_google">Google</string>
+
+    <!-- Recents -->
+    <string name="action_lens">Lens</string>
+
+    <!-- Hotseat searchbar -->
+    <string name="label_search">Пошук</string>
+    <string name="label_lens">Google Lens</string>
+    <string name="label_voice_search">Голосовий пошук</string>
+    <string name="dock_search_title">Пошуковий рядок Google</string>
+    <string name="dock_search_summary">Показувати пошукову панель у нижній частині головного екрана</string>
+
+    <!-- Smartspace -->
+    <string name="smartspace_pref_title">At a Glance</string>
+    <string name="smartspace_pref_summary">Показувати віджет Google у верхній частині головного екрану</string>
+
+    <!-- All apps themed icons -->
+    <string name="pref_themed_icons_title">Перефарбовувати всі іконки</string>
+    <string name="pref_themed_icons_summary">Увімкніть, щоб стилізовані іконки були і в списку додатків</string>
+
+    <!-- Show top shadow -->
+    <string name="show_top_shadow">Відображати тінь від статусбару</string>
+
+</resources>
