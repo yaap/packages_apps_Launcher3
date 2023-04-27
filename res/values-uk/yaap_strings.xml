@@ -17,17 +17,12 @@
 */
 -->
 
-<resources>
-
-    <!-- Folder titles -->
-    <string name="google_folder_title" translatable="false">Google</string>
-
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Settings title to show Google Now at -1 screen on launcher. [CHAR LIMIT=50] -->
     <string name="title_show_google_feed">Свайп для доступу до Google feed</string>
 
     <!-- Settings message explaining when the -1 screen is available on an LTR device. [CHAR LIMIT=100] -->
     <string name="msg_minus_one_on_left">Свайпнути вліво на головному екрані, щоб відкрити Google feed</string>
-    <string name="pref_show_google_now_summary" translatable="false">@string/msg_minus_one_on_left</string>
 
     <!-- Settings message explaining when the -1 screen is available on an RTL device. [CHAR LIMIT=100] -->
     <string name="msg_minus_one_on_right">Свайпнути вправо на головному екрані, щоб відкрити Google feed</string>
@@ -75,5 +70,36 @@
 
     <!-- Show top shadow -->
     <string name="show_top_shadow">Відображати тінь від статусбару</string>
+	
+    <!-- AppInfo -->
+    <string name="app_info_icon_pack">Іконпак</string>
+    <string name="app_info_icon_pack_none">Нічого</string>
+    <string name="app_info_source">Джерело</string>
+    <string name="app_info_source_system">Система</string>
+    <string name="app_info_last_update">Останнє оновлення</string>
+    <string name="app_info_version">Версія</string>
+    <string name="app_info_more">Більше</string>
+	
+    <!-- Icon pack -->
+    <string name="icon_pack_title">Іконпак</string>
+    <string name="icon_pack_default_label">За замовчуванням</string>
+    <string name="icon_pack_add">Додати</string>
+    <string name="icon_pack_no_market">Немає доступного магазину програм</string>
+
+    <!-- Icon size -->
+    <string name="icon_size_title">Розмір іконок</string>
+
+    <!-- Font size -->
+    <string name="font_size_title">Розмір шрифту</string>
+
+    <!-- Custom seekbar -->
+    <string name="custom_seekbar_value">Значення: <xliff:g id="v">%s</xliff:g></string>
+    <string name="custom_seekbar_default_value">за замовчуванням</string>
+    <string name="custom_seekbar_default_value_to_set">Значення за замовчуванням: <xliff:g id="v">%s</xliff:g>\nТривале натискання, щоб встановити</string>
+    <string name="custom_seekbar_default_value_is_set">Значення за замовчуванням встановлено</string>
+
+    <!-- Background opacity -->
+    <string name="app_background_opacity_title">Непрозорість панелі програм</string>
+    <string name="recent_background_opacity_title">Непрозорість недавніх програм</string>
 
 </resources>
