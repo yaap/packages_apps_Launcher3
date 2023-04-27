@@ -76,8 +76,7 @@
     <!-- Show top shadow -->
     <string name="show_top_shadow">Відображати тінь від статусбару</string>
 	
-	<!-- AppInfo -->
-    <string name="app_info_version_value" translatable="false">%1$s (%2$d)</string>
+    <!-- AppInfo -->
     <string name="app_info_icon_pack">Іконпак</string>
     <string name="app_info_icon_pack_none">Нічого</string>
     <string name="app_info_source">Джерело</string>
@@ -86,7 +85,7 @@
     <string name="app_info_version">Версія</string>
     <string name="app_info_more">Більше</string>
 	
-	<!-- Icon pack -->
+    <!-- Icon pack -->
     <string name="icon_pack_title">Іконпак</string>
     <string name="icon_pack_default_label">За замовчуванням</string>
     <string name="icon_pack_add">Додати</string>
