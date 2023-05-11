@@ -73,6 +73,10 @@
     <string name="pref_themed_icons_title">All apps themed icons</string>
     <string name="pref_themed_icons_summary">Toggle to switch between homescreen dock and all apps themed icons</string>
 
+    <!-- Force monochrome icons -->
+    <string name="pref_force_monochrome_themed_icons_title">Force themed icons</string>
+    <string name="pref_force_monochrome_themed_icons_summary">Generate themed icon for apps that do not have one (requires re-toggling of themed icons)</string>
+
     <!-- Show top shadow -->
     <string name="show_top_shadow">Show top shadow</string>
 
