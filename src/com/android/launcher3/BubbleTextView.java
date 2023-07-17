@@ -20,7 +20,6 @@ import static com.android.launcher3.InvariantDeviceProfile.KEY_SHOW_DESKTOP_LABE
 import static com.android.launcher3.InvariantDeviceProfile.KEY_SHOW_DRAWER_LABELS;
 import static com.android.launcher3.config.FeatureFlags.ENABLE_DOWNLOAD_APP_UX_V2;
 import static com.android.launcher3.config.FeatureFlags.ENABLE_ICON_LABEL_AUTO_SCALING;
-import static com.android.launcher3.InvariantDeviceProfile.KEY_ALLAPPS_THEMED_ICONS;
 import static com.android.launcher3.graphics.PreloadIconDrawable.newPendingIcon;
 import static com.android.launcher3.icons.BitmapInfo.FLAG_NO_BADGE;
 import static com.android.launcher3.icons.BitmapInfo.FLAG_THEMED;
@@ -186,7 +185,6 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
     private boolean mDisableRelayout = false;
 
     private boolean mShouldShowLabel;
-    private boolean mThemeAllAppsIcons;
 
     private HandlerRunnable mIconLoadRequest;
 
@@ -221,36 +219,30 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
             defaultIconSize = grid.iconSizePx;
             setCenterVertically(grid.isScalableGrid);
             mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DESKTOP_LABELS, true);
-            mThemeAllAppsIcons = prefs.getBoolean(KEY_ALLAPPS_THEMED_ICONS, false);
         } else if (mDisplay == DISPLAY_ALL_APPS) {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, grid.allAppsIconTextSizePx);
             setCompoundDrawablePadding(grid.allAppsIconDrawablePaddingPx);
             defaultIconSize = grid.allAppsIconSizePx;
             mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DRAWER_LABELS, true);
-            mThemeAllAppsIcons = prefs.getBoolean(KEY_ALLAPPS_THEMED_ICONS, false);
         } else if (mDisplay == DISPLAY_FOLDER) {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, grid.folderChildTextSizePx);
             setCompoundDrawablePadding(grid.folderChildDrawablePaddingPx);
             defaultIconSize = grid.folderChildIconSizePx;
             mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DESKTOP_LABELS, true);
-            mThemeAllAppsIcons = prefs.getBoolean(KEY_ALLAPPS_THEMED_ICONS, false);
         } else if (mDisplay == DISPLAY_SEARCH_RESULT) {
             setTextSize(TypedValue.COMPLEX_UNIT_PX, grid.allAppsIconTextSizePx);
             defaultIconSize = getResources().getDimensionPixelSize(R.dimen.search_row_icon_size);
             mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DESKTOP_LABELS, true);
-            mThemeAllAppsIcons = prefs.getBoolean(KEY_ALLAPPS_THEMED_ICONS, false);
         } else if (mDisplay == DISPLAY_SEARCH_RESULT_SMALL) {
             defaultIconSize = getResources().getDimensionPixelSize(
                     R.dimen.search_row_small_icon_size);
             mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DESKTOP_LABELS, true);
-            mThemeAllAppsIcons = prefs.getBoolean(KEY_ALLAPPS_THEMED_ICONS, false);
         } else if (mDisplay == DISPLAY_TASKBAR) {
             defaultIconSize = grid.iconSizePx;
         } else {
             // widget_selection or shortcut_popup
             defaultIconSize = grid.iconSizePx;
             mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DESKTOP_LABELS, true);
-            mThemeAllAppsIcons = prefs.getBoolean(KEY_ALLAPPS_THEMED_ICONS, false);
         }
 
         mCenterVertically = a.getBoolean(R.styleable.BubbleTextView_centerVertically, false);
@@ -403,33 +395,18 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
 
     @UiThread
     protected void applyIconAndLabel(ItemInfoWithIcon info) {
-        if(mThemeAllAppsIcons) {
-            boolean useTheme = mDisplay == DISPLAY_WORKSPACE || mDisplay == DISPLAY_FOLDER || mDisplay == DISPLAY_ALL_APPS
-                    || mDisplay == DISPLAY_TASKBAR;
-            int flags = shouldUseTheme() ? FLAG_THEMED : 0;
-            if (mHideBadge) {
+        boolean useTheme = mDisplay == DISPLAY_WORKSPACE || mDisplay == DISPLAY_FOLDER
+                || mDisplay == DISPLAY_TASKBAR;
+        int flags = shouldUseTheme() ? FLAG_THEMED : 0;
+        if (mHideBadge) {
             flags |= FLAG_NO_BADGE;
         }
-            FastBitmapDrawable iconDrawable = info.newIcon(getContext(), flags);
-            mDotParams.appColor = iconDrawable.getIconColor();
-            mDotParams.dotColor = getContext().getResources()
-                    .getColor(android.R.color.system_accent3_200, getContext().getTheme());
-            setIcon(iconDrawable);
-            applyLabel(info);
-        } else {
-            boolean useTheme = mDisplay == DISPLAY_WORKSPACE || mDisplay == DISPLAY_FOLDER
-                    || mDisplay == DISPLAY_TASKBAR;
-            int flags = useTheme ? FLAG_THEMED : 0;
-            if (mHideBadge) {
-            flags |= FLAG_NO_BADGE;
-        }
-            FastBitmapDrawable iconDrawable = info.newIcon(getContext(), flags);
-            mDotParams.appColor = iconDrawable.getIconColor();
-            mDotParams.dotColor = getContext().getResources()
-                    .getColor(android.R.color.system_accent3_200, getContext().getTheme());
-            setIcon(iconDrawable);
-            applyLabel(info);
-        }
+        FastBitmapDrawable iconDrawable = info.newIcon(getContext(), flags);
+        mDotParams.appColor = iconDrawable.getIconColor();
+        mDotParams.dotColor = getContext().getResources()
+                .getColor(android.R.color.system_accent3_200, getContext().getTheme());
+        setIcon(iconDrawable);
+        applyLabel(info);
     }
 
     protected boolean shouldUseTheme() {

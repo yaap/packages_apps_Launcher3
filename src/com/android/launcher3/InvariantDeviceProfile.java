@@ -98,7 +98,6 @@ public class InvariantDeviceProfile implements OnSharedPreferenceChangeListener 
     public static final String KEY_SHOW_DESKTOP_LABELS = "pref_desktop_show_labels";
     public static final String KEY_SHOW_DRAWER_LABELS = "pref_drawer_show_labels";
     public static final String KEY_WORKSPACE_LOCK = "pref_workspace_lock";
-    public static final String KEY_ALLAPPS_THEMED_ICONS = "pref_allapps_themed_icons";
     public static final String KEY_ICON_SIZE = "pref_custom_icon_size";
     public static final String KEY_FONT_SIZE = "pref_custom_font_size";
 
@@ -332,7 +331,7 @@ public class InvariantDeviceProfile implements OnSharedPreferenceChangeListener 
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-        if (KEY_SHOW_DESKTOP_LABELS.equals(key) || KEY_SHOW_DRAWER_LABELS.equals(key) || KEY_ALLAPPS_THEMED_ICONS.equals(key) || IconDatabase.KEY_ICON_PACK.equals(key) || KEY_ICON_SIZE.equals(key) || KEY_FONT_SIZE.equals(key)) {
+        if (KEY_SHOW_DESKTOP_LABELS.equals(key) || KEY_SHOW_DRAWER_LABELS.equals(key) || IconDatabase.KEY_ICON_PACK.equals(key) || KEY_ICON_SIZE.equals(key) || KEY_FONT_SIZE.equals(key)) {
             onConfigChanged(mContext);
         }
     }
