@@ -96,6 +96,10 @@
         android:key="icon_category"
         android:title="@string/category_icon">
 
+        <Preference
+            android:key="pref_icon_pack"
+            android:title="@string/app_info_icon_pack" />
+
         <SwitchPreference
             android:key="pref_allapps_themed_icons"
             android:title="@string/pref_themed_icons_title"
@@ -110,10 +114,6 @@
             android:defaultValue="false"
             android:persistent="true" />
   
-        <Preference
-            android:key="pref_icon_pack"
-            android:title="@string/app_info_icon_pack" />
-
         <!--
         LAUNCHER_ADD_NEW_APPS_TO_HOME_SCREEN_ENABLED(613)
         LAUNCHER_ADD_NEW_APPS_TO_HOME_SCREEN_DISABLED(614)
