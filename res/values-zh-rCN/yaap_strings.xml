@@ -74,7 +74,7 @@
 
     <!-- Force monochrome icons -->
     <string name="pref_force_monochrome_themed_icons_title">带主题的图标</string>
-    <string name="pref_force_monochrome_themed_icons_summary">为没有主题图标的应用程序生成主题图标（需重新开启带主题的图标）</string>
+    <string name="pref_force_monochrome_themed_icons_summary">为没有主题图标的应用生成主题图标（需重新开启带主题的图标开关）</string>
 
     <!-- Show top shadow -->
     <string name="show_top_shadow">顶部阴影</string>
