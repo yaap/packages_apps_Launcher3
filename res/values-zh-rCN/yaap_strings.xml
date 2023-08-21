@@ -49,10 +49,13 @@
     <!-- Settings Categories -->
     <string name="category_icon">图标</string>
     <string name="category_misc">杂项</string>
+    <string name="category_recents">最近项目</string>
     <string name="category_google">Google</string>
 
-    <!-- Recents -->
+    <!-- Recents Lens -->
     <string name="action_lens">智能镜头</string>
+    <string name="show_lens_button_title">显示智能镜头</string>
+    <string name="show_lens_button_summary">当可用时，将屏幕截图替换为智能镜头按钮</string>
 
     <!-- Hotseat searchbar -->
     <string name="label_search">搜索</string>
@@ -68,6 +71,10 @@
     <!-- All apps themed icons -->
     <string name="pref_themed_icons_title">抽屉主题图标</string>
     <string name="pref_themed_icons_summary">为抽屉所有应用图标启用带主题的图标</string>
+
+    <!-- Force monochrome icons -->
+    <string name="pref_force_monochrome_themed_icons_title">带主题的图标</string>
+    <string name="pref_force_monochrome_themed_icons_summary">为没有主题图标的应用生成主题图标（需重新开启带主题的图标开关）</string>
 
     <!-- Show top shadow -->
     <string name="show_top_shadow">顶部阴影</string>
