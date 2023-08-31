@@ -452,9 +452,6 @@
     <dimen name="bottom_sheet_handle_margin">16dp</dimen>
     <dimen name="bottom_sheet_handle_corner_radius">2dp</dimen>
 
-    <!-- Dark theme icon's -->
-    <dimen name="theme_icon_size">24dp</dimen>
-
     <!-- Overview scrolling scale animation -->
     <dimen name="overview_scroll_scale">0.9</dimen>
 
