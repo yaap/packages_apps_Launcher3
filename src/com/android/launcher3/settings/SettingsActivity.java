@@ -56,6 +56,7 @@ import com.android.launcher3.R;
 import com.android.launcher3.Utilities;
 import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.model.WidgetsModel;
+import com.android.launcher3.qsb.QsbContainerView;
 import com.android.launcher3.states.RotationHelper;
 import com.android.launcher3.uioverrides.flags.DeveloperOptionsFragment;
 import com.android.launcher3.uioverrides.plugins.PluginManagerWrapper;
@@ -346,7 +347,7 @@ public class SettingsActivity extends FragmentActivity
             }
 
             if (mShowGoogleBarPref != null) {
-                mShowGoogleBarPref.setEnabled(Utilities.isGSAEnabled(getContext()));
+                mShowGoogleBarPref.setEnabled(QsbContainerView.getSearchWidgetPackageName(getContext()) != null);
             }
         }
 
