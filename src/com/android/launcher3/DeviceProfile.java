@@ -550,7 +550,8 @@ public class DeviceProfile {
                 || inv.inlineQsb[INDEX_TWO_PANEL_LANDSCAPE]
                 : inv.inlineQsb[INDEX_DEFAULT] || inv.inlineQsb[INDEX_LANDSCAPE])
                 && hotseatQsbHeight > 0 && showQsb;
-        isQsbInline = isScalableGrid && inv.inlineQsb[mTypeIndex] && canQsbInline;
+        isQsbInline = (mIsScalableGrid || (isTaskbarPresent && !isLandscape))
+                && inv.inlineQsb[mTypeIndex] && canQsbInline;
 
         areNavButtonsInline = isTaskbarPresent && !isGestureMode;
         numShownHotseatIcons =
@@ -894,7 +895,7 @@ public class DeviceProfile {
      * necessary.
      */
     public void recalculateHotseatWidthAndBorderSpace() {
-        if (!mIsScalableGrid) return;
+        if (!(mIsScalableGrid || (isTaskbarPresent && !isLandscape))) return;
 
         updateHotseatWidthAndBorderSpace(inv.numColumns);
         int numWorkspaceColumns = getPanelCount() * inv.numColumns;
