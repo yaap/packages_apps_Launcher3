@@ -177,11 +177,7 @@ public class TaskbarView extends FrameLayout implements FolderIcon.FolderIconPar
             mTaskbarDivider.setPadding(mItemPadding, mItemPadding, mItemPadding, mItemPadding);
         }
 
-        if (Utilities.showQSB(context)) {
-            mQsb = LayoutInflater.from(context).inflate(R.layout.search_container_hotseat, this, false);
-        } else {
-            mQsb = LayoutInflater.from(context).inflate(R.layout.empty_view, this, false);
-        }
+        mQsb = LayoutInflater.from(context).inflate(R.layout.search_container_hotseat, this, false);
 
         // Default long press (touch) delay = 400ms
         mAllAppsButtonTouchDelayMs = ViewConfiguration.getLongPressTimeout();
