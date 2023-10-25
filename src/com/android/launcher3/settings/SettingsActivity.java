@@ -282,14 +282,6 @@ public class SettingsActivity extends FragmentActivity
             return true;
         }
 
-        public static boolean isGSAEnabled(Context context) {
-            try {
-                return context.getPackageManager().getApplicationInfo(GSA_PACKAGE, 0).enabled;
-            } catch (PackageManager.NameNotFoundException e) {
-                return false;
-            }
-        }
-
         private void updateIsGoogleAppEnabled() {
             if (mShowGoogleBarPref != null) {
                 mShowGoogleBarPref.setEnabled(Utilities.isGSAEnabled(getContext()));
