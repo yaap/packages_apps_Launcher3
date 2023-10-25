@@ -893,13 +893,8 @@ public final class Utilities {
     }
 
     public static boolean isGSAEnabled(Context context) {
-        PackageManager pm = context.getPackageManager();
-        if (pm == null) {
-            return false;
-        }
         try {
-            ApplicationInfo ai = pm.getApplicationInfo(GSA_PACKAGE, 0);
-            return ai.enabled && ai.isProduct();
+            return context.getPackageManager().getApplicationInfo(GSA_PACKAGE, 0).enabled;
         } catch (PackageManager.NameNotFoundException e) {
             return false;
         }
