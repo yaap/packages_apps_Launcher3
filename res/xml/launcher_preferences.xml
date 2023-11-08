@@ -74,7 +74,7 @@
         android:key="pref_smartspace"
         android:title="@string/smartspace_pref_title"
         android:summary="@string/smartspace_pref_summary"
-        android:defaultValue="true" />
+        android:defaultValue="false" />
 
     <SwitchPreference
         android:key="pref_dt_gesture"
