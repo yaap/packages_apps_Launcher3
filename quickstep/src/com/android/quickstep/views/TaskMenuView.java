@@ -16,6 +16,8 @@
 
 package com.android.quickstep.views;
 
+import static android.view.Surface.ROTATION_0;
+import static android.view.ViewGroup.LayoutParams.WRAP_CONTENT;
 import static com.android.app.animation.Interpolators.EMPHASIZED;
 import static com.android.launcher3.Flags.enableOverviewIconMenu;
 import static com.android.launcher3.util.MultiPropertyFactory.MULTI_PROPERTY_VALUE;
@@ -36,8 +38,10 @@ import android.util.AttributeSet;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.ViewOutlineProvider;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -50,9 +54,10 @@ import com.android.launcher3.anim.AnimationSuccessListener;
 import com.android.launcher3.anim.RoundedRectRevealOutlineProvider;
 import com.android.launcher3.popup.SystemShortcut;
 import com.android.launcher3.views.BaseDragLayer;
+import com.android.quickstep.orientation.RecentsPagedOrientationHandler;
 import com.android.quickstep.TaskOverlayFactory;
 import com.android.quickstep.TaskUtils;
-import com.android.quickstep.orientation.RecentsPagedOrientationHandler;
+import com.android.quickstep.util.RecentsOrientedState;
 import com.android.quickstep.util.TaskCornerRadius;
 import com.android.quickstep.views.TaskView.TaskContainer;
 
@@ -79,6 +84,8 @@ public class TaskMenuView extends AbstractFloatingView {
     private float mMenuTranslationYBeforeOpen;
     private float mMenuTranslationXBeforeOpen;
 
+    private ScrollView mOptionScrollView;
+
     public TaskMenuView(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
     }
@@ -95,6 +102,7 @@ public class TaskMenuView extends AbstractFloatingView {
         super.onFinishInflate();
         mTaskName = findViewById(R.id.task_name);
         mOptionLayout = findViewById(R.id.menu_option_layout);
+        mOptionScrollView = findViewById(R.id.menu_options_scroll_view);
     }
 
     @Override
@@ -249,6 +257,17 @@ public class TaskMenuView extends AbstractFloatingView {
         setLayoutParams(params);
         setScaleX(mTaskView.getScaleX());
         setScaleY(mTaskView.getScaleY());
+
+        // Set task menu scroll view height
+        ViewGroup.LayoutParams layoutParams = mOptionScrollView.getLayoutParams();
+        RecentsOrientedState orientedState = recentsView.getPagedViewOrientedState();
+        boolean isInLandscape = orientedState.getTouchRotation() != ROTATION_0;
+        if (isInLandscape) {
+            layoutParams.height = getContext().getResources().getDimensionPixelSize(R.dimen.task_menu_option_height_landscape);
+        } else {
+            layoutParams.height = LayoutParams.WRAP_CONTENT;
+        }
+        mOptionScrollView.setLayoutParams(layoutParams);
 
         // Set divider spacing
         ShapeDrawable divider = new ShapeDrawable(new RectShape());
