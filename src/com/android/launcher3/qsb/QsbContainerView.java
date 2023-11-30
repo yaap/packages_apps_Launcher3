@@ -82,6 +82,14 @@ public class QsbContainerView extends FrameLayout implements SharedPreferences.O
             }
             if (providerPkg == null && Utilities.isGSAEnabled(context)) {
                 providerPkg = Utilities.GSA_PACKAGE;
+            } else {
+                String[] fallbacks = context.getResources().getStringArray(R.array.qsb_search_fallback);
+                for (int i = 0; i < fallbacks.length; i++) {
+                    if (Utilities.isPackageEnabled(fallbacks[i], context)) {
+                        providerPkg = fallbacks[i];
+                        break;
+                    }
+                }
             }
         }
         return providerPkg;

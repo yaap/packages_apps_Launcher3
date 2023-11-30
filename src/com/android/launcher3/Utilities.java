@@ -830,6 +830,14 @@ public final class Utilities {
         return !prefs.getBoolean(InvariantDeviceProfile.KEY_WORKSPACE_LOCK, false);
     }
 
+    public static boolean isPackageEnabled(String pkg, Context context) {
+        try {
+            return context.getPackageManager().getApplicationInfo(pkg, 0).enabled;
+        } catch (PackageManager.NameNotFoundException e) {
+            return false;
+        }
+    }
+
     public static boolean isGSAEnabled(Context context) {
         try {
             return (context.getPackageManager().getApplicationInfo(GSA_PACKAGE, 0).enabled &&
@@ -850,7 +858,7 @@ public final class Utilities {
     }
 
     public static boolean showQSB(Context context) {
-        return isGSAEnabled(context) && isQSBEnabled(context);
+        return isQSBEnabled(context);
     }
 
     private static boolean isQSBEnabled(Context context) {
