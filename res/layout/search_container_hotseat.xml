@@ -22,4 +22,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/qsb_widget_height"
         android:contentDescription="@string/label_search"
-        android:padding="0dp"/>
+        android:paddingLeft="14dp"
+        android:paddingRight="14dp"
+        android:paddingBottom="0dp"
+        android:paddingTop="0dp"/>
