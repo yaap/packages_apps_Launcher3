@@ -28,12 +28,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Icon;
-import android.os.Binder;
 import android.os.PersistableBundle;
 import android.os.Process;
 import android.os.UserManager;
 import android.text.TextUtils;
-import android.util.Log;
 
 import com.android.launcher3.LauncherAppState;
 import com.android.launcher3.LauncherSettings.Favorites;
@@ -50,6 +48,13 @@ import com.android.launcher3.util.IntSet;
  * A set of utility methods for Launcher DB used for DB updates and migration.
  */
 public class LauncherDbUtils {
+
+    /**
+     * Returns a string which can be used as a where clause for DB query to match the given itemId
+     */
+    public static String itemIdMatch(int itemId) {
+        return "_id=" + itemId;
+    }
 
     public static IntArray queryIntArray(boolean distinct, SQLiteDatabase db, String tableName,
             String columnName, String selection, String groupBy, String orderBy) {
@@ -110,52 +115,49 @@ public class LauncherDbUtils {
                 deletedShortcuts.add(lc.id);
                 continue;
             }
-            ContentValues update;
-            try {
-                Intent intent = lc.parseIntent();
-                if (intent == null) {
-                    deletedShortcuts.add(lc.id);
-                    continue;
-                }
-
-                // Make sure the target intent can be launched without any permissions. Otherwise remove
-                // the shortcut
-                ResolveInfo ri = context.getPackageManager().resolveActivity(intent, 0);
-                if (ri == null || !TextUtils.isEmpty(ri.activityInfo.permission)) {
-                    deletedShortcuts.add(lc.id);
-                    continue;
-                }
-                PersistableBundle extras = new PersistableBundle();
-                extras.putString(EXTRA_SHORTCUT_BADGE_OVERRIDE_PACKAGE, ri.activityInfo.packageName);
-                ShortcutInfo.Builder infoBuilder = new ShortcutInfo.Builder(
-                        context, "migrated_shortcut-" + lc.id)
-                        .setIntent(intent)
-                        .setExtras(extras)
-                        .setShortLabel(lc.getTitle());
-
-                Bitmap bitmap = null;
-                byte[] iconData = lc.getIconBlob();
-                if (iconData != null) {
-                    bitmap = BitmapFactory.decodeByteArray(iconData, 0, iconData.length);
-                }
-                if (bitmap != null) {
-                    infoBuilder.setIcon(Icon.createWithBitmap(bitmap));
-                }
-
-                ShortcutInfo info = infoBuilder.build();
-                if (!PinRequestHelper.createRequestForShortcut(context, info).accept()) {
-                    deletedShortcuts.add(lc.id);
-                    continue;
-                }
-                update = new ContentValues();
-                update.put(Favorites.ITEM_TYPE, Favorites.ITEM_TYPE_DEEP_SHORTCUT);
-                update.put(Favorites.INTENT,
-                        ShortcutKey.makeIntent(info.getId(), context.getPackageName()).toUri(0));
-            } catch (Throwable e) {
-                Log.e("migrateLegacyShortcuts", "unable to migrate, id " + lc.id, e);
+            Intent intent = lc.parseIntent();
+            if (intent == null) {
                 deletedShortcuts.add(lc.id);
                 continue;
             }
+            if (TextUtils.isEmpty(lc.getTitle())) {
+                deletedShortcuts.add(lc.id);
+                continue;
+            }
+
+            // Make sure the target intent can be launched without any permissions. Otherwise remove
+            // the shortcut
+            ResolveInfo ri = context.getPackageManager().resolveActivity(intent, 0);
+            if (ri == null || !TextUtils.isEmpty(ri.activityInfo.permission)) {
+                deletedShortcuts.add(lc.id);
+                continue;
+            }
+            PersistableBundle extras = new PersistableBundle();
+            extras.putString(EXTRA_SHORTCUT_BADGE_OVERRIDE_PACKAGE, ri.activityInfo.packageName);
+            ShortcutInfo.Builder infoBuilder = new ShortcutInfo.Builder(
+                    context, "migrated_shortcut-" + lc.id)
+                    .setIntent(intent)
+                    .setExtras(extras)
+                    .setShortLabel(lc.getTitle());
+
+            Bitmap bitmap = null;
+            byte[] iconData = lc.getIconBlob();
+            if (iconData != null) {
+                bitmap = BitmapFactory.decodeByteArray(iconData, 0, iconData.length);
+            }
+            if (bitmap != null) {
+                infoBuilder.setIcon(Icon.createWithBitmap(bitmap));
+            }
+
+            ShortcutInfo info = infoBuilder.build();
+            if (!PinRequestHelper.createRequestForShortcut(context, info).accept()) {
+                deletedShortcuts.add(lc.id);
+                continue;
+            }
+            ContentValues update = new ContentValues();
+            update.put(Favorites.ITEM_TYPE, Favorites.ITEM_TYPE_DEEP_SHORTCUT);
+            update.put(Favorites.INTENT,
+                    ShortcutKey.makeIntent(info.getId(), context.getPackageName()).toUri(0));
             db.update(Favorites.TABLE_NAME, update, "_id = ?",
                     new String[] {Integer.toString(lc.id)});
         }
@@ -174,7 +176,7 @@ public class LauncherDbUtils {
     /**
      * Utility class to simplify managing sqlite transactions
      */
-    public static class SQLiteTransaction extends Binder implements AutoCloseable {
+    public static class SQLiteTransaction implements AutoCloseable {
         private final SQLiteDatabase mDb;
 
         public SQLiteTransaction(SQLiteDatabase db) {

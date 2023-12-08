@@ -50,7 +50,6 @@
         <item name="workspaceShadowColor">#B0000000</item>
         <item name="workspaceAmbientShadowColor">#40000000</item>
         <item name="workspaceKeyShadowColor">#89000000</item>
-        <item name="workspaceStatusBarScrim">@drawable/workspace_bg</item>
         <item name="widgetsTheme">@style/WidgetContainerTheme</item>
         <item name="folderPaginationColor">@color/folder_pagination_color_light</item>
         <item name="folderPreviewColor">@color/folder_preview_light</item>
@@ -137,7 +136,6 @@
         <item name="workspaceAmbientShadowColor">@android:color/transparent</item>
         <item name="workspaceKeyShadowColor">@android:color/transparent</item>
         <item name="isWorkspaceDarkText">true</item>
-        <item name="workspaceStatusBarScrim">@null</item>
         <item name="workspaceAccentColor">@color/workspace_accent_color_dark</item>
         <item name="dropTargetHoverTextColor">@color/drop_target_hover_text_color_dark</item>
         <item name="dropTargetHoverButtonColor">@color/drop_target_hover_button_color_dark</item>
@@ -189,7 +187,6 @@
         <item name="workspaceAmbientShadowColor">@android:color/transparent</item>
         <item name="workspaceKeyShadowColor">@android:color/transparent</item>
         <item name="isWorkspaceDarkText">true</item>
-        <item name="workspaceStatusBarScrim">@null</item>
         <item name="workspaceAccentColor">@color/workspace_accent_color_dark</item>
         <item name="dropTargetHoverTextColor">@color/drop_target_hover_text_color_dark</item>
         <item name="dropTargetHoverButtonColor">@color/drop_target_hover_button_color_dark</item>
@@ -464,6 +461,11 @@
 
     <style name="AllAppsStyleDefault">
         <item name="horizontalPadding">16dp</item>
+    </style>
+
+    <style name="ArrowTipStyle">
+        <item name="arrowTipBackground">@color/arrow_tip_view_bg</item>
+        <item name="arrowTipTextColor">@color/arrow_tip_view_content</item>
     </style>
 
     <style name="QsbIconTint">

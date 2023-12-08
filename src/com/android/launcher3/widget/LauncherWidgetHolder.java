@@ -285,15 +285,16 @@ public class LauncherWidgetHolder {
     protected Bundle getConfigurationActivityOptions(@NonNull BaseDraggingActivity activity,
             int widgetId) {
         LauncherAppWidgetHostView view = mViews.get(widgetId);
-        if (view == null) return getDefaultConfigurationActivityOptions();
+        if (view == null) {
+            return activity.makeDefaultActivityOptions(
+                    -1 /* SPLASH_SCREEN_STYLE_UNDEFINED */).toBundle();
+        }
         Object tag = view.getTag();
-        if (!(tag instanceof ItemInfo)) return getDefaultConfigurationActivityOptions();
-        ActivityOptionsWrapper activityOptionsWrapper =
-                activity.getActivityLaunchOptions(view, (ItemInfo) tag);
-        // Must allow background activity start for U.
-        activityOptionsWrapper.options.setPendingIntentBackgroundActivityStartMode(
-                ActivityOptions.MODE_BACKGROUND_ACTIVITY_START_ALLOWED);
-        Bundle bundle = activityOptionsWrapper.toBundle();
+        if (!(tag instanceof ItemInfo)) {
+            return activity.makeDefaultActivityOptions(
+                    -1 /* SPLASH_SCREEN_STYLE_UNDEFINED */).toBundle();
+        }
+        Bundle bundle = activity.getActivityLaunchOptions(view, (ItemInfo) tag).toBundle();
         bundle.putInt(KEY_SPLASH_SCREEN_STYLE, SPLASH_SCREEN_STYLE_EMPTY);
         return bundle;
     }
