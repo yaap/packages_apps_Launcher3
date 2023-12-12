@@ -72,23 +72,15 @@ public class QsbContainerView extends FrameLayout implements SharedPreferences.O
     @WorkerThread
     @Nullable
     public static String getSearchWidgetPackageName(@NonNull Context context) {
-        String providerPkg = Settings.Global.getString(context.getContentResolver(),
-                SEARCH_PROVIDER_SETTINGS_KEY);
-        if (providerPkg == null) {
-            SearchManager searchManager = context.getSystemService(SearchManager.class);
-            ComponentName componentName = searchManager.getGlobalSearchActivity();
-            if (componentName != null) {
-                providerPkg = searchManager.getGlobalSearchActivity().getPackageName();
-            }
-            if (providerPkg == null && Utilities.isGSAEnabled(context)) {
-                providerPkg = Utilities.GSA_PACKAGE;
-            } else {
-                String[] fallbacks = context.getResources().getStringArray(R.array.qsb_search_fallback);
-                for (int i = 0; i < fallbacks.length; i++) {
-                    if (Utilities.isPackageEnabled(fallbacks[i], context)) {
-                        providerPkg = fallbacks[i];
-                        break;
-                    }
+        String providerPkg = null;
+        if (Utilities.isGSAEnabled(context)) {
+            providerPkg = Utilities.GSA_PACKAGE;
+        } else {
+            String[] fallbacks = context.getResources().getStringArray(R.array.qsb_search_fallback);
+            for (int i = 0; i < fallbacks.length; i++) {
+                if (Utilities.isPackageEnabled(fallbacks[i], context)) {
+                    providerPkg = fallbacks[i];
+                    break;
                 }
             }
         }
