@@ -19,92 +19,103 @@
     xmlns:launcher="http://schemas.android.com/apk/res-auto"
     xmlns:settings="http://schemas.android.com/apk/res/com.android.launcher3">
 
-    <com.android.launcher3.settings.NotificationDotsPreference
-        android:key="pref_icon_badging"
-        android:title="@string/notification_dots_title"
-        android:persistent="false"
-        android:widgetLayout="@layout/notification_pref_warning" />
+    <androidx.preference.PreferenceCategory
+        android:key="home_category"
+        android:title="@string/category_home">
 
-    <SwitchPreference
-        android:defaultValue="false"
-        android:key="pref_workspace_lock"
-        android:persistent="true"
-        android:title="@string/settings_lock_layout_title"
-        android:summaryOn="@string/settings_lock_layout_summary_on"
-        android:summaryOff="@string/settings_lock_layout_summary_off" />
+        <com.android.launcher3.settings.NotificationDotsPreference
+            android:key="pref_icon_badging"
+            android:title="@string/notification_dots_title"
+            android:persistent="false"
+            android:widgetLayout="@layout/notification_pref_warning" />
 
-    <!--
-      LAUNCHER_ADD_NEW_APPS_TO_HOME_SCREEN_ENABLED(613)
-      LAUNCHER_ADD_NEW_APPS_TO_HOME_SCREEN_DISABLED(614)
-    -->
-    <SwitchPreference
-        android:key="pref_add_icon_to_home"
-        android:title="@string/auto_add_shortcuts_label"
-        android:summary="@string/auto_add_shortcuts_description"
-        android:defaultValue="true"
-        android:persistent="true"
-        launcher:logIdOn="613"
-        launcher:logIdOff="614" />
+        <SwitchPreference
+            android:defaultValue="false"
+            android:key="pref_workspace_lock"
+            android:persistent="true"
+            android:title="@string/settings_lock_layout_title"
+            android:summaryOn="@string/settings_lock_layout_summary_on"
+            android:summaryOff="@string/settings_lock_layout_summary_off" />
 
-    <!--
-      LAUNCHER_HOME_SCREEN_ROTATION_ENABLED(615)
-      LAUNCHER_HOME_SCREEN_ROTATION_DISABLED(616)
-    -->
-    <SwitchPreference
-        android:key="pref_allowRotation"
-        android:title="@string/allow_rotation_title"
-        android:summary="@string/allow_rotation_desc"
-        android:defaultValue="false"
-        android:persistent="true"
-        launcher:logIdOn="615"
-        launcher:logIdOff="616" />
+        <!--
+          LAUNCHER_ADD_NEW_APPS_TO_HOME_SCREEN_ENABLED(613)
+          LAUNCHER_ADD_NEW_APPS_TO_HOME_SCREEN_DISABLED(614)
+        -->
+        <SwitchPreference
+            android:key="pref_add_icon_to_home"
+            android:title="@string/auto_add_shortcuts_label"
+            android:summary="@string/auto_add_shortcuts_description"
+            android:defaultValue="true"
+            android:persistent="true"
+            launcher:logIdOn="613"
+            launcher:logIdOff="614" />
 
-    <SwitchPreference
-        android:key="pref_dock_search"
-        android:title="@string/dock_search_title"
-        android:summary="@string/dock_search_summary"
-        android:defaultValue="true" />
+        <SwitchPreference
+            android:key="pref_dock_search"
+            android:title="@string/dock_search_title"
+            android:summary="@string/dock_search_summary"
+            android:defaultValue="true" />
 
-    <SwitchPreference
-        android:key="pref_forced_monochrome_icons"
-        android:title="@string/pref_force_monochrome_themed_icons_title"
-        android:summary="@string/pref_force_monochrome_themed_icons_summary"
-        android:defaultValue="false"
-        android:persistent="true" />
+        <SwitchPreference
+            android:key="pref_forced_monochrome_icons"
+            android:title="@string/pref_force_monochrome_themed_icons_title"
+            android:summary="@string/pref_force_monochrome_themed_icons_summary"
+            android:defaultValue="false"
+            android:persistent="true" />
 
-    <com.android.launcher3.settings.preferences.CustomSeekBarPreference
-        android:key="pref_custom_icon_size"
-        android:title="@string/icon_size_title"
-        android:persistent="true"
-        android:max="150"
-        android:min="50"
-        settings:units="%"
-        android:defaultValue="100" />
+        <com.android.launcher3.settings.preferences.CustomSeekBarPreference
+            android:key="pref_custom_icon_size"
+            android:title="@string/icon_size_title"
+            android:persistent="true"
+            android:max="150"
+            android:min="50"
+            settings:units="%"
+            android:defaultValue="100" />
+    </androidx.preference.PreferenceCategory>
 
-    <com.android.launcher3.settings.preferences.CustomSeekBarPreference
-        android:key="pref_custom_font_size"
-        android:title="@string/font_size_title"
-        android:persistent="true"
-        android:max="150"
-        android:min="50"
-        settings:units="%"
-        android:defaultValue="100" />
+    <androidx.preference.PreferenceCategory
+        android:key="icon_category"
+        android:title="@string/category_icon">
 
-    <com.android.launcher3.settings.preferences.CustomSeekBarPreference
-        android:key="pref_app_drawer_opacity"
-        android:title="@string/background_opacity_title"
-        android:persistent="true"
-        android:max="100"
-        android:min="0"
-        settings:units="%"
-        android:defaultValue="100" />
+        <SwitchPreference
+            android:key="pref_forced_monochrome_icons"
+            android:title="@string/pref_force_monochrome_themed_icons_title"
+            android:summary="@string/pref_force_monochrome_themed_icons_summary"
+            android:defaultValue="false"
+            android:persistent="true" />
 
-    <androidx.preference.PreferenceScreen
-        android:persistent="false"
-        android:title="@string/suggestion_pref_screen_title"
-        android:key="pref_suggestions"
-        android:summary="@string/suggestion_pref_screen_desc">
-        <intent android:action="android.settings.ACTION_CONTENT_SUGGESTIONS_SETTINGS" />
-    </androidx.preference.PreferenceScreen>
+        <com.android.launcher3.settings.preferences.CustomSeekBarPreference
+            android:key="pref_custom_icon_size"
+            android:title="@string/icon_size_title"
+            android:persistent="true"
+            android:max="150"
+            android:min="50"
+            settings:units="%"
+            android:defaultValue="100" />
 
+        <com.android.launcher3.settings.preferences.CustomSeekBarPreference
+            android:key="pref_custom_font_size"
+            android:title="@string/font_size_title"
+            android:persistent="true"
+            android:max="150"
+            android:min="50"
+            settings:units="%"
+            android:defaultValue="100" />
+
+    </androidx.preference.PreferenceCategory>
+
+    <androidx.preference.PreferenceCategory
+        android:key="drawer_category"
+        android:title="@string/category_drawer">
+
+        <com.android.launcher3.settings.preferences.CustomSeekBarPreference
+            android:key="pref_app_drawer_opacity"
+            android:title="@string/background_opacity_title"
+            android:persistent="true"
+            android:max="100"
+            android:min="0"
+            settings:units="%"
+            android:defaultValue="100" />
+
+    </androidx.preference.PreferenceCategory>
 </androidx.preference.PreferenceScreen>

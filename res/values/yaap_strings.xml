@@ -60,4 +60,10 @@
 
     <!-- Background opacity -->
     <string name="background_opacity_title">App drawer opacity</string>
+
+    <!-- Settings Categories -->
+    <string name="category_home">Home Screen</string>
+    <string name="category_icon">Icons</string>
+    <string name="category_drawer">App Drawer</string>
+    <string name="category_misc">Misc</string>
 </resources>
