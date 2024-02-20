@@ -220,8 +220,11 @@ android_app {
     ],
     optimize: {
         proguard_flags_files: ["proguard.flags"],
-        // Proguard is disable for testing. Derivarive prjects to keep proguard enabled
-        enabled: false,
+        enabled: true,
+        optimize: true,
+        shrink: true,
+        shrink_resources: true,
+        proguard_compatibility: true,
     },
 
     sdk_version: "current",
@@ -389,7 +392,12 @@ android_app {
 
     static_libs: ["Launcher3QuickStepLib"],
     optimize: {
-        enabled: false,
+        proguard_flags_files: ["proguard.flags"],
+        enabled: true,
+        optimize: true,
+        shrink: true,
+        shrink_resources: true,
+        proguard_compatibility: true,
     },
 
     certificate: "platform",
