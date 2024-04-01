@@ -41,8 +41,6 @@
     <uses-permission android:name="android.permission.READ_DEVICE_CONFIG" />
     <uses-permission android:name="android.permission.QUERY_ALL_PACKAGES" />
     <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.SUSPEND_APPS" />
-    <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS" />
     <!-- for rotating surface by arbitrary degree -->
     <uses-permission android:name="android.permission.ACCESS_SURFACE_FLINGER" />
     <uses-permission android:name="android.permission.ROTATE_SURFACE_FLINGER" />
@@ -75,6 +73,7 @@
 
     <application
         android:backupAgent="com.android.launcher3.LauncherBackupAgent"
+        android:name="com.android.launcher3.LauncherApplication"
         android:fullBackupOnly="true"
         android:backupInForeground="true"
         android:fullBackupContent="@xml/backupscheme"

@@ -22,6 +22,7 @@ import static android.view.View.VISIBLE;
 
 import static com.android.launcher3.DeviceProfile.DEFAULT_SCALE;
 import static com.android.launcher3.LauncherSettings.Favorites.CONTAINER_HOTSEAT_PREDICTION;
+import static com.android.launcher3.config.FeatureFlags.shouldShowFirstPageWidget;
 import static com.android.launcher3.model.ModelUtils.filterCurrentWorkspaceItems;
 import static com.android.launcher3.model.ModelUtils.getMissingHotseatRanks;
 

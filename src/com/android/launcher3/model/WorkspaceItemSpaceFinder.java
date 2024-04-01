@@ -16,6 +16,7 @@
 package com.android.launcher3.model;
 
 import static com.android.launcher3.WorkspaceLayoutManager.FIRST_SCREEN_ID;
+import static com.android.launcher3.config.FeatureFlags.shouldShowFirstPageWidget;
 
 import android.util.LongSparseArray;
 

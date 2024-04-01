@@ -16,6 +16,7 @@
 package com.android.launcher3.model;
 
 import static com.android.launcher3.LauncherSettings.Favorites.addTableToDb;
+import static com.android.launcher3.config.FeatureFlags.shouldShowFirstPageWidget;
 import static com.android.launcher3.provider.LauncherDbUtils.dropTable;
 
 import android.content.ContentValues;
@@ -266,7 +267,6 @@ public class DatabaseHelper extends NoLocaleSQLiteHelper implements
                                     Favorites.CONTAINER, Favorites.CONTAINER_DESKTOP,
                                     Favorites.CELLY, 0), null);
                 }
-                return;
             }
             case 31: {
                 LauncherDbUtils.migrateLegacyShortcuts(mContext, db);

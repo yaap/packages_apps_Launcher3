@@ -54,13 +54,13 @@ public class YaapLauncher extends QuickstepLauncher {
     @Override
     public void onCreate(Bundle bundle) {
         super.onCreate(bundle);
-        SystemUiProxy.INSTANCE.get(this).setLauncherUnlockAnimationController(mUnlockAnimationController);
+        SystemUiProxy.INSTANCE.get(this).setLauncherUnlockAnimationController(this.getClass().getSimpleName(), mUnlockAnimationController);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        SystemUiProxy.INSTANCE.get(this).setLauncherUnlockAnimationController(null);
+        SystemUiProxy.INSTANCE.get(this).setLauncherUnlockAnimationController("null", null);
     }
 
     @Override
