@@ -65,7 +65,7 @@
  
     <!-- Smartspace -->
     <string name="smartspace_pref_title">At a Glance</string>
-    <string name="smartspace_pref_summary">Show on the home screen -- introduces some jank</string>
+    <string name="smartspace_pref_summary">Show smartspace at the top of home screen</string>
 
     <!-- Force monochrome icons -->
     <string name="pref_force_monochrome_themed_icons_title">Force themed icons</string>
