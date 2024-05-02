@@ -132,7 +132,7 @@ public class RecentsState implements BaseState<RecentsState> {
     public int getScrimColor(RecentsActivity activity) {
         return hasFlag(FLAG_SCRIM) ? ColorUtils.setAlphaComponent(
                 Themes.getAttrColor(activity, R.attr.overviewScrimColor),
-                70 * 255 / 100)
+                60 * 255 / 100)
                 : Color.TRANSPARENT;
     }
 
