@@ -57,7 +57,7 @@ public class QuickSwitchState extends BackgroundAppState {
             return launcher.getColor(R.color.taskbar_background);
         }
         return ColorUtils.setAlphaComponent(
-                Themes.getAttrColor(launcher, R.attr.overviewScrimColor), 70 * 255 / 100);
+                Themes.getAttrColor(launcher, R.attr.overviewScrimColor), 60 * 255 / 100);
     }
 
     @Override
