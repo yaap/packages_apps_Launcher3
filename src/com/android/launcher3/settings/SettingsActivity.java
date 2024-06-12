@@ -64,8 +64,8 @@ import com.android.launcher3.LauncherAppState;
 import com.android.launcher3.BuildConfig;
 import com.android.launcher3.LauncherFiles;
 import com.android.launcher3.LauncherPrefs;
-import com.android.launcher3.R;
 import com.android.launcher3.Utilities;
+import com.android.launcher3.R;
 import com.android.launcher3.model.WidgetsModel;
 import com.android.launcher3.qsb.QsbContainerView;
 import com.android.launcher3.states.RotationHelper;
@@ -148,7 +148,7 @@ public class SettingsActivity extends FragmentActivity
     }
 
     private boolean startPreference(String fragment, Bundle args, String key) {
-        if (Utilities.ATLEAST_P && getSupportFragmentManager().isStateSaved()) {
+        if (getSupportFragmentManager().isStateSaved()) {
             // Sometimes onClick can come after onPause because of being posted on the handler.
             // Skip starting new preferences in that case.
             return false;

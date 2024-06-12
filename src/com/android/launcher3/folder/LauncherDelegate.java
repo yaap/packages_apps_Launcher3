@@ -97,7 +97,8 @@ public class LauncherDelegate {
                             return;
                         }
                         finalItem =  info.contents.remove(0);
-                        newIcon = mLauncher.createShortcut(cellLayout, finalItem);
+                        newIcon = mLauncher.getItemInflater().inflateItem(
+                                finalItem, mLauncher.getModelWriter(), cellLayout);
                         mLauncher.getModelWriter().addOrMoveItemInDatabase(finalItem,
                                 info.container, info.screenId, info.cellX, info.cellY);
                     }
