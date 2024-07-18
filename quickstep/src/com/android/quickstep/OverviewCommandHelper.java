@@ -68,6 +68,8 @@ public class OverviewCommandHelper {
     public static final int TYPE_TOGGLE = 4;
     public static final int TYPE_HOME = 5;
 
+    private static final int COMMAND_IS_STALE_TIME = 750;
+
     /**
      * Use case for needing a queue is double tapping recents button in 3 button nav.
      * Size of 2 should be enough. We'll toss in one more because we're kind hearted.
@@ -159,7 +161,13 @@ public class OverviewCommandHelper {
      */
     @BinderThread
     public void addCommand(int type) {
-        if (mPendingCommands.size() >= MAX_QUEUE_SIZE) {
+        if (!mPendingCommands.isEmpty()
+                && SystemClock.elapsedRealtime() - mPendingCommands.get(0).createTime
+                > COMMAND_IS_STALE_TIME) {
+            // if one command has not finished as expected, the entire queue is likely bad
+            clearPendingCommands();
+        } else if (mPendingCommands.size() >= MAX_QUEUE_SIZE) {
+            // The queue is full, we will not add any commands
             Log.d(TAG, "the pending command queue is full (" + mPendingCommands.size() + "). "
                     + "command not added: " + type);
             return;
