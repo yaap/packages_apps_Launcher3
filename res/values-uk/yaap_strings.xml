@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+/*
+* Copyright (C) 2022 Paranoid Android
+*
+* Licensed under the Apache License, Version 2.0 (the "License");
+* you may not use this file except in compliance with the License.
+* You may obtain a copy of the License at
+*
+*      http://www.apache.org/licenses/LICENSE-2.0
+*
+* Unless required by applicable law or agreed to in writing, software
+* distributed under the License is distributed on an "AS IS" BASIS,
+* WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+* See the License for the specific language governing permissions and
+* limitations under the License.
+*/
+-->
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- Settings title to show Google Now at -1 screen on launcher. [CHAR LIMIT=50] -->
+    <string name="title_show_google_feed">Зробіть свайп для доступу до Google Feed</string>
+
+    <!-- Settings message explaining when the -1 screen is available on an LTR device. [CHAR LIMIT=100] -->
+    <string name="msg_minus_one_on_left">З головного екрану свайпніть вліво щоб відкрити Google Feed</string>
+
+    <!-- Settings message explaining when the -1 screen is available on an RTL device. [CHAR LIMIT=100] -->
+    <string name="msg_minus_one_on_right">З головного екрану свайпніть вправо щоб відкрити Google Feed</string>
+
+    <!-- Gestures -->
+    <string name="pref_dt_gesture_title">Подвійне торкання для режиму сну</string>
+    <string name="pref_dt_gesture_summary">Двічі торкніться в порожньому місці, щоб вимкнути екран</string>
+
+    <!-- Suggestions -->
+    <string name="suggestion_pref_screen_title">Пропозиції</string>
+    <string name="suggestion_pref_screen_desc">Для всіх програм &amp; Пропозиції на головному екрані</string>
+
+    <!-- Edit workspace -->
+    <string name="settings_lock_layout_title">Блокування робочого стола</string>
+    <string name="settings_lock_layout_summary_on">Значки та віджети не можна додавати, видаляти та переміщувати на головному екрані</string>
+    <string name="settings_lock_layout_summary_off">Значки та віджети можна додавати, видаляти та переміщувати на головному екрані</string>
+    <string name="settings_edit_widgets_error">Неможливо додати віджети на головний екран</string>
+
+    <!-- Hotseat searchbar -->
+    <string name="label_search">Пошук</string>
+    <string name="label_voice_search">Голосовий пошук</string>
+    <string name="dock_search_title">Панель пошуку</string>
+    <string name="dock_search_summary">Панель пошуку в док-панелі</string>
+
+    <!-- Kill App recents action shortcut -->
+    <string name="recent_task_option_kill_app">Зняти</string>
+    <string name="recents_app_killed">Додаток знято</string>
+
+    <!-- button string shown pause work profile -->
+    <string name="work_apps_pause_btn_text_calyx">Вимкнути робочі програми</string>
+ 
+    <!-- Smartspace -->
+    <string name="smartspace_pref_title">Найголовніше</string>
+    <string name="smartspace_pref_summary">Показати інформаційну панель у верхній частині головного екрана</string>
+
+    <!-- Force monochrome icons -->
+    <string name="pref_force_monochrome_themed_icons_title">Тематичні значки (монохром)</string>
+    <string name="pref_force_monochrome_themed_icons_summary">Створити тематичний значок для додатків, у яких його немає (потрібно повторно перемикати тематичні значки)</string>
+
+    <!-- All apps themed icons -->
+    <string name="pref_themed_icons_title">Тематичні значки</string>
+    <string name="pref_themed_icons_summary">Слідкуйте за тематичними значками, які використовуються на головному екрані</string>
+
+    <!-- Custom seekbar -->
+    <string name="custom_seekbar_value">Значення: <xliff:g id="v">%s</xliff:g></string>
+    <string name="custom_seekbar_default_value">за замовчуванням</string>
+    <string name="custom_seekbar_default_value_to_set">Значення за замовчуванням: <xliff:g id="v">%s</xliff:g>\nТривале натискання, щоб встановити</string>
+    <string name="custom_seekbar_default_value_is_set">Значення за замовчуванням встановлено</string>
+
+    <!-- Icon size -->
+    <string name="icon_size_title">Розмір іконок</string>
+
+    <!-- Font size -->
+    <string name="font_size_title">Розмір шрифту</string>
+
+    <!-- Background opacity -->
+    <string name="background_opacity_title">Непрозорість панелі програм</string>
+
+    <!-- Hide labels -->
+    <string name="desktop_show_labels">Показувати мітки значків на робочому столі</string>
+    <string name="drawer_show_labels">Показати мітки піктограм в меню програм</string>
+
+    <!-- Background blur -->
+    <string name="background_blur_title">Глибина розмиття фону</string>
+    <string name="background_blur_summary">Установіть рівень глибини розмиття для нещодавніх і панелі програм</string>
+
+    <!-- Settings Categories -->
+    <string name="category_home">Головний екран</string>
+    <string name="category_icon">Іконки</string>
+    <string name="category_drawer">Меню програм</string>
+    <string name="category_misc">Інше</string>
+</resources>
