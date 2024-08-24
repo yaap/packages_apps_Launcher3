@@ -117,4 +117,7 @@
     <string name="category_icon">Icons</string>
     <string name="category_drawer">App Drawer</string>
     <string name="category_misc">Misc</string>
+
+    <!-- Floating window -->
+    <string name="floating_window">Floating</string>
 </resources>
