@@ -74,7 +74,7 @@ public class NavHandleLongPressHandler implements ResourceBasedOverride {
             return null;
         }
         updateThumbnail();
-        VibrationUtils.triggerVibration(mContext, 2);
+        VibrationUtils.triggerVibration(mContext, 5);
         if (mThumbnailData != null && mThumbnailData.getThumbnail() != null) {
             if (DEBUG) Log.d(TAG, "getLongPressRunnable: Google lens should start now");
             ImageActionUtils.startLensActivity(mContext, mThumbnailData.getThumbnail(), null, TAG);
