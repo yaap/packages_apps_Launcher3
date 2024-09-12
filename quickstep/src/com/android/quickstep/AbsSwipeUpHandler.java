@@ -196,9 +196,13 @@ public abstract class AbsSwipeUpHandler<T extends RecentsViewContainer,
     private boolean mRecentsViewScrollLinked = false;
 
     private final Runnable mLauncherOnDestroyCallback = () -> {
+        onConsumerAboutToBeSwitched();
         ActiveGestureLog.INSTANCE.addLog("Launcher destroyed", LAUNCHER_DESTROYED);
         mRecentsView = null;
         mContainer = null;
+        if (!mRecentsAnimationStartCallbacks.isEmpty()) {
+            mRecentsAnimationStartCallbacks.clear();
+        }
         mStateCallback.clearState(STATE_LAUNCHER_PRESENT);
     };
 

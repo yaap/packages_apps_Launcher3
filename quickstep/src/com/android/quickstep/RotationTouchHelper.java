@@ -160,7 +160,7 @@ public class RotationTouchHelper implements DisplayInfoChangeListener, SafeClose
         onDisplayInfoChangedInternal(info, CHANGE_ALL, info.getNavigationMode().hasGestures);
         runOnDestroy(() -> mDisplayController.removeChangeListener(this));
 
-        mOrientationListener = new OrientationEventListener(mContext) {
+        mOrientationListener = new OrientationEventListener(mContext.getApplicationContext()) {
             @Override
             public void onOrientationChanged(int degrees) {
                 int newRotation = RecentsOrientedState.getRotationForUserDegreesRotated(degrees,
