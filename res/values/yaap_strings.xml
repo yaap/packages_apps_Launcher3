@@ -45,6 +45,25 @@
     <string name="label_voice_search">Voice search</string>
     <string name="dock_search_title">Search bar</string>
     <string name="dock_search_summary">Search bar in the bottom dock</string>
+    <string name="pref_dock_search_provider_title">Search bar provider</string>
+    <string name="pref_dock_search_provider_default">Default (Predetermined list)</string>
+    <string name="browser_name_duckduckgo">DuckDuckGo</string>
+    <string name="browser_name_cromite">Cromite</string>
+    <string name="browser_name_brave_nightly">Brave Nightly</string>
+    <string name="browser_name_brave_beta">Brave Beta</string>
+    <string name="browser_name_brave">Brave</string>
+    <string name="browser_name_firefox_focus">Firefox Focus</string>
+    <string name="browser_name_firefox_nightly">Firefox Nightly</string>
+    <string name="browser_name_firefox_beta">Firefox Beta</string>
+    <string name="browser_name_firefox">Firefox</string>
+    <string name="browser_name_fennec">Fennec</string>
+    <string name="browser_name_chromium">Chromium</string>
+    <string name="browser_name_chrome">Google Chrome</string>
+    <string name="browser_name_vivaldi">Vivaldi</string>
+    <string name="browser_name_tor_alpha">Tor Alpha</string>
+    <string name="browser_name_tor">Tor</string>
+    <string name="browser_name_kiwi">Kiwi</string>
+    <string name="browser_name_startpage">Startpage</string>
 
     <!-- Kill App recents action shortcut -->
     <string name="recent_task_option_kill_app">Kill</string>

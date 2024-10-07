@@ -74,16 +74,22 @@ public class QsbContainerView extends FrameLayout implements SharedPreferences.O
     @WorkerThread
     @Nullable
     public static String getSearchWidgetPackageName(@NonNull Context context) {
-        String providerPkg = null;
+        // check user settings
+        String override = Utilities.getQSBProviderOverride(context);
+        if (override != null && !override.isEmpty()
+                && Utilities.isPackageEnabled(override, context)) {
+            return override;
+        }
+        // fallback to default (GSA or fallback list)
         if (Utilities.isGSAEnabled(context)) {
-            providerPkg = Utilities.GSA_PACKAGE;
-        } else {
-            String[] fallbacks = context.getResources().getStringArray(R.array.qsb_search_fallback);
-            for (int i = 0; i < fallbacks.length; i++) {
-                if (Utilities.isPackageEnabled(fallbacks[i], context)) {
-                    providerPkg = fallbacks[i];
-                    break;
-                }
+            return Utilities.GSA_PACKAGE;
+        }
+        String providerPkg = null;
+        String[] fallbacks = context.getResources().getStringArray(R.array.qsb_search_fallback);
+        for (int i = 0; i < fallbacks.length; i++) {
+            if (Utilities.isPackageEnabled(fallbacks[i], context)) {
+                providerPkg = fallbacks[i];
+                break;
             }
         }
         return providerPkg;
@@ -248,12 +254,15 @@ public class QsbContainerView extends FrameLayout implements SharedPreferences.O
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (!mKeyWidgetId.equals(key)) return;
-        int widgetId = LauncherPrefs.getPrefs(getContext()).getInt(mKeyWidgetId, -1);
-        if (widgetId > -1) {
+        if (mKeyWidgetId.equals(key)) {
+            int widgetId = LauncherPrefs.getPrefs(getContext()).getInt(mKeyWidgetId, -1);
+            if (widgetId > -1) {
+                rebindFragment();
+            } else {
+                mQsbWidgetHost.deleteHost();
+            }
+        } else if (Utilities.KEY_DOCK_SEARCH_PROVIDER.equals(key)) {
             rebindFragment();
-        } else {
-            mQsbWidgetHost.deleteHost();
         }
     }
 

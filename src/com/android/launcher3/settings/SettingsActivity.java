@@ -43,6 +43,7 @@ import androidx.fragment.app.DialogFragment;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentActivity;
 import androidx.fragment.app.FragmentManager;
+import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
@@ -50,6 +51,7 @@ import androidx.preference.PreferenceFragmentCompat.OnPreferenceStartFragmentCal
 import androidx.preference.PreferenceFragmentCompat.OnPreferenceStartScreenCallback;
 import androidx.preference.PreferenceGroup.PreferencePositionCallback;
 import androidx.preference.PreferenceScreen;
+import androidx.preference.SwitchPreferenceCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.launcher3.BuildConfig;
@@ -62,6 +64,8 @@ import com.android.launcher3.qsb.QsbContainerView;
 import com.android.launcher3.states.RotationHelper;
 import com.android.launcher3.util.DisplayController;
 import com.android.launcher3.util.SettingsCache;
+
+import java.util.ArrayList;
 
 /**
  * Settings activity for Launcher. Currently implements the following setting: Allow rotation
@@ -129,6 +133,7 @@ public class SettingsActivity extends FragmentActivity
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) { 
         switch (key) {
             case Utilities.KEY_DOCK_SEARCH:
+            case Utilities.KEY_DOCK_SEARCH_PROVIDER:
             case Utilities.KEY_BLUR_DEPTH:
                 LauncherAppState.getInstance(this).setNeedsRestart();
                 break;
@@ -194,6 +199,7 @@ public class SettingsActivity extends FragmentActivity
 
         private Preference mShowGoogleAppPref;
         private Preference mShowGoogleBarPref;
+        private ListPreference mSearchProviderPref;
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -296,6 +302,11 @@ public class SettingsActivity extends FragmentActivity
                     updateIsGoogleAppEnabled();
                     return true;
 
+                case Utilities.KEY_DOCK_SEARCH_PROVIDER:
+                    mSearchProviderPref = (ListPreference) preference;
+                    updateSearchProviders();
+                    return true;
+
                 case Utilities.KEY_MINUS_ONE:
                     mShowGoogleAppPref = preference;
                     updateIsGoogleAppEnabled();
@@ -312,7 +323,72 @@ public class SettingsActivity extends FragmentActivity
 
             if (mShowGoogleBarPref != null) {
                 mShowGoogleBarPref.setEnabled(QsbContainerView.getSearchWidgetPackageName(getContext()) != null);
+                mShowGoogleBarPref.setOnPreferenceChangeListener((pref, newValue) -> {
+                    boolean value = (Boolean) newValue;
+                    if (mSearchProviderPref != null) {
+                        mSearchProviderPref.setEnabled(value);
+                    }
+                    SharedPreferences prefs = LauncherPrefs.getPrefs(
+                            getContext().getApplicationContext());
+                    prefs.edit().putBoolean(Utilities.KEY_DOCK_SEARCH, value).commit();
+                    return true;
+                });
+                if (mSearchProviderPref != null) {
+                    mSearchProviderPref.setEnabled(
+                            ((SwitchPreferenceCompat) mShowGoogleBarPref).isChecked());
+                }
             }
+        }
+
+        private void updateSearchProviders() {
+            if (mSearchProviderPref == null) {
+                return;
+            }
+            if (QsbContainerView.getSearchWidgetPackageName(getContext()) == null) {
+                mSearchProviderPref.setEnabled(false);
+                return;
+            }
+            if (mShowGoogleBarPref != null) {
+                mSearchProviderPref.setEnabled(
+                        ((SwitchPreferenceCompat) mShowGoogleBarPref).isChecked());
+            }
+            String[] fallbacks = getContext().getResources().getStringArray(
+                    R.array.qsb_search_fallback);
+            String[] fallbackNames = getContext().getResources().getStringArray(
+                    R.array.qsb_search_fallback_names);
+            ArrayList<CharSequence> entries = new ArrayList<>();
+            ArrayList<CharSequence> entryValues = new ArrayList<>();
+            // always add the default first
+            entries.add(getContext().getResources().getString(
+                    R.string.pref_dock_search_provider_default));
+            entryValues.add("");
+            // add the rest after it
+            for (int i = 0; i < fallbacks.length; i++) {
+                if (!Utilities.isPackageEnabled(fallbacks[i], getContext())) {
+                    continue;
+                }
+                entries.add(fallbackNames[i]);
+                entryValues.add(fallbacks[i]);
+            }
+            // update the preference
+            mSearchProviderPref.setOnPreferenceChangeListener((pref, newValue) -> {
+                String value = (String) newValue;
+                int index = mSearchProviderPref.findIndexOfValue(value);
+                mSearchProviderPref.setSummary(mSearchProviderPref.getEntries()[index]);
+                SharedPreferences prefs = LauncherPrefs.getPrefs(
+                        getContext().getApplicationContext());
+                prefs.edit().putString(Utilities.KEY_DOCK_SEARCH_PROVIDER, value).commit();
+                return true;
+            });
+            CharSequence[] entriesArr = entries.toArray(new CharSequence[0]);
+            CharSequence[] valuesArr = entryValues.toArray(new CharSequence[0]);
+            mSearchProviderPref.setEntries(entriesArr);
+            mSearchProviderPref.setEntryValues(valuesArr);
+            // update selection and summary
+            String value = Utilities.getQSBProviderOverride(getContext());
+            int index = mSearchProviderPref.findIndexOfValue(value);
+            mSearchProviderPref.setValue(index >= 0 ? value : "");
+            mSearchProviderPref.setSummary(entriesArr[index >= 0 ? index : 0]);
         }
 
         @Override

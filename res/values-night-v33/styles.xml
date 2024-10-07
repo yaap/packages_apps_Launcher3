@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
 /*
-* Copyright (C) 2008 The Android Open Source Project
+* Copyright (C) 2024 Yet Another AOSP Project
 *
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -18,20 +18,6 @@
 -->
 
 <resources>
-    <style name="AddItemActivityTheme" parent="@android:style/Theme.Translucent.NoTitleBar">
-        <item name="widgetsTheme">@style/WidgetContainerTheme.Dark</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <!-- Add the dim background here, rather than in the activity layout as the window slides
-             in from the bottom, and we don't want the scrim to slide. -->
-        <item name="android:backgroundDimEnabled">true</item>
-    </style>
-
-    <style name="WidgetPickerActivityTheme" parent="@android:style/Theme.Translucent.NoTitleBar">
-        <item name="widgetsTheme">@style/WidgetContainerTheme.Dark</item>
-        <item name="android:windowBackground">@android:color/transparent</item>
-        <item name="pageIndicatorDotColor">@color/page_indicator_dot_color_dark</item>
-    </style>
-
     <style name="HomeSettings.AlertDialog.Base" parent="@style/Theme.AppCompat.DayNight.Dialog.Alert">
         <item name="colorAccent">@android:color/system_primary_dark</item>
         <item name="android:colorBackground">@android:color/system_surface_container_high_dark</item>

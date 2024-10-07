@@ -81,6 +81,10 @@
             android:summary="@string/dock_search_summary"
             android:defaultValue="true" />
 
+        <androidx.preference.ListPreference
+            android:key="pref_dock_search_provider"
+            android:title="@string/pref_dock_search_provider_title"
+            launcher:iconSpaceReserved="false" />
 
         <SwitchPreferenceCompat
             android:key="pref_dt_gesture"

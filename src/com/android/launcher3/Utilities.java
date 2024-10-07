@@ -180,6 +180,7 @@ public final class Utilities {
     public static final String LENS_SHARE_ACTIVITY = "com.google.android.apps.search.lens.LensShareEntryPointActivity";
 
     public static final String KEY_DOCK_SEARCH = "pref_dock_search";
+    public static final String KEY_DOCK_SEARCH_PROVIDER = "pref_dock_search_provider";
     public static final String KEY_APP_DRAWER_OPACITY = "pref_app_drawer_opacity";
     public static final String KEY_FORCE_MONOCHROME_ICONS = "pref_forced_monochrome_icons";
     public static final String KEY_BLUR_DEPTH = "pref_blur_depth";
@@ -939,6 +940,11 @@ public final class Utilities {
     private static boolean isQSBEnabled(Context context) {
         SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
         return prefs.getBoolean(KEY_DOCK_SEARCH, true);
+    }
+
+    public static String getQSBProviderOverride(Context context) {
+        SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
+        return prefs.getString(KEY_DOCK_SEARCH_PROVIDER, "");
     }
 
     public static int getAllAppsOpacity(Context context) {
