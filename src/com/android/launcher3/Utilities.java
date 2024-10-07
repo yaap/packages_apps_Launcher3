@@ -30,7 +30,9 @@ import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.Person;
 import android.app.WallpaperManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.LauncherActivityInfo;
 import android.content.pm.LauncherApps;
@@ -174,7 +176,6 @@ public final class Utilities {
     @IntDef({TRANSLATE_UP, TRANSLATE_DOWN, TRANSLATE_LEFT, TRANSLATE_RIGHT})
     public @interface AdjustmentDirection{}
     public static final String GSA_PACKAGE = "com.google.android.googlequicksearchbox";
-    public static final String LENS_ACTIVITY = "com.google.android.apps.lens.MainActivity";
     public static final String LENS_URI = "google://lens";
     public static final String LENS_SHARE_ACTIVITY = "com.google.android.apps.search.lens.LensShareEntryPointActivity";
 
@@ -906,16 +907,14 @@ public final class Utilities {
     }
 
     public static boolean isGSAEnabled(Context context) {
-        PackageManager pm = context.getPackageManager();
-        if (pm == null) {
+        if (!isPackageEnabled(GSA_PACKAGE, context)) {
             return false;
         }
-        try {
-            ApplicationInfo ai = pm.getApplicationInfo(GSA_PACKAGE, 0);
-            return ai.enabled && ai.isProduct();
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
+        // telling real GSA apart from the google stub
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setComponent(new ComponentName(GSA_PACKAGE, LENS_SHARE_ACTIVITY));
+        return context.getPackageManager().queryIntentActivities(intent,
+                PackageManager.MATCH_DEFAULT_ONLY).size() > 0;
     }
 
     public static boolean isLongPressToSearchEnabled(Context context) {
