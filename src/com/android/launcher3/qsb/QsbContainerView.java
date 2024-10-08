@@ -56,6 +56,8 @@ import com.android.launcher3.Utilities;
 import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.widget.util.WidgetSizes;
 
+import java.util.Set;
+
 /**
  * A frame layout which contains a QSB.
  *
@@ -85,10 +87,10 @@ public class QsbContainerView extends FrameLayout implements SharedPreferences.O
             return Utilities.GSA_PACKAGE;
         }
         String providerPkg = null;
-        String[] fallbacks = context.getResources().getStringArray(R.array.qsb_search_fallback);
-        for (int i = 0; i < fallbacks.length; i++) {
-            if (Utilities.isPackageEnabled(fallbacks[i], context)) {
-                providerPkg = fallbacks[i];
+        Set<String> fallbacks = Utilities.getQSBProviderFallbacks(context).keySet();
+        for (String fallback : fallbacks) {
+            if (Utilities.isPackageEnabled(fallback, context)) {
+                providerPkg = fallback;
                 break;
             }
         }

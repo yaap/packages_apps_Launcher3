@@ -66,6 +66,7 @@ import com.android.launcher3.util.DisplayController;
 import com.android.launcher3.util.SettingsCache;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 /**
  * Settings activity for Launcher. Currently implements the following setting: Allow rotation
@@ -352,10 +353,10 @@ public class SettingsActivity extends FragmentActivity
                 mSearchProviderPref.setEnabled(
                         ((SwitchPreferenceCompat) mShowGoogleBarPref).isChecked());
             }
-            String[] fallbacks = getContext().getResources().getStringArray(
-                    R.array.qsb_search_fallback);
-            String[] fallbackNames = getContext().getResources().getStringArray(
-                    R.array.qsb_search_fallback_names);
+            LinkedHashMap<String, String> fallbackMap =
+                    Utilities.getQSBProviderFallbacks(getContext());
+            String[] fallbacks = fallbackMap.keySet().toArray(new String[0]);
+            String[] fallbackNames = fallbackMap.values().toArray(new String[0]);
             ArrayList<CharSequence> entries = new ArrayList<>();
             ArrayList<CharSequence> entryValues = new ArrayList<>();
             // always add the default first
