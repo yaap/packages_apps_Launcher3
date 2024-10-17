@@ -189,6 +189,7 @@ public final class Utilities {
     public static final String KEY_DOCK_SEARCH_PROVIDER = "pref_dock_search_provider";
     public static final String KEY_APP_DRAWER_OPACITY = "pref_app_drawer_opacity";
     public static final String KEY_FORCE_MONOCHROME_ICONS = "pref_forced_monochrome_icons";
+    public static final String KEY_AUTO_KEYABORD = "pref_auto_keyboard";
     public static final String KEY_BLUR_DEPTH = "pref_blur_depth";
     public static final String KEY_MINUS_ONE = "pref_enable_minus_one";
 
@@ -1001,6 +1002,11 @@ public final class Utilities {
     public static boolean enableMonoChromeThemedIcons(Context context) {
         SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
         return prefs.getBoolean(KEY_FORCE_MONOCHROME_ICONS, false);
+    }
+
+    public static boolean enableAutoIme(Context context) {
+        SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
+        return prefs.getBoolean(KEY_AUTO_KEYABORD, false);
     }
 
     public static int getBlurRadius(Context context) {
