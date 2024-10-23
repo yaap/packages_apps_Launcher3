@@ -361,6 +361,10 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
         getMainAdapterProvider().clearHighlightedItem();
         animateToSearchState(false);
         rebindAdapters();
+        if (mAllAppsTransitionController.getProgress() != 0f) return;
+        // show the keyboard again. we just erased the last char.
+        // doesn't mean we want it gone
+        mSearchUiManager.getEditText().showKeyboard();
     }
 
     /**
