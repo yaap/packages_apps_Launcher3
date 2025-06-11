@@ -28,6 +28,7 @@ import android.content.pm.LauncherActivityInfo;
 import android.content.pm.ShortcutInfo;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
+import android.os.Process;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.util.ArrayMap;
@@ -58,10 +59,13 @@ public class ApiWrapper {
             LauncherAppComponent::getApiWrapper);
 
     protected final Context mContext;
+    private final String[] mLegacyMultiInstanceSupportedApps;
 
     @Inject
     public ApiWrapper(@ApplicationContext Context context) {
         mContext = context;
+        mLegacyMultiInstanceSupportedApps = context.getResources().getStringArray(
+                com.android.launcher3.R.array.config_appsSupportMultiInstancesSplit);
     }
 
     /**
@@ -120,8 +124,27 @@ public class ApiWrapper {
      * Activity).
      */
     public Intent getAppMarketActivityIntent(String packageName, UserHandle user) {
-        if (Utilities.isFDroidEnabled(mContext)) {
-            Intent intent = mContext.getPackageManager()
+        return createMarketIntent(packageName);
+    }
+
+    /**
+     * Returns an intent which can be used to start a search for a package on app market
+     */
+    public Intent getMarketSearchIntent(String packageName, UserHandle user) {
+        // If we are search for the current user, just launch the market directly as the
+        // system won't have the installer details either
+        return  (Process.myUserHandle().equals(user))
+                ? createMarketIntent(packageName)
+                : getAppMarketActivityIntent(packageName, user);
+    }
+
+    private Intent createMarketIntent(String packageName) {
+        return createMarketIntent(packageName, mContext);
+    }
+
+    private static Intent createMarketIntent(String packageName, Context context) {
+        if (Utilities.isFDroidEnabled(context)) {
+            Intent intent = context.getPackageManager()
                     .getLaunchIntentForPackage(Utilities.FDROID_PACKAGE);
             if (packageName == null || BuildConfig.APPLICATION_ID.equals(packageName)) {
                 return intent;
@@ -149,11 +172,30 @@ public class ApiWrapper {
     /**
      * Checks if an activity is flagged as non-resizeable.
      */
-    public boolean isNonResizeableActivity(LauncherActivityInfo lai) {
-        // Overridden in quickstep
+    public boolean isNonResizeableActivity(@NonNull LauncherActivityInfo lai) {
+        // Overridden in Quickstep
         return false;
     }
 
+    /**
+     * Checks if an activity supports multi-instance.
+     */
+    public boolean supportsMultiInstance(@NonNull LauncherActivityInfo lai) {
+        // Check app multi-instance properties after V
+        if (!Utilities.ATLEAST_V) {
+            return false;
+        }
+
+        // Check the legacy hardcoded allowlist first
+        for (String pkg : mLegacyMultiInstanceSupportedApps) {
+            if (pkg.equals(lai.getComponentName().getPackageName())) {
+                return true;
+            }
+        }
+
+        // Overridden in Quickstep
+        return false;
+    }
     /**
      * Starts an Activity which can be used to set this Launcher as the HOME app, via a consent
      * screen. In case the consent screen cannot be shown, or the user does not set current Launcher
@@ -177,6 +219,20 @@ public class ApiWrapper {
     public String getApplicationInfoHash(@NonNull ApplicationInfo appInfo) {
         // The hashString in source dir changes with every install
         return appInfo.sourceDir;
+    }
+
+    /**
+     * Returns the round icon resource Id if defined by the app
+     */
+    public int getRoundIconRes(@NonNull ApplicationInfo appInfo) {
+        return 0;
+    }
+
+    /**
+     * Checks if the shortcut is using an icon with file or URI source
+     */
+    public boolean isFileDrawable(@NonNull ShortcutInfo shortcutInfo) {
+        return false;
     }
 
     private static class NoopDrawable extends ColorDrawable {

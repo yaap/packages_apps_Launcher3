@@ -34,8 +34,6 @@ import com.android.launcher3.views.ActivityContext;
  */
 public class AllAppsState extends LauncherState {
 
-    private static final float PARALLAX_COEFFICIENT = .125f;
-
     private static final int STATE_FLAGS = FLAG_WORKSPACE_INACCESSIBLE;
 
     public AllAppsState(int id) {
@@ -43,8 +41,7 @@ public class AllAppsState extends LauncherState {
     }
 
     @Override
-    public <DEVICE_PROFILE_CONTEXT extends Context & ActivityContext>
-    int getTransitionDuration(DEVICE_PROFILE_CONTEXT context, boolean isToState) {
+    public int getTransitionDuration(ActivityContext context, boolean isToState) {
         return isToState
                 ? context.getDeviceProfile().allAppsOpenDuration
                 : context.getDeviceProfile().allAppsCloseDuration;

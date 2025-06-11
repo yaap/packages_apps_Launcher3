@@ -25,6 +25,7 @@ import androidx.core.graphics.ColorUtils;
 
 import com.android.internal.jank.Cuj;
 import com.android.launcher3.DeviceProfile;
+import com.android.launcher3.Flags;
 import com.android.launcher3.Launcher;
 import com.android.launcher3.LauncherState;
 import com.android.launcher3.R;
@@ -51,8 +52,7 @@ public class AllAppsState extends LauncherState {
     }
 
     @Override
-    public <DEVICE_PROFILE_CONTEXT extends Context & ActivityContext>
-    int getTransitionDuration(DEVICE_PROFILE_CONTEXT context, boolean isToState) {
+    public int getTransitionDuration(ActivityContext context, boolean isToState) {
         return isToState
                 ? context.getDeviceProfile().allAppsOpenDuration
                 : context.getDeviceProfile().allAppsCloseDuration;
@@ -105,7 +105,7 @@ public class AllAppsState extends LauncherState {
 
     @Override
     public int getTitle() {
-        return R.string.all_apps_label;
+        return R.string.all_apps_list_label;
     }
 
     @Override
@@ -157,7 +157,7 @@ public class AllAppsState extends LauncherState {
         return new PageAlphaProvider(DECELERATE_2) {
             @Override
             public float getPageAlpha(int pageIndex) {
-                return launcher.getDeviceProfile().shouldShowAllAppsOnSheet()
+                return isWorkspaceVisible(launcher.getDeviceProfile())
                         ? superPageAlphaProvider.getPageAlpha(pageIndex)
                         : 0;
             }
@@ -167,11 +167,15 @@ public class AllAppsState extends LauncherState {
     @Override
     public int getVisibleElements(Launcher launcher) {
         int elements = ALL_APPS_CONTENT | FLOATING_SEARCH_BAR;
-        // When All Apps is presented on a bottom sheet, HOTSEAT_ICONS are visible.
-        if (launcher.getDeviceProfile().shouldShowAllAppsOnSheet()) {
+        if (isWorkspaceVisible(launcher.getDeviceProfile())) {
             elements |= HOTSEAT_ICONS;
         }
         return elements;
+    }
+
+    private static boolean isWorkspaceVisible(DeviceProfile deviceProfile) {
+        // Currently we hide the workspace with the all apps blur flag for simplicity.
+        return deviceProfile.isTablet && !Flags.allAppsBlur();
     }
 
     @Override

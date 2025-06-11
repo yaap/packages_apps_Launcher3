@@ -116,6 +116,7 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
         ScrimView.ScrimDrawingController {
 
 
+    private static final String TAG = "ActivityAllAppsContainerView";
     public static final float PULL_MULTIPLIER = .02f;
     public static final float FLING_VELOCITY_MULTIPLIER = 1200f;
     protected static final String BUNDLE_KEY_CURRENT_PAGE = "launcher.allapps.current_page";
@@ -181,6 +182,7 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
     private ScrimView mScrimView;
     private int mHeaderColor;
     private int mBottomSheetBackgroundColor;
+    private float mBottomSheetBackgroundAlpha = 1f;
     private int mTabsProtectionAlpha;
     @Nullable private AllAppsTransitionController mAllAppsTransitionController;
 
@@ -274,12 +276,7 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
         mFastScroller = findViewById(R.id.fast_scroller);
         mFastScroller.setPopupView(findViewById(R.id.fast_scroller_popup));
         mFastScrollLetterLayout = findViewById(R.id.scroll_letter_layout);
-        if (Flags.letterFastScroller()) {
-            // Set clip children to false otherwise the scroller letters will be clipped.
-            setClipChildren(false);
-        } else {
-            setClipChildren(true);
-        }
+        setClipChildren(false);
 
         mSearchContainer = inflateSearchBar();
         if (!isSearchBarFloating()) {
@@ -316,7 +313,17 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
                 0,
                 0 // Bottom left
         };
-        mBottomSheetBackgroundColor = getContext().getColor(R.color.materialColorSurfaceDim);
+        if (Flags.allAppsBlur()) {
+            int resId = Utilities.isDarkTheme(getContext())
+                    ? android.R.color.system_accent1_800 : android.R.color.system_accent1_100;
+            int layerAbove = ColorUtils.setAlphaComponent(getResources().getColor(resId, null),
+                    (int) (0.4f * 255));
+            int layerBelow = ColorUtils.setAlphaComponent(Color.WHITE, (int) (0.1f * 255));
+            mBottomSheetBackgroundColor = ColorUtils.compositeColors(layerAbove, layerBelow);
+        } else {
+            mBottomSheetBackgroundColor = getContext().getColor(R.color.materialColorSurfaceDim);
+        }
+        mBottomSheetBackgroundAlpha = Color.alpha(mBottomSheetBackgroundColor) / 255.0f;
         updateBackgroundVisibility(mActivityContext.getDeviceProfile());
         mSearchUiManager.initializeSearch(this);
     }
@@ -578,6 +585,7 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
     }
 
     protected void rebindAdapters(boolean force) {
+        Log.d(TAG, "rebindAdapters: force: " + force);
         if (mSearchTransitionController.isRunning()) {
             mRebindAdaptersAfterSearchAnimation = true;
             return;
@@ -586,6 +594,7 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
 
         boolean showTabs = shouldShowTabs();
         if (showTabs == mUsingTabs && !force) {
+            Log.d(TAG, "rebindAdapters: Not needed.");
             return;
         }
 
@@ -615,6 +624,7 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
             mViewPager.getPageIndicator().setActiveMarker(AdapterHolder.MAIN);
             findViewById(R.id.tab_personal)
                     .setOnClickListener((View view) -> {
+                        Log.d(TAG, "rebindAdapters: " + "Clicked personal tab.");
                         if (mViewPager.snapToPage(AdapterHolder.MAIN)) {
                             mActivityContext.getStatsLogManager().logger()
                                     .log(LAUNCHER_ALLAPPS_TAP_ON_PERSONAL_TAB);
@@ -622,6 +632,7 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
                     });
             findViewById(R.id.tab_work)
                     .setOnClickListener((View view) -> {
+                        Log.d(TAG, "rebindAdapters: " + "Clicked work tab.");
                         if (mViewPager.snapToPage(AdapterHolder.WORK)) {
                             mActivityContext.getStatsLogManager().logger()
                                     .log(LAUNCHER_ALLAPPS_TAP_ON_WORK_TAB);
@@ -679,6 +690,7 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
     }
 
     private void replaceAppsRVContainer(boolean showTabs) {
+        Log.d(TAG, "replaceAppsRVContainer: showTabs: " + showTabs);
         for (int i = AdapterHolder.MAIN; i <= AdapterHolder.WORK; i++) {
             AdapterHolder adapterHolder = mAH.get(i);
             if (adapterHolder.mRecyclerView != null) {
@@ -712,7 +724,6 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
 
             mWorkManager.reset();
             post(() -> mAH.get(AdapterHolder.WORK).applyPadding());
-
         } else {
             mWorkManager.detachWorkUtilityViews();
             mViewPager = null;
@@ -1011,6 +1022,7 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
 
     @VisibleForTesting
     public void onAppsUpdated() {
+        Log.d(TAG, "onAppsUpdated; number of apps: " + mAllAppsStore.getApps().length);
         mHasWorkApps = Stream.of(mAllAppsStore.getApps())
                 .anyMatch(mWorkManager.getItemInfoMatcher());
         mHasPrivateApps = Stream.of(mAllAppsStore.getApps())
@@ -1157,7 +1169,7 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
 
         if (!grid.isVerticalBarLayout() || FeatureFlags.enableResponsiveWorkspace()) {
             int topPadding = grid.allAppsPadding.top;
-            if (isSearchBarFloating() && !grid.isTablet) {
+            if (isSearchBarFloating() && !grid.shouldShowAllAppsOnSheet()) {
                 topPadding += getResources().getDimensionPixelSize(
                         R.dimen.all_apps_additional_top_padding_floating_search);
             }
@@ -1406,7 +1418,7 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
         // Draw full background panel for tablets.
         if (hasBottomSheet) {
             mHeaderPaint.setColor(mBottomSheetBackgroundColor);
-            mHeaderPaint.setAlpha(255);
+            mHeaderPaint.setAlpha((int) (mBottomSheetBackgroundAlpha * 255));
 
             mTmpRectF.set(
                     leftWithScale,
@@ -1450,7 +1462,7 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
     public int getHeaderBottom() {
         int bottom = (int) getTranslationY() + mHeader.getClipTop();
         if (isSearchBarFloating()) {
-            if (mActivityContext.getDeviceProfile().isTablet) {
+            if (mActivityContext.getDeviceProfile().shouldShowAllAppsOnSheet()) {
                 return bottom + mBottomSheetBackground.getTop();
             }
             return bottom;
