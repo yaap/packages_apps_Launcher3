@@ -65,10 +65,6 @@
     <string name="browser_name_kiwi">Kiwi</string>
     <string name="browser_name_startpage">Startpage</string>
 
-    <!-- Kill App recents action shortcut -->
-    <string name="recent_task_option_kill_app">Kill</string>
-    <string name="recents_app_killed">App killed</string>
-
     <!-- Force monochrome icons -->
     <string name="pref_force_monochrome_themed_icons_title">Force themed icons</string>
     <string name="pref_force_monochrome_themed_icons_summary">Generate themed icon for apps that do not have one (requires re-toggling of themed icons)</string>
