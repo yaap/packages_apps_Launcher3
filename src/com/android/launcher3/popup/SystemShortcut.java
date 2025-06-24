@@ -1,9 +1,6 @@
 package com.android.launcher3.popup;
 
-import static android.app.WindowConfiguration.WINDOWING_MODE_FREEFORM;
 import static com.android.launcher3.logging.StatsLogManager.LauncherEvent.LAUNCHER_DISMISS_PREDICTION_UNDO;
-
-
 import static com.android.launcher3.logging.StatsLogManager.LauncherEvent.LAUNCHER_PRIVATE_SPACE_INSTALL_SYSTEM_SHORTCUT_TAP;
 import static com.android.launcher3.logging.StatsLogManager.LauncherEvent.LAUNCHER_PRIVATE_SPACE_UNINSTALL_SYSTEM_SHORTCUT_TAP;
 import static com.android.launcher3.logging.StatsLogManager.LauncherEvent.LAUNCHER_SYSTEM_SHORTCUT_APP_INFO_TAP;
@@ -20,7 +17,6 @@ import android.os.Process;
 import android.os.UserHandle;
 import android.util.Log;
 import android.view.View;
-import android.view.WindowInsets;
 import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -397,39 +393,6 @@ public abstract class SystemShortcut<T extends ActivityContext> extends ItemInfo
                     .logger()
                     .withItemInfo(mItemInfo)
                     .log(LAUNCHER_PRIVATE_SPACE_UNINSTALL_SYSTEM_SHORTCUT_TAP);
-        }
-    }
-
-    public static final Factory<ActivityContext> FREE_FORM = (activity, itemInfo, originalView) -> 
-        new FreeForm(activity, itemInfo, originalView);
-
-    public static class FreeForm<T extends ActivityContext> extends SystemShortcut<T> { 
-        private final String mPackageName;
-        private final ComponentName mComponentName;
-        private final int mUserId;
-        
-        public FreeForm(T target, ItemInfo itemInfo, View originalView) {
-            super(R.drawable.ic_caption_desktop_button_foreground, R.string.recent_task_option_freeform, target, itemInfo, originalView);
-            mPackageName = itemInfo.getTargetComponent().getPackageName();
-            mComponentName = itemInfo.getTargetComponent();
-            mUserId = originalView.getContext().getUserId();
-        }
-
-        @Override
-        public void onClick(View view) {
-            if (mPackageName != null) {
-                startLmoFreeform(view.getContext());
-                AbstractFloatingView.closeAllOpenViews(((ActivityContext) mTarget));
-            }
-        }
-
-        private void startLmoFreeform(Context context) {
-            final Intent intent = new Intent("com.libremobileos.freeform.START_FREEFORM")
-                    .setPackage("com.libremobileos.freeform")
-                    .putExtra("packageName", mPackageName)
-                    .putExtra("activityName", mComponentName.getClassName())
-                    .putExtra("userId", mUserId);
-            context.sendBroadcast(intent);
         }
     }
 
