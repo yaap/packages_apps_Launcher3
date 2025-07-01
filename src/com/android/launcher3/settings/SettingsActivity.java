@@ -78,8 +78,7 @@ import java.util.LinkedHashMap;
  * Settings activity for Launcher. Currently implements the following setting: Allow rotation
  */
 public class SettingsActivity extends FragmentActivity
-        implements OnPreferenceStartFragmentCallback, OnPreferenceStartScreenCallback,
-        SharedPreferences.OnSharedPreferenceChangeListener {
+        implements OnPreferenceStartFragmentCallback, OnPreferenceStartScreenCallback {
 
     @VisibleForTesting
     static final String DEVELOPER_OPTIONS_KEY = "pref_developer_options";
@@ -133,27 +132,6 @@ public class SettingsActivity extends FragmentActivity
             f.setArguments(args);
             // Display the fragment as the main content.
             fm.beginTransaction().replace(R.id.content_frame, f).commit();
-        }
-
-        LauncherPrefs.getPrefs(this).registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        LauncherPrefs.getPrefs(this).unregisterOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) { 
-        switch (key) {
-            case Utilities.KEY_DOCK_SEARCH:
-            case Utilities.KEY_DOCK_SEARCH_PROVIDER:
-            case Utilities.KEY_BLUR_DEPTH:
-                LauncherAppState.getInstance(this).setNeedsRestart();
-                break;
-            default:
-                break;
         }
     }
 
