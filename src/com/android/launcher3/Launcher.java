@@ -124,6 +124,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentSender;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.content.res.Configuration;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
@@ -429,6 +430,23 @@ public class Launcher extends StatefulActivity<LauncherState>
     private InputMethodManager mInputMethodManager;
 
     private boolean mWasImeOpened = false;
+    private boolean mNeedsRestart = false;
+
+    private final OnSharedPreferenceChangeListener mSharedPrefListener =
+            new OnSharedPreferenceChangeListener() {
+                @Override
+                public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+                    switch (key) {
+                        case Utilities.KEY_DOCK_SEARCH:
+                        case Utilities.KEY_DOCK_SEARCH_PROVIDER:
+                        case Utilities.KEY_BLUR_DEPTH:
+                            mNeedsRestart = true;
+                            break;
+                        default:
+                            break;
+                    }
+                }
+            };
 
     public static Launcher getLauncher(Context context) {
         return fromContext(context);
@@ -620,6 +638,8 @@ public class Launcher extends StatefulActivity<LauncherState>
 
         mInputMethodManager = (InputMethodManager) mWorkspace.getContext().getSystemService(
                 Context.INPUT_METHOD_SERVICE); 
+
+        mSharedPrefs.registerOnSharedPreferenceChangeListener(mSharedPrefListener);
     }
 
     protected ModelCallbacks createModelCallbacks() {
@@ -1316,11 +1336,13 @@ public class Launcher extends StatefulActivity<LauncherState>
         } else {
             mOverlayManager.onActivityResumed();
         }
-                        
-        LauncherAppState.getInstance(this).checkIfRestartNeeded();
 
         DragView.removeAllViews(this);
         TraceHelper.INSTANCE.endSection();
+
+        if (mNeedsRestart) {
+            Utilities.restart(this);
+        }
     }
 
     @Override
@@ -1818,6 +1840,8 @@ public class Launcher extends StatefulActivity<LauncherState>
         getRootView().getViewTreeObserver().removeOnPreDrawListener(mOnInitialBindListener);
         mOverlayManager.onActivityDestroyed();
         PillColorProvider.getInstance(mWorkspace.getContext()).unregisterObserver();
+
+        mSharedPrefs.unregisterOnSharedPreferenceChangeListener(mSharedPrefListener);
     }
 
     public LauncherAccessibilityDelegate getAccessibilityDelegate() {
