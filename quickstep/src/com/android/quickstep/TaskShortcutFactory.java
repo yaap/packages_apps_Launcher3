@@ -325,9 +325,11 @@ public interface TaskShortcutFactory {
             IActivityManager iam = ActivityManagerNative.getDefault();
             try {
                 iam.forceStopPackage(packageName, UserHandle.USER_CURRENT);
-                Toast appKilled = Toast.makeText(mTarget.asContext(), R.string.recents_app_killed,
-                    Toast.LENGTH_SHORT);
-                appKilled.show();
+                String title = TaskUtils.getTitle(
+                        taskView.getContext(), mTaskContainer.getTask()).toString();
+                String text = String.format(
+                        mTarget.asContext().getString(R.string.recents_app_killed), title);
+                Toast.makeText(mTarget.asContext(), text, Toast.LENGTH_SHORT).show();
 
                 RecentsView<?, ?> recentsView = taskView.getRecentsView();
                 if (recentsView != null) {

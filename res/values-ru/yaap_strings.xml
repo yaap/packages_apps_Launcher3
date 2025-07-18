@@ -67,7 +67,6 @@
 
     <!-- Kill App recents action shortcut -->
     <string name="recent_task_option_kill_app">Закрыть</string>
-    <string name="recents_app_killed">Приложение закрыто</string>
 
     <!-- Force monochrome icons -->
     <string name="pref_force_monochrome_themed_icons_title">Принудительно использовать тематические иконки</string>

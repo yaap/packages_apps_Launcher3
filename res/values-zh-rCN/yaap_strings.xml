@@ -56,7 +56,6 @@
 
     <!-- Kill App recents action shortcut -->
     <string name="recent_task_option_kill_app">强行停止</string>
-    <string name="recents_app_killed">应用已停止</string>
 
     <!-- Pause apps -->
     <string name="pause">暂停</string>

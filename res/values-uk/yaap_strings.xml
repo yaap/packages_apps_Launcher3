@@ -50,7 +50,6 @@
 
     <!-- Kill App recents action shortcut -->
     <string name="recent_task_option_kill_app">Зняти</string>
-    <string name="recents_app_killed">Додаток знято</string>
 
     <!-- button string shown pause work profile -->
     <string name="work_apps_pause_btn_text_calyx">Вимкнути робочі програми</string>
