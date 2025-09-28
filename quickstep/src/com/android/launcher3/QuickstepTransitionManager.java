@@ -1271,7 +1271,7 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
         }
 
         RemoteAnimationTarget launcherTarget = null;
-        for (final RemoteAnimationTarget target : targets.apps) {
+        for (final RemoteAnimationTarget target : targets.unfilteredApps) {
             if (MODE_CLOSING == target.mode) {
                 launcherTarget = target;
                 break;
