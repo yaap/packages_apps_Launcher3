@@ -112,6 +112,10 @@
     <!-- Settings message explaining when the -1 screen is available on an RTL device. [CHAR LIMIT=100] -->
     <string name="msg_minus_one_on_right">When you swipe left from main home screen</string>
 
+    <!-- Always show page indicator dots -->
+    <string name="pref_always_show_dots_title">Always show dots</string>
+    <string name="pref_always_show_dots_summary">Never hide the page indicator dots</string>
+
     <!-- Settings Categories -->
     <string name="category_home">Home Screen</string>
     <string name="category_icon">Icons</string>

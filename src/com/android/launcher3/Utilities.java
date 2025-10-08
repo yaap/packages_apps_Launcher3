@@ -185,6 +185,7 @@ public final class Utilities {
     public static final String KEY_AUTO_KEYABORD = "pref_auto_keyboard";
     public static final String KEY_BLUR_DEPTH = "pref_blur_depth";
     public static final String KEY_MINUS_ONE = "pref_enable_minus_one";
+    public static final String KEY_ALWAYS_SHOW_DOTS = "pref_always_show_dots";
 
     /**
      * Returns true if theme is dark.
@@ -1130,5 +1131,10 @@ public final class Utilities {
         SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
         return prefs.getInt(KEY_BLUR_DEPTH,
                 context.getResources().getInteger(R.integer.max_depth_blur_radius));
+    }
+
+    public static boolean getAlwaysShowDots(Context context) {
+        SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
+        return prefs.getBoolean(KEY_ALWAYS_SHOW_DOTS, false);
     }
 }

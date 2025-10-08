@@ -431,6 +431,7 @@ public class Launcher extends StatefulActivity<LauncherState>
 
     private boolean mWasImeOpened = false;
     private boolean mNeedsRestart = false;
+    private boolean mAlwaysShowDots = false;
 
     private final OnSharedPreferenceChangeListener mSharedPrefListener =
             new OnSharedPreferenceChangeListener() {
@@ -441,6 +442,9 @@ public class Launcher extends StatefulActivity<LauncherState>
                         case Utilities.KEY_DOCK_SEARCH_PROVIDER:
                         case Utilities.KEY_BLUR_DEPTH:
                             mNeedsRestart = true;
+                            break;
+                        case Utilities.KEY_ALWAYS_SHOW_DOTS:
+                            updateAlwaysShowDotsSetting();
                             break;
                         default:
                             break;
@@ -639,7 +643,16 @@ public class Launcher extends StatefulActivity<LauncherState>
         mInputMethodManager = (InputMethodManager) mWorkspace.getContext().getSystemService(
                 Context.INPUT_METHOD_SERVICE); 
 
+        updateAlwaysShowDotsSetting();
         mSharedPrefs.registerOnSharedPreferenceChangeListener(mSharedPrefListener);
+    }
+
+    private void updateAlwaysShowDotsSetting() {
+        if (mWorkspace == null) {
+            return;
+        }
+        mAlwaysShowDots = Utilities.getAlwaysShowDots(mWorkspace.getContext());
+        mWorkspace.getPageIndicator().setShouldAutoHide(!mAlwaysShowDots);
     }
 
     protected ModelCallbacks createModelCallbacks() {
@@ -1259,7 +1272,7 @@ public class Launcher extends StatefulActivity<LauncherState>
             mWorkspace.setClipChildren(false);
         }
         // When multiple pages are visible, show persistent page indicator
-        mWorkspace.getPageIndicator().setShouldAutoHide(!state.hasFlag(FLAG_MULTI_PAGE));
+        mWorkspace.getPageIndicator().setShouldAutoHide(!mAlwaysShowDots);
 
         mPrevLauncherState = mStateManager.getCurrentStableState();
         if (mPrevLauncherState != state && ALL_APPS.equals(state)
@@ -1442,7 +1455,7 @@ public class Launcher extends StatefulActivity<LauncherState>
         mDropTargetBar.setup(mDragController);
         mAllAppsController.setupViews(mScrimView, mAppsView);
 
-        mWorkspace.getPageIndicator().setShouldAutoHide(true);
+        mWorkspace.getPageIndicator().setShouldAutoHide(!mAlwaysShowDots);
         mWorkspace.getPageIndicator().setPaintColor(Themes.getAttrBoolean(
                 this, R.attr.isWorkspaceDarkText) ? Color.BLACK : Color.WHITE);
     }
