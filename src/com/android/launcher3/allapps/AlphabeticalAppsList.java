@@ -386,7 +386,7 @@ public class AlphabeticalAppsList<T extends Context & ActivityContext> implement
 
     private int addPrivateSpaceApps(int position) {
         // Add Install Apps Button first.
-        if (Flags.privateSpaceAppInstallerButton() && !enableMovingContentIntoPrivateSpace()) {
+        if (!enableMovingContentIntoPrivateSpace()) {
             mPrivateProviderManager.addPrivateSpaceInstallAppButton(mAdapterItems);
             position++;
         }
@@ -436,6 +436,7 @@ public class AlphabeticalAppsList<T extends Context & ActivityContext> implement
                         currentItem.itemInfo.getTargetPackage(), PRIVATE_SPACE_PACKAGE)) {
                     currentItem.itemInfo.bitmap = mPrivateProviderManager.preparePSBitmapInfo();
                     currentItem.itemInfo.bitmap.creationFlags |= FLAG_NO_BADGE;
+                    currentItem.itemInfo.title = mPrivateProviderManager.getPSAppTitleOverride();
                     currentItem.itemInfo.contentDescription =
                             mPrivateProviderManager.getPsAppContentDesc();
                     privateSpaceAppIndex = i;
@@ -466,7 +467,7 @@ public class AlphabeticalAppsList<T extends Context & ActivityContext> implement
             if (hasPrivateApps) {
                 mAdapterItems.add(AdapterItem.asAppWithDecorationInfo(info,
                         new SectionDecorationInfo(mActivityContext,
-                                getRoundRegions(i, appList.size()), true /* decorateTogether */)));
+                                getRoundRegions(i, appList.size()))));
             } else {
                 mAdapterItems.add(AdapterItem.asApp(info));
             }

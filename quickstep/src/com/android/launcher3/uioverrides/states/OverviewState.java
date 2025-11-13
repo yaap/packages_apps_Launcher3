@@ -17,7 +17,6 @@ package com.android.launcher3.uioverrides.states;
 
 import static com.android.app.animation.Interpolators.DECELERATE_2;
 import static com.android.launcher3.Flags.enableDesktopExplodedView;
-import static com.android.launcher3.Flags.enableOverviewBackgroundWallpaperBlur;
 import static com.android.launcher3.Flags.enableScalingRevealHomeAnimation;
 import static com.android.launcher3.logging.StatsLogManager.LAUNCHER_STATE_OVERVIEW;
 
@@ -35,11 +34,11 @@ import com.android.launcher3.Utilities;
 import com.android.launcher3.util.DisplayController;
 import com.android.launcher3.util.Themes;
 import com.android.launcher3.views.ActivityContext;
+import com.android.launcher3.views.ScrimColors;
 import com.android.quickstep.util.BaseDepthController;
 import com.android.quickstep.util.LayoutUtils;
 import com.android.quickstep.views.RecentsView;
 import com.android.quickstep.views.TaskView;
-import com.android.systemui.shared.system.BlurUtils;
 
 /**
  * Definition for overview state
@@ -87,7 +86,7 @@ public class OverviewState extends LauncherState {
         recentsView.getTaskSize(sTempRect);
         float scale;
         DeviceProfile deviceProfile = launcher.getDeviceProfile();
-        if (deviceProfile.isTwoPanels) {
+        if (deviceProfile.getDeviceProperties().isTwoPanels()) {
             // In two panel layout, width does not include both panels or space between them, so
             // use height instead. We do not use height for handheld, as cell layout can be
             // shorter than a task and we want the workspace to scale down to task size.
@@ -119,9 +118,9 @@ public class OverviewState extends LauncherState {
         int elements = OVERVIEW_ACTIONS | ADD_DESK_BUTTON;
         DeviceProfile dp = launcher.getDeviceProfile();
         boolean showFloatingSearch;
-        if (dp.isPhone) {
+        if (dp.getDeviceProperties().isPhone()) {
             // Only show search in phone overview in portrait mode.
-            showFloatingSearch = !dp.isLandscape;
+            showFloatingSearch = !dp.getDeviceProperties().isLandscape();
         } else {
             // Only show search in tablet overview if taskbar is not visible.
             showFloatingSearch = !dp.isTaskbarPresent || isTaskbarStashed(launcher);
@@ -153,7 +152,7 @@ public class OverviewState extends LauncherState {
     @Override
     public boolean shouldFloatingSearchBarUsePillWhenUnfocused(Launcher launcher) {
         DeviceProfile dp = launcher.getDeviceProfile();
-        return dp.isPhone && !dp.isLandscape;
+        return dp.getDeviceProperties().isPhone() && !dp.getDeviceProperties().isLandscape();
     }
 
     @Override
@@ -162,20 +161,17 @@ public class OverviewState extends LauncherState {
     }
 
     @Override
-    public int getWorkspaceScrimColor(Launcher launcher) {
-        return enableOverviewBackgroundWallpaperBlur() && BlurUtils.supportsBlursOnWindows()
-                ? Themes.getAttrColor(launcher, R.attr.overviewScrimColorOverBlur)
-                : Themes.getAttrColor(launcher, R.attr.overviewScrimColor);
+    public ScrimColors getWorkspaceScrimColor(Launcher launcher) {
+        return new ScrimColors(
+                /* backgroundColor */ Themes.getAttrColor(launcher, R.attr.overviewScrimColor),
+                /* foregroundColor */ ColorUtils.compositeColors(
+                Themes.getAttrColor(launcher, R.attr.overviewScrimForegroundPrimary),
+                Themes.getAttrColor(launcher, R.attr.overviewScrimForegroundSecondary)));
     }
 
     @Override
     public boolean displayOverviewTasksAsGrid(DeviceProfile deviceProfile) {
-        return deviceProfile.isTablet;
-    }
-
-    @Override
-    public boolean detachDesktopCarousel() {
-        return false;
+        return deviceProfile.getDeviceProperties().isTablet();
     }
 
     @Override
@@ -225,7 +221,7 @@ public class OverviewState extends LauncherState {
     public void onBackInvoked(Launcher launcher) {
         RecentsView recentsView = launcher.getOverviewPanel();
         TaskView taskView = recentsView.getRunningTaskView();
-        if (taskView != null) {
+        if (taskView != null && !taskView.isBeingDismissed()) {
             if (recentsView.isTaskViewFullyVisible(taskView)) {
                 taskView.launchWithAnimation();
             } else {

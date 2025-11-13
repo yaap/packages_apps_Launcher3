@@ -126,6 +126,7 @@ public class TaskbarDragLayer extends BaseDragLayer<TaskbarActivityContext> {
 
     @Override
     public void recreateControllers() {
+        super.recreateControllers();
         mControllers = mControllerCallbacks.getTouchControllers();
     }
 

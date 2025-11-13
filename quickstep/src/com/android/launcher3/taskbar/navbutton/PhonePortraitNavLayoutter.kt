@@ -26,8 +26,8 @@ import android.widget.LinearLayout
 import android.widget.Space
 import com.android.launcher3.R
 import com.android.launcher3.taskbar.TaskbarActivityContext
-import com.android.launcher3.taskbar.TaskbarManager.NAV_BAR_INVERSE
-import com.android.launcher3.taskbar.TaskbarManager.NAV_BAR_LAYOUT
+import com.android.launcher3.taskbar.TaskbarManagerImpl.NAV_BAR_INVERSE
+import com.android.launcher3.taskbar.TaskbarManagerImpl.NAV_BAR_LAYOUT
 import com.android.launcher3.util.SettingsCache
 
 class PhonePortraitNavLayoutter(
@@ -37,7 +37,7 @@ class PhonePortraitNavLayoutter(
     startContextualContainer: ViewGroup,
     imeSwitcher: ImageView?,
     a11yButton: ImageView?,
-    space: Space?
+    space: Space?,
 ) :
     AbstractNavButtonLayoutter(
         resources,
@@ -46,12 +46,12 @@ class PhonePortraitNavLayoutter(
         startContextualContainer,
         imeSwitcher,
         a11yButton,
-        space
+        space,
     ) {
 
     override fun layoutButtons(context: TaskbarActivityContext, isA11yButtonPersistent: Boolean) {
         val layoutMode = SettingsCache.INSTANCE.get(homeButton!!.context).getIntValue(NAV_BAR_LAYOUT, 0)
-        val totalWidth = context.deviceProfile.widthPx
+        val totalWidth = context.deviceProfile.deviceProperties.widthPx
         val homeButtonWidth =
             resources.getDimensionPixelSize(R.dimen.taskbar_phone_home_button_size)
         val roundedCornerContentMargin =
@@ -73,7 +73,7 @@ class PhonePortraitNavLayoutter(
         val navContainerParams =
             FrameLayout.LayoutParams(
                 navButtonContainerWidth.toInt(),
-                ViewGroup.LayoutParams.MATCH_PARENT
+                ViewGroup.LayoutParams.MATCH_PARENT,
             )
         navContainerParams.apply {
             topMargin = 0
@@ -135,14 +135,14 @@ class PhonePortraitNavLayoutter(
             contextualButtonWidth.toInt(),
             roundedCornerContentMargin + contentPadding,
             0,
-            Gravity.START
+            Gravity.START,
         )
         repositionContextualContainer(
             endContextualContainer,
             contextualButtonWidth.toInt(),
             0,
             roundedCornerContentMargin + contentPadding,
-            Gravity.END
+            Gravity.END,
         )
 
         startContextualContainer.addView(space, MATCH_PARENT, MATCH_PARENT)

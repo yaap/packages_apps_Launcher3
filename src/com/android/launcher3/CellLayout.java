@@ -1052,7 +1052,7 @@ public class CellLayout extends ViewGroup {
     /**
      * Returns the amount of space left over after subtracting padding and cells. This space will be
      * very small, a few pixels at most, and is a result of rounding down when calculating the cell
-     * width in {@link DeviceProfile#calculateCellWidth(int, int, int)}.
+     * width in {@link deviceprofile#calculateCellWidth(int, int, int)}.
      */
     public int getUnusedHorizontalSpace() {
         return getMeasuredWidth() - getPaddingLeft() - getPaddingRight() - (mCountX * mCellWidth)
@@ -1076,10 +1076,8 @@ public class CellLayout extends ViewGroup {
             int delay, boolean permanent, boolean adjustOccupied) {
         ShortcutAndWidgetContainer clc = getShortcutsAndWidgets();
 
-        if (clc.indexOfChild(child) != -1 && (child instanceof Reorderable)) {
+        if (clc.indexOfChild(child) != -1 && (child instanceof Reorderable item)) {
             final CellLayoutLayoutParams lp = (CellLayoutLayoutParams) child.getLayoutParams();
-            final ItemInfo info = (ItemInfo) child.getTag();
-            final Reorderable item = (Reorderable) child;
 
             // We cancel any existing animations
             if (mReorderAnimators.containsKey(lp)) {
@@ -1485,7 +1483,7 @@ public class CellLayout extends ViewGroup {
                 lp.setCellX(lp.getTmpCellX());
                 lp.setCellY(lp.getTmpCellY());
                 if (requiresDbUpdate) {
-                    Launcher.cast(mActivity).getModelWriter().modifyItemInDatabase(info, container,
+                    mActivity.getModelWriter().modifyItemInDatabase(info, container,
                             screenId, lp.getCellX(), lp.getCellY(), lp.cellHSpan, lp.cellVSpan);
                 }
             }
@@ -1855,8 +1853,7 @@ public class CellLayout extends ViewGroup {
 
     public void markCellsAsOccupiedForView(View view) {
         if (view instanceof LauncherAppWidgetHostView
-                && view.getTag() instanceof LauncherAppWidgetInfo) {
-            LauncherAppWidgetInfo info = (LauncherAppWidgetInfo) view.getTag();
+                && view.getTag() instanceof LauncherAppWidgetInfo info) {
             CellPos pos = mActivity.getCellPosMapper().mapModelToPresenter(info);
             mOccupied.markCells(pos.cellX, pos.cellY, info.spanX, info.spanY, true);
             return;
@@ -1869,8 +1866,7 @@ public class CellLayout extends ViewGroup {
 
     public void markCellsAsUnoccupiedForView(View view) {
         if (view instanceof LauncherAppWidgetHostView
-                && view.getTag() instanceof LauncherAppWidgetInfo) {
-            LauncherAppWidgetInfo info = (LauncherAppWidgetInfo) view.getTag();
+                && view.getTag() instanceof LauncherAppWidgetInfo info) {
             CellPos pos = mActivity.getCellPosMapper().mapModelToPresenter(info);
             mOccupied.markCells(pos.cellX, pos.cellY, info.spanX, info.spanY, false);
             return;

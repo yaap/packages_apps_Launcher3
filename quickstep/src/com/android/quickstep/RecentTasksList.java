@@ -18,9 +18,7 @@ package com.android.quickstep;
 
 import static android.content.Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS;
 
-import static com.android.launcher3.Flags.enableSeparateExternalDisplayTasks;
 import static com.android.launcher3.util.Executors.UI_HELPER_EXECUTOR;
-import static com.android.quickstep.util.SplitScreenUtils.convertShellSplitBoundsToLauncher;
 import static com.android.wm.shell.shared.GroupedTaskInfo.TYPE_DESK;
 import static com.android.wm.shell.shared.GroupedTaskInfo.TYPE_SPLIT;
 
@@ -40,8 +38,6 @@ import androidx.annotation.VisibleForTesting;
 import com.android.launcher3.statehandlers.DesktopVisibilityController;
 import com.android.launcher3.util.DaggerSingletonTracker;
 import com.android.launcher3.util.LooperExecutor;
-import com.android.launcher3.util.SplitConfigurationOptions;
-import com.android.launcher3.util.window.WindowManagerProxy;
 import com.android.quickstep.util.DesktopTask;
 import com.android.quickstep.util.ExternalDisplaysKt;
 import com.android.quickstep.util.GroupTask;
@@ -65,6 +61,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -72,10 +69,7 @@ import java.util.stream.Collectors;
 /**
  * Manages the recent task list from the system, caching it as necessary.
  */
-// TODO: b/401602554 - Consider letting [DesktopTasksController] notify [RecentTasksController] of
-//  desk changes to trigger [IRecentTasksListener.onRecentTasksChanged()], instead of implementing
-//  [DesktopVisibilityListener].
-public class RecentTasksList implements WindowManagerProxy.DesktopVisibilityListener {
+public class RecentTasksList {
 
     private static final TaskLoadResult INVALID_RESULT = new TaskLoadResult(-1, false, 0);
 
@@ -83,7 +77,6 @@ public class RecentTasksList implements WindowManagerProxy.DesktopVisibilityList
     private final KeyguardManager mKeyguardManager;
     private final LooperExecutor mMainThreadExecutor;
     private final SystemUiProxy mSysUiProxy;
-    private final DesktopVisibilityController mDesktopVisibilityController;
 
     // The list change id, increments as the task list changes in the system
     private int mChangeId;
@@ -102,14 +95,12 @@ public class RecentTasksList implements WindowManagerProxy.DesktopVisibilityList
     public RecentTasksList(Context context, LooperExecutor mainThreadExecutor,
             KeyguardManager keyguardManager, SystemUiProxy sysUiProxy,
             TopTaskTracker topTaskTracker,
-            DesktopVisibilityController desktopVisibilityController,
             DaggerSingletonTracker tracker) {
         mContext = context;
         mMainThreadExecutor = mainThreadExecutor;
         mKeyguardManager = keyguardManager;
         mChangeId = 1;
         mSysUiProxy = sysUiProxy;
-        mDesktopVisibilityController = desktopVisibilityController;
         final IRecentTasksListener recentTasksListener = new IRecentTasksListener.Stub() {
             @Override
             public void onRecentTasksChanged() throws RemoteException {
@@ -162,13 +153,6 @@ public class RecentTasksList implements WindowManagerProxy.DesktopVisibilityList
         tracker.addCloseable(
                 () -> mSysUiProxy.unregisterRecentTasksListener(recentTasksListener));
 
-        if (DesktopModeStatus.enableMultipleDesktops(mContext)) {
-            mDesktopVisibilityController.registerDesktopVisibilityListener(
-                    this);
-            tracker.addCloseable(
-                    () -> mDesktopVisibilityController.unregisterDesktopVisibilityListener(this));
-        }
-
         // We may receive onRunningTaskAppeared events later for tasks which have already been
         // included in the list returned by mSysUiProxy.getRunningTasks(), or may receive
         // onRunningTaskVanished for tasks not included in the returned list. These cases will be
@@ -200,8 +184,27 @@ public class RecentTasksList implements WindowManagerProxy.DesktopVisibilityList
      * @param callback     The callback to receive the list of recent tasks
      * @return The change id of the current task list
      */
-    public synchronized int getTasks(boolean loadKeysOnly,
-            @Nullable Consumer<List<GroupTask>> callback, Predicate<GroupTask> filter) {
+    public synchronized int getTasks(
+            boolean loadKeysOnly,
+            @Nullable Consumer<List<GroupTask>> callback,
+            Predicate<GroupTask> filter) {
+        return getTasks(
+                loadKeysOnly,
+                callback == null ? null : (tasks, requestId) -> callback.accept(tasks),
+                filter);
+    }
+
+    /**
+     * Asynchronously fetches the list of recent tasks, reusing cached list if available.
+     *
+     * @param loadKeysOnly Whether to load other associated task data, or just the key
+     * @param callback     The callback to receive the list of recent tasks
+     * @return The change id of the current task list
+     */
+    public synchronized int getTasks(
+            boolean loadKeysOnly,
+            @Nullable BiConsumer<List<GroupTask>, Integer> callback,
+            Predicate<GroupTask> filter) {
         final int requestLoadId = mChangeId;
         if (mResultsUi.isValidForRequest(requestLoadId, loadKeysOnly)) {
             // The list is up to date, send the callback on the next frame,
@@ -214,7 +217,7 @@ public class RecentTasksList implements WindowManagerProxy.DesktopVisibilityList
                         .collect(Collectors.toCollection(ArrayList<GroupTask>::new));
 
                 mMainThreadExecutor.post(() -> {
-                    callback.accept(result);
+                    callback.accept(result, requestLoadId);
                 });
             }
 
@@ -237,7 +240,7 @@ public class RecentTasksList implements WindowManagerProxy.DesktopVisibilityList
                             .map(GroupTask::copy)
                             .collect(Collectors.toCollection(ArrayList<GroupTask>::new));
 
-                    callback.accept(result);
+                    callback.accept(result, requestLoadId);
                 }
             });
         });
@@ -305,27 +308,6 @@ public class RecentTasksList implements WindowManagerProxy.DesktopVisibilityList
      */
     public ArrayList<RunningTaskInfo> getRunningTasks() {
         return mRunningTasks;
-    }
-
-    @Override
-    public void onDeskAdded(int displayId, int deskId) {
-        onRecentTasksChanged();
-    }
-
-    @Override
-    public void onDeskRemoved(int displayId, int deskId) {
-        onRecentTasksChanged();
-    }
-
-    @Override
-    public void onActiveDeskChanged(int displayId, int newActiveDesk, int oldActiveDesk) {
-        // Should desk activation changes lead to the invalidation of the loaded tasks? The cases
-        // are:
-        // - Switching from one active desk to another.
-        // - Switching from out of a desk session into an active desk.
-        // - Switching from an active desk to a non-desk session.
-        // These changes don't affect the list of desks, nor their contents, so let's ignore them
-        // for now.
     }
 
     private void onRunningTaskAppeared(RunningTaskInfo taskInfo) {
@@ -417,6 +399,7 @@ public class RecentTasksList implements WindowManagerProxy.DesktopVisibilityList
                 continue;
             }
 
+            // [getTaskInfo1] will not be null for types below beside [TYPE_DESK].
             if (Flags.enableShellTopTaskTracking()) {
                 final TaskInfo taskInfo1 = rawTask.getBaseGroupedTask().getTaskInfo1();
                 final Task.TaskKey task1Key = new Task.TaskKey(taskInfo1);
@@ -428,10 +411,8 @@ public class RecentTasksList implements WindowManagerProxy.DesktopVisibilityList
                     final Task.TaskKey task2Key = new Task.TaskKey(taskInfo2);
                     final Task task2 = Task.from(task2Key, taskInfo2,
                             tmpLockedUsers.get(task2Key.userId) /* isLocked */);
-                    final SplitConfigurationOptions.SplitBounds launcherSplitBounds =
-                            convertShellSplitBoundsToLauncher(
-                                    rawTask.getBaseGroupedTask().getSplitBounds());
-                    allTasks.add(new SplitTask(task1, task2, launcherSplitBounds));
+                    allTasks.add(new SplitTask(task1, task2,
+                            rawTask.getBaseGroupedTask().getSplitBounds()));
                 } else {
                     allTasks.add(new SingleTask(task1));
                 }
@@ -468,9 +449,7 @@ public class RecentTasksList implements WindowManagerProxy.DesktopVisibilityList
                 }
                 if (task2 != null) {
                     Objects.requireNonNull(rawTask.getSplitBounds());
-                    final SplitConfigurationOptions.SplitBounds launcherSplitBounds =
-                            convertShellSplitBoundsToLauncher(rawTask.getSplitBounds());
-                    allTasks.add(new SplitTask(task1, task2, launcherSplitBounds));
+                    allTasks.add(new SplitTask(task1, task2, rawTask.getSplitBounds()));
                 } else {
                     allTasks.add(new SingleTask(task1));
                 }
@@ -495,8 +474,7 @@ public class RecentTasksList implements WindowManagerProxy.DesktopVisibilityList
         Set<Integer> minimizedTaskIds = minimizedTaskIdArray != null
                 ? CollectionsKt.toSet(ArraysKt.asIterable(minimizedTaskIdArray))
                 : Collections.emptySet();
-        if (enableSeparateExternalDisplayTasks()
-                && !DesktopExperienceFlags.ENABLE_MULTIPLE_DESKTOPS_BACKEND.isTrue()) {
+        if (!DesktopExperienceFlags.ENABLE_MULTIPLE_DESKTOPS_BACKEND.isTrue()) {
             // This code is not needed when the multiple desktop feature is enabled, since Shell
             // will send a single `GroupedTaskInfo` for each desk with a unique `deskId` across
             // all displays.

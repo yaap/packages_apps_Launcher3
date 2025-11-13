@@ -108,11 +108,29 @@ public class SurfaceTransaction {
         }
 
         /**
+         * @param radius The radius for the background blur to apply to the surface.
+         * @return this Builder
+         */
+        public SurfaceProperties setBackgroundBlurRadius(int radius) {
+            mTransaction.setBackgroundBlurRadius(mSurface, radius);
+            return this;
+        }
+
+        /**
          * Requests to show the given surface.
          * @return this Builder
          */
         public SurfaceProperties setShow() {
             mTransaction.show(mSurface);
+            return this;
+        }
+
+        /**
+         * Requests to remove the given surface.
+         * @return this Builder
+         */
+        public SurfaceProperties setRemove() {
+            mTransaction.remove(mSurface);
             return this;
         }
     }
@@ -127,6 +145,7 @@ public class SurfaceTransaction {
         public Rect windowCrop = null;
         public float cornerRadius = 0;
         public float shadowRadius = 0;
+        public int backgroundBlurRadius = 0;
 
         protected MockProperties() {
             super(null);
@@ -168,7 +187,18 @@ public class SurfaceTransaction {
         }
 
         @Override
+        public SurfaceProperties setBackgroundBlurRadius(int radius) {
+            this.backgroundBlurRadius = radius;
+            return this;
+        }
+
+        @Override
         public SurfaceProperties setShow() {
+            return this;
+        }
+
+        @Override
+        public SurfaceProperties setRemove() {
             return this;
         }
     }

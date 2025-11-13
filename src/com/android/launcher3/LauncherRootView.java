@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.view.KeyEvent;
 import android.view.ViewDebug;
 import android.view.WindowInsets;
 
@@ -50,6 +51,12 @@ public class LauncherRootView extends InsettableFrameLayout {
         if (resetState) {
             mStatefulContainer.getStateManager().reapplyState(true /* cancelCurrentAnimation */);
         }
+    }
+
+    @Override
+    public boolean dispatchKeyEvent(KeyEvent event) {
+        return mStatefulContainer.onRootViewDispatchKeyEvent(event)
+                || super.dispatchKeyEvent(event);
     }
 
     @Override

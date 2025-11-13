@@ -24,7 +24,7 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Space
 import com.android.launcher3.R
-import com.android.launcher3.taskbar.TaskbarManager.NAV_BAR_INVERSE
+import com.android.launcher3.taskbar.TaskbarManagerImpl.NAV_BAR_INVERSE
 import com.android.launcher3.util.SettingsCache
 
 class PhoneSeascapeNavLayoutter(
@@ -34,7 +34,7 @@ class PhoneSeascapeNavLayoutter(
     startContextualContainer: ViewGroup,
     imeSwitcher: ImageView?,
     a11yButton: ImageView?,
-    space: Space?
+    space: Space?,
 ) :
     PhoneLandscapeNavLayoutter(
         resources,
@@ -43,7 +43,7 @@ class PhoneSeascapeNavLayoutter(
         startContextualContainer,
         imeSwitcher,
         a11yButton,
-        space
+        space,
     ) {
 
     override fun addThreeButtons() {
@@ -71,14 +71,14 @@ class PhoneSeascapeNavLayoutter(
             buttonSize,
             roundedCornerContentMargin + contentPadding,
             0,
-            Gravity.TOP
+            Gravity.TOP,
         )
         repositionContextualContainer(
             endContextualContainer,
             buttonSize,
             0,
             roundedCornerContentMargin + contentPadding,
-            Gravity.BOTTOM
+            Gravity.BOTTOM,
         )
 
         startContextualContainer.addView(space, MATCH_PARENT, MATCH_PARENT)

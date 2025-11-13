@@ -344,7 +344,8 @@ public abstract class BaseWidgetSheet extends AbstractSlideInView<BaseActivity>
 
         DeviceProfile deviceProfile = mActivityContext.getDeviceProfile();
         measureChildWithMargins(mContent, widthMeasureSpec,
-                widthUsed, heightMeasureSpec, deviceProfile.bottomSheetTopPadding);
+                widthUsed, heightMeasureSpec,
+                deviceProfile.getBottomSheetProfile().getBottomSheetTopPadding());
         setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec),
                 MeasureSpec.getSize(heightMeasureSpec));
     }
@@ -355,7 +356,7 @@ public abstract class BaseWidgetSheet extends AbstractSlideInView<BaseActivity>
     protected int getInsetsWidth() {
         int widthUsed;
         DeviceProfile deviceProfile = mActivityContext.getDeviceProfile();
-        if (deviceProfile.isTablet) {
+        if (deviceProfile.getDeviceProperties().isTablet()) {
             widthUsed = Math.max(2 * getTabletHorizontalMargin(deviceProfile),
                     2 * (mInsets.left + mInsets.right));
         } else if (mInsets.bottom > 0) {
@@ -375,7 +376,7 @@ public abstract class BaseWidgetSheet extends AbstractSlideInView<BaseActivity>
 
     @Override
     protected Interpolator getIdleInterpolator() {
-        return mActivityContext.getDeviceProfile().isTablet
+        return mActivityContext.getDeviceProfile().getDeviceProperties().isTablet()
                 ? EMPHASIZED : super.getIdleInterpolator();
     }
 
@@ -394,7 +395,7 @@ public abstract class BaseWidgetSheet extends AbstractSlideInView<BaseActivity>
 
         // In light mode, landscape reverses navbar background color.
         boolean isPhoneLandscape =
-                !mActivityContext.getDeviceProfile().isTablet && mInsets.bottom == 0;
+                !mActivityContext.getDeviceProfile().getDeviceProperties().isTablet() && mInsets.bottom == 0;
         if (!isNavBarDark && isPhoneLandscape) {
             isNavBarDark = true;
         }
