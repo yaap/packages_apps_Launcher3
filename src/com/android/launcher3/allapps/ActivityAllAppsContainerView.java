@@ -826,7 +826,8 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
                 : (int) (Utilities.boundToRange(
                         (scrolledOffset + mHeader.mSnappedScrolledY) / mHeaderThreshold, 0f, 1f)
                         * 255);
-        if (mTabsProtectionAlpha != tabsAlpha) {
+        if (headerColor != mHeaderColor || mTabsProtectionAlpha != tabsAlpha) {
+            mHeaderColor = headerColor;
             mTabsProtectionAlpha = tabsAlpha;
             invalidateHeader();
         }
