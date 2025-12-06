@@ -242,11 +242,11 @@
         <item name="android:paddingVertical">4dp</item>
         <item name="android:paddingHorizontal">@dimen/overview_actions_button_horizontal_padding
         </item>
-        <item name="android:textSize">14sp</item>
+        <item name="android:textSize">12sp</item>
         <item name="android:textColor">@color/overview_button</item>
         <item name="android:drawableTint">@color/overview_button</item>
         <item name="android:tint">?android:attr/textColorPrimary</item>
-        <item name="android:drawablePadding">8dp</item>
+        <item name="android:drawablePadding">4dp</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:textFontWeight">600</item>
         <item name="android:gravity">center</item>
