@@ -134,19 +134,15 @@ public class AllAppsState extends LauncherState {
 
     @Override
     protected <DEVICE_PROFILE_CONTEXT extends Context & ActivityContext>
-            float getDepthUnchecked(DEVICE_PROFILE_CONTEXT context) {
-        if (context.getDeviceProfile().shouldShowAllAppsOnSheet()) {
-            return context.getDeviceProfile().getBottomSheetProfile().getBottomSheetDepth();
+        float getDepthUnchecked(DEVICE_PROFILE_CONTEXT context) {
+        // The scrim fades in at approximately 50% of the swipe gesture.
+        if (enableScalingRevealHomeAnimation()) {
+            // This means that the depth should be twice of what we want, in order to fully zoom
+            // out during the visible portion of the animation.
+            return BaseDepthController.DEPTH_60_PERCENT;
         } else {
-            // The scrim fades in at approximately 50% of the swipe gesture.
-            if (enableScalingRevealHomeAnimation()) {
-                // This means that the depth should be twice of what we want, in order to fully zoom
-                // out during the visible portion of the animation.
-                return BaseDepthController.DEPTH_60_PERCENT;
-            } else {
-                // This means that the depth should be greater than 1, in order to fully zoom out.
-                return 2f;
-            }
+            // This means that the depth should be greater than 1, in order to fully zoom out.
+            return 2f;
         }
     }
 
