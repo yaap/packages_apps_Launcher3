@@ -40,7 +40,9 @@ import androidx.annotation.Nullable;
 
 import com.android.launcher3.ShortcutAndWidgetContainer.TranslationProvider;
 import com.android.launcher3.celllayout.CellLayoutLayoutParams;
+import com.android.launcher3.model.data.ItemInfo;
 import com.android.launcher3.util.HorizontalInsettableView;
+import com.android.launcher3.util.LauncherBindableItemsContainer.ItemOperator;
 import com.android.launcher3.util.MultiPropertyFactory;
 import com.android.launcher3.util.MultiPropertyFactory.MultiProperty;
 import com.android.launcher3.util.MultiTranslateDelegate;
@@ -162,7 +164,8 @@ public class Hotseat extends CellLayout implements Insettable {
                         cellX -> dp.getHotseatAdjustedTranslation(getContext(), cellX));
                 if (mQsb instanceof HorizontalInsettableView) {
                     HorizontalInsettableView insettableQsb = (HorizontalInsettableView) mQsb;
-                    final float insetFraction = (float) dp.iconSizePx / dp.hotseatQsbWidth;
+                    final float insetFraction =
+                            (float) dp.getWorkspaceIconProfile().getIconSizePx() / dp.hotseatQsbWidth;
                     // post this to the looper so that QSB has a chance to redraw itself, e.g.
                     // after device rotation
                     mQsb.post(() -> insettableQsb.setHorizontalInsets(insetFraction));
@@ -227,7 +230,7 @@ public class Hotseat extends CellLayout implements Insettable {
         if (mQsb instanceof HorizontalInsettableView horizontalInsettableQsb) {
             final float currentInsetFraction = horizontalInsettableQsb.getHorizontalInsets();
             final float targetInsetFraction = shouldAdjustQsb
-                    ? (float) dp.iconSizePx / dp.hotseatQsbWidth : 0;
+                    ? (float) dp.getWorkspaceIconProfile().getIconSizePx() / dp.hotseatQsbWidth : 0;
             ValueAnimator qsbAnimator =
                     ValueAnimator.ofFloat(currentInsetFraction, targetInsetFraction);
             qsbAnimator.addUpdateListener(animation -> {
@@ -372,6 +375,18 @@ public class Hotseat extends CellLayout implements Insettable {
      */
     public View getQsb() {
         return mQsb;
+    }
+
+    @Nullable
+    @Override
+    public View mapOverItems(ItemOperator op) {
+        if (Flags.enableQsbOnHotseat()
+                && mQsb != null
+                && mQsb.getTag() instanceof ItemInfo info
+                && op.evaluate(info, mQsb)) {
+            return mQsb;
+        }
+        return super.mapOverItems(op);
     }
 
     /** Dumps the Hotseat internal state */

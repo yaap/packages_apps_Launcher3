@@ -91,7 +91,7 @@ class TaskbarNavLayoutter(
         if (backButton != null && homeButton != null && recentsButton != null) {
             navButtonContainer.removeAllViews()
 
-            if (SettingsCache.INSTANCE.get(context).getValue(NAV_BAR_INVERSE, 0)) {
+            if (SettingsCache.INSTANCE.get(context).getIntValue(NAV_BAR_INVERSE, 0) == 1) {
                 navButtonContainer.addView(recentsButton)
                 navButtonContainer.addView(homeButton)
                 navButtonContainer.addView(backButton)
@@ -127,12 +127,14 @@ class TaskbarNavLayoutter(
         startContextualContainer.removeAllViews()
 
         if (!context.deviceProfile.deviceProperties.isGestureMode) {
+            val contextualButtonWidth =
+                resources.getDimensionPixelSize(R.dimen.taskbar_contextual_button_width)
             val contextualMargin =
                 resources.getDimensionPixelSize(R.dimen.taskbar_contextual_button_padding)
             repositionContextualContainer(endContextualContainer, WRAP_CONTENT, 0, 0, Gravity.END)
             repositionContextualContainer(
                 startContextualContainer,
-                WRAP_CONTENT,
+                contextualButtonWidth,
                 contextualMargin,
                 contextualMargin,
                 Gravity.START,

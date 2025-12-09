@@ -83,18 +83,7 @@ class PhonePortraitNavLayoutter(
         }
 
         // Ensure order of buttons is correct
-        navButtonContainer.removeAllViews()
-        navButtonContainer.orientation = LinearLayout.HORIZONTAL
-
-        if (SettingsCache.INSTANCE.get(context).getValue(NAV_BAR_INVERSE, 0)) {
-            navButtonContainer.addView(recentsButton)
-            navButtonContainer.addView(homeButton)
-            navButtonContainer.addView(backButton)
-        } else {
-            navButtonContainer.addView(backButton)
-            navButtonContainer.addView(homeButton)
-            navButtonContainer.addView(recentsButton)
-        }
+        addThreeButtons()
 
         navButtonContainer.layoutParams = navContainerParams
         navButtonContainer.gravity = Gravity.CENTER

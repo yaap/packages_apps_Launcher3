@@ -33,20 +33,19 @@ import android.util.Log;
 import com.android.launcher3.config.FeatureFlags;
 import com.android.launcher3.graphics.BitmapCreationCheck;
 import com.android.launcher3.logging.FileLog;
-import com.android.launcher3.util.ResourceBasedOverride;
+
+import javax.inject.Inject;
 
 /**
  * Utility class to handle one time initializations of the main process
  */
-public class MainProcessInitializer implements ResourceBasedOverride {
+public class MainProcessInitializer {
+
+    @Inject
+    public MainProcessInitializer() {
+    }
 
     private static final boolean DEBUG_STRICT_MODE = false;
-
-    public static void initialize(Context context) {
-        Overrides.getObject(
-                MainProcessInitializer.class, context, R.string.main_process_initializer_class)
-                .init(context);
-    }
 
     protected void init(Context context) {
         FileLog.setDir(context.getApplicationContext().getFilesDir());

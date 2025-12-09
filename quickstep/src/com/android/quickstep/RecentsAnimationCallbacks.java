@@ -36,9 +36,10 @@ import androidx.annotation.UiThread;
 
 import com.android.launcher3.Utilities;
 import com.android.launcher3.util.Preconditions;
-import com.android.quickstep.fallback.window.RecentsWindowManager;
+import com.android.quickstep.util.ActiveGestureLog;
 import com.android.quickstep.util.ActiveGestureProtoLogProxy;
 import com.android.quickstep.views.RecentsViewContainer;
+import com.android.quickstep.window.RecentsWindowManager;
 import com.android.systemui.shared.recents.model.ThumbnailData;
 import com.android.systemui.shared.system.RecentsAnimationControllerCompat;
 
@@ -56,7 +57,7 @@ public class RecentsAnimationCallbacks implements
         com.android.systemui.shared.system.RecentsAnimationListener {
 
     private final Set<RecentsAnimationListener> mListeners = new ArraySet<>();
-    private final RecentsViewContainer mContainer;
+    private final boolean mIsContainerRecentsWindowManager;
 
     // TODO(141886704): Remove these references when they are no longer needed
     private RecentsAnimationController mController;
@@ -64,7 +65,7 @@ public class RecentsAnimationCallbacks implements
     private boolean mCancelled;
 
     public RecentsAnimationCallbacks(RecentsViewContainer container) {
-        mContainer = container;
+        mIsContainerRecentsWindowManager = container instanceof RecentsWindowManager;
     }
 
     @UiThread
@@ -90,22 +91,13 @@ public class RecentsAnimationCallbacks implements
         onAnimationCanceled(new HashMap<>());
     }
 
-    // Called only in Q platform
-    @BinderThread
-    @Deprecated
-    public final void onAnimationStart(RecentsAnimationControllerCompat controller,
-            RemoteAnimationTarget[] appTargets, Rect homeContentInsets,
-            Rect minimizedHomeBounds, Bundle extras) {
-        onAnimationStart(controller, appTargets, new RemoteAnimationTarget[0],
-                homeContentInsets, minimizedHomeBounds, extras, /* transitionInfo= */ null);
-    }
-
     // Called only in R+ platform
     @BinderThread
     public final void onAnimationStart(RecentsAnimationControllerCompat animationController,
             RemoteAnimationTarget[] appTargets,
             RemoteAnimationTarget[] wallpaperTargets,
-            Rect homeContentInsets, Rect minimizedHomeBounds, Bundle extras,
+            Rect homeContentInsets,
+            Bundle extras,
             @Nullable TransitionInfo transitionInfo) {
         long appCount = Arrays.stream(appTargets)
                 .filter(app -> app.mode == MODE_CLOSING)
@@ -114,8 +106,7 @@ public class RecentsAnimationCallbacks implements
         boolean isOpeningHome = Arrays.stream(appTargets).filter(app -> app.mode == MODE_OPENING
                         && app.windowConfiguration.getActivityType() == ACTIVITY_TYPE_HOME)
                 .count() > 0;
-        if (appCount == 0 && (!(mContainer instanceof RecentsWindowManager)
-                || isOpeningHome)) {
+        if (appCount == 0 && (!mIsContainerRecentsWindowManager || isOpeningHome)) {
             ActiveGestureProtoLogProxy.logOnRecentsAnimationStartCancelled();
             // Edge case, if there are no closing app targets, then Launcher has nothing to handle
             notifyAnimationCanceled();
@@ -127,8 +118,10 @@ public class RecentsAnimationCallbacks implements
         mController = new RecentsAnimationController(animationController,
                 this::onAnimationFinished);
         if (mCancelled) {
-            Utilities.postAsyncCallback(MAIN_EXECUTOR.getHandler(),
-                    mController::finishAnimationToApp);
+            Utilities.postAsyncCallback(
+                    MAIN_EXECUTOR.getHandler(),
+                    () -> mController.finishAnimationToApp(new ActiveGestureLog.CompoundString(
+                            "RecentsAnimationCallback.onAnimationStart: mCancelled=true")));
         } else {
             RemoteAnimationTarget[] nonAppTargets;
             final ArrayList<RemoteAnimationTarget> apps = new ArrayList<>();
@@ -140,8 +133,7 @@ public class RecentsAnimationCallbacks implements
                 nonAppTargets = new RemoteAnimationTarget[0];
             }
             final RecentsAnimationTargets targets = new RecentsAnimationTargets(appTargets,
-                    wallpaperTargets, nonAppTargets, homeContentInsets, minimizedHomeBounds,
-                    extras);
+                    wallpaperTargets, nonAppTargets, homeContentInsets, extras);
 
             Utilities.postAsyncCallback(MAIN_EXECUTOR.getHandler(), () -> {
                 ActiveGestureProtoLogProxy.logOnRecentsAnimationStart(targets.apps.length);

@@ -50,6 +50,10 @@ android {
                     "$widgetPickerDir/tests/multivalentTestsForDevice/src",
                 )
             )
+            res.setSrcDirs(listOf(
+                "$widgetPickerDir/tests/multivalentScreenshotTests/res",
+                "$widgetPickerDir/res"
+            ))
             manifest.srcFile("$widgetPickerDir/tests/AndroidManifest.xml")
         }
         named("test") {
@@ -82,6 +86,8 @@ dependencies {
     implementation(libs.dagger)
     kapt(libs.dagger.compiler)
     kapt(libs.dagger.android.processor)
+    kaptAndroidTest(libs.dagger.compiler)
+    kaptAndroidTest(libs.dagger.android.processor)
 
     // Compose UI dependencies
     implementation(libs.compose.ui)
@@ -104,6 +110,7 @@ dependencies {
     testImplementation(libs.mockito.robolectric.bytebuddy.agent)
     testImplementation(libs.mockito.robolectric.bytebuddy)
     testImplementation(libs.mockito.robolectric)
+    testImplementation(libs.mockito.kotlin)
     testImplementation(libs.junit)
     testImplementation(libs.google.truth)
     testImplementation(libs.androidx.test.runner)

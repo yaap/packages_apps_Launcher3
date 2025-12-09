@@ -29,7 +29,7 @@
         <item name="android:windowActionBar">false</item>
         <item name="android:windowNoTitle">true</item>
         <item name="preferenceTheme">@style/HomeSettings.PreferenceTheme</item>
-        <item name="android:fontFamily" android:featureFlag="com.android.launcher3.gsf_res">google-sans-flex</item>
+        <item name="android:fontFamily">google-sans-flex</item>
         <item name="alertDialogTheme">@style/HomeSettings.AlertDialog</item>
     </style>
 
@@ -106,7 +106,7 @@
     </style>
 
     <style name="HomeSettings.ExpandedToolbarTitle" parent="HomeSettings.CollapsedToolbarTitle">
-        <item name="android:fontFamily" android:featureFlag="com.android.launcher3.gsf_res">variable-display-small</item>
+        <item name="android:fontFamily">variable-display-small</item>
         <item name="android:textSize">36sp</item>
     </style>
 </resources>

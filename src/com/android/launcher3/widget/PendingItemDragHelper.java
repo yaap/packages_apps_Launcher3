@@ -16,6 +16,8 @@
 
 package com.android.launcher3.widget;
 
+import static android.appwidget.AppWidgetManager.INVALID_APPWIDGET_ID;
+
 import static com.android.launcher3.widget.util.WidgetSizes.getWidgetSizePx;
 
 import android.graphics.Bitmap;
@@ -138,7 +140,7 @@ public class PendingItemDragHelper extends DragPreviewProvider {
                     }
                 } else {
                     mAppWidgetHostViewPreview = new LauncherAppWidgetHostView(launcher);
-                    mAppWidgetHostViewPreview.setAppWidget(/* appWidgetId= */ -1,
+                    mAppWidgetHostViewPreview.setAppWidget(/* appWidgetId= */ INVALID_APPWIDGET_ID,
                             mWidgetPreviewInfo.providerInfo);
                     mAppWidgetHostViewPreview.setClipChildren(false);
                     mAppWidgetHostViewPreview.setClipToPadding(false);
@@ -152,7 +154,7 @@ public class PendingItemDragHelper extends DragPreviewProvider {
                 }
             } else if (mRemoteViewsPreview != null) {
                 mAppWidgetHostViewPreview = new LauncherAppWidgetHostView(launcher);
-                mAppWidgetHostViewPreview.setAppWidget(/* appWidgetId= */ -1,
+                mAppWidgetHostViewPreview.setAppWidget(/* appWidgetId= */ INVALID_APPWIDGET_ID,
                         ((PendingAddWidgetInfo) mAddInfo).info);
                 DeviceProfile deviceProfile = launcher.getDeviceProfile();
                 mAppWidgetHostViewPreview.updateAppWidget(/* remoteViews= */ mRemoteViewsPreview);
@@ -214,12 +216,13 @@ public class PendingItemDragHelper extends DragPreviewProvider {
             previewWidth = preview.getIntrinsicWidth();
             previewHeight = preview.getIntrinsicHeight();
             li.recycle();
-            scale = ((float) launcher.getDeviceProfile().iconSizePx) / previewWidth;
+            scale = ((float) launcher.getDeviceProfile().getWorkspaceIconProfile().getIconSizePx())
+                    / previewWidth;
 
             // Create a preview same as the workspace cell size and draw the icon at the
             // appropriate position.
             DeviceProfile dp = launcher.getDeviceProfile();
-            int iconSize = dp.iconSizePx;
+            int iconSize = dp.getWorkspaceIconProfile().getIconSizePx();
 
             int padding = launcher.getResources()
                     .getDimensionPixelSize(R.dimen.widget_preview_shortcut_padding);
@@ -230,7 +233,8 @@ public class PendingItemDragHelper extends DragPreviewProvider {
             dragRegion.left = (mEstimatedCellSize[0] - iconSize) / 2;
             dragRegion.right = dragRegion.left + iconSize;
             dragRegion.top = (mEstimatedCellSize[1]
-                    - iconSize - dp.iconTextSizePx - dp.iconDrawablePaddingPx) / 2;
+                    - iconSize - dp.getWorkspaceIconProfile().getIconTextSizePx()
+                    - dp.getWorkspaceIconProfile().getIconDrawablePaddingPx()) / 2;
             dragRegion.bottom = dragRegion.top + iconSize;
             draggableView = DraggableView.ofType(DraggableView.DRAGGABLE_ICON);
         }

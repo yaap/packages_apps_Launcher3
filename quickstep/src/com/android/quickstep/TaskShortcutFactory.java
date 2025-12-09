@@ -18,10 +18,10 @@ package com.android.quickstep;
 
 import static android.app.WindowConfiguration.WINDOWING_MODE_FREEFORM;
 import static android.content.Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS;
+import static android.view.Display.DEFAULT_DISPLAY;
 
 import static com.android.launcher3.util.OverviewReleaseFlags.enableGridOnlyOverview;
 import static com.android.launcher3.Flags.enableRefactorTaskThumbnail;
-import static com.android.launcher3.logging.StatsLogManager.LauncherEvent.LAUNCHER_SYSTEM_SHORTCUT_CLOSE_APP_TAP;
 import static com.android.launcher3.logging.StatsLogManager.LauncherEvent.LAUNCHER_SYSTEM_SHORTCUT_FREE_FORM_TAP;
 import static com.android.launcher3.util.SplitConfigurationOptions.STAGE_POSITION_BOTTOM_OR_RIGHT;
 
@@ -42,6 +42,7 @@ import android.os.UserHandle;
 import android.view.View;
 import android.view.WindowInsets;
 import android.view.WindowManagerGlobal;
+import android.window.DesktopExperienceFlags;
 import android.window.SplashScreen;
 import android.widget.Toast;
 
@@ -206,7 +207,7 @@ public interface TaskShortcutFactory {
             dismissTaskMenuView();
             RecentsView rv = mTarget.getOverviewPanel();
             rv.switchToScreenshot(() -> {
-                rv.finishRecentsAnimation(true /* toRecents */, false /* shouldPip */, () -> {
+                rv.finishRecentsAnimation(true /* toHome */, false /* shouldPip */, () -> {
                     mTarget.returnToHomescreen();
                     rv.getHandler().post(this::startActivity);
                 });
@@ -337,8 +338,6 @@ public interface TaskShortcutFactory {
             if (recentsView != null) {
                 dismissTaskMenuView();
                 recentsView.dismissTaskView(taskView, true, true);
-                mTarget.getStatsLogManager().logger().withItemInfo(mTaskContainer.getItemInfo())
-                        .log(LAUNCHER_SYSTEM_SHORTCUT_CLOSE_APP_TAP);
             }
         }
     }
@@ -384,8 +383,7 @@ public interface TaskShortcutFactory {
      * Does NOT add split options in the following scenarios:
      * * 1. Taskbar is not present AND aren't at least 2 tasks in overview to show split options for
      * * 2. Split isn't supported by the task itself (non resizable activity)
-     * * 3. We aren't currently in multi-window
-     * * 4. The taskView to show split options for is the focused task AND we haven't started
+     * * 3. The taskView to show split options for is the focused task AND we haven't started
      * * scrolling in overview (if we haven't scrolled, there's a split overview action button so
      * * we don't need this menu option)
      */
@@ -405,9 +403,13 @@ public interface TaskShortcutFactory {
                     !deviceProfile.isTaskbarPresent && recentsView.getTaskViewCount() < 2;
             boolean isTaskSplitNotSupported = !task.isDockable ||
                     (intentFlags & FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS) != 0;
-            boolean hideForExistingMultiWindow = container.getDeviceProfile().getDeviceProperties().isMultiWindowMode();
 
-            if (notEnoughTasksToSplit || isTaskSplitNotSupported || hideForExistingMultiWindow) {
+            if (notEnoughTasksToSplit || isTaskSplitNotSupported) {
+                return null;
+            }
+
+            if (container.asContext().getDisplayId() != DEFAULT_DISPLAY
+                    && !DesktopExperienceFlags.ENABLE_NON_DEFAULT_DISPLAY_SPLIT_BUGFIX.isTrue()) {
                 return null;
             }
 

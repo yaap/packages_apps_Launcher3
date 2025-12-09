@@ -22,6 +22,7 @@ import androidx.test.filters.LargeTest
 import androidx.test.platform.app.InstrumentationRegistry
 import com.android.launcher3.AbstractFloatingView
 import com.android.launcher3.Launcher
+import com.android.launcher3.LauncherSettings.Favorites
 import com.android.launcher3.model.data.ItemInfo
 import com.android.launcher3.model.data.LauncherAppWidgetInfo
 import com.android.launcher3.testcomponent.WidgetConfigActivity
@@ -85,7 +86,11 @@ class AddWidgetConfigTest : BaseLauncherActivityTest<Launcher>() {
         // Add widget to home screen
         val monitor = WidgetConfigStartupMonitor()
         launcherActivity.executeOnLauncher { l: Launcher ->
-            val addItemListener = WidgetPickerAddItemListener(WidgetInfo.AppWidgetInfo(widgetInfo))
+            val addItemListener =
+                WidgetPickerAddItemListener(
+                    container = Favorites.CONTAINER_WIDGETS_TRAY,
+                    widgetInfo = WidgetInfo.AppWidgetInfo(widgetInfo),
+                )
             addItemListener.init(l, /* isHomeStarted= */ true)
         }
 

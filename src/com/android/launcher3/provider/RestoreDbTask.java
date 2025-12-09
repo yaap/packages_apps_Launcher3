@@ -131,7 +131,7 @@ public class RestoreDbTask {
         // of the current phone.
         if (!Flags.oneGridSpecs()) {
             FileLog.d(TAG, "Resetting IDP to default for restore dest device");
-            idp.reset(context);
+            idp.reset();
             trySettingPreviousGridAsCurrent(context, idp, oldPhoneFileName, previousDbs);
         }
 
@@ -175,7 +175,7 @@ public class RestoreDbTask {
              */
             FileLog.d(TAG, "Setting grid from old device as current grid: "
                 + "oldPhoneGridOption:" + oldPhoneGridOption.name);
-            idp.setCurrentGrid(context, oldPhoneGridOption.name);
+            idp.setCurrentGrid(oldPhoneGridOption.name);
         }
     }
 

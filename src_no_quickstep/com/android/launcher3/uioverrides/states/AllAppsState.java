@@ -20,8 +20,10 @@ import static com.android.launcher3.logging.StatsLogManager.LAUNCHER_STATE_ALLAP
 
 import android.content.Context;
 import android.graphics.Color;
+
 import com.android.launcher3.Launcher;
 import com.android.launcher3.LauncherState;
+import com.android.launcher3.LauncherUiState;
 import com.android.launcher3.R;
 import com.android.launcher3.Utilities;
 import com.android.launcher3.util.Themes;
@@ -57,14 +59,17 @@ public class AllAppsState extends LauncherState {
     }
 
     @Override
-    public int getVisibleElements(Launcher launcher) {
+    public int getVisibleElements(LauncherUiState launcherUiState) {
         return ALL_APPS_CONTENT;
     }
 
     @Override
     public ScaleAndTranslation getWorkspaceScaleAndTranslation(Launcher launcher) {
-        return new ScaleAndTranslation(launcher.getDeviceProfile().workspaceContentScale, NO_OFFSET,
-                NO_OFFSET);
+        return new ScaleAndTranslation(
+                launcher.getDeviceProfile().mWorkspaceProfile.getWorkspaceContentScale(),
+                NO_OFFSET,
+                NO_OFFSET
+        );
     }
 
     @Override
@@ -75,9 +80,10 @@ public class AllAppsState extends LauncherState {
             ScaleAndTranslation overviewScaleAndTranslation = LauncherState.OVERVIEW
                     .getWorkspaceScaleAndTranslation(launcher);
             return new ScaleAndTranslation(
-                    launcher.getDeviceProfile().workspaceContentScale,
+                    launcher.getDeviceProfile().mWorkspaceProfile.getWorkspaceContentScale(),
                     overviewScaleAndTranslation.translationX,
-                    overviewScaleAndTranslation.translationY);
+                    overviewScaleAndTranslation.translationY
+            );
         }
     }
 

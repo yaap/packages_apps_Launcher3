@@ -43,6 +43,7 @@ import androidx.annotation.VisibleForTesting;
 import androidx.annotation.WorkerThread;
 
 import com.android.launcher3.ConstantItem;
+import com.android.launcher3.Flags;
 import com.android.launcher3.InvariantDeviceProfile;
 import com.android.launcher3.LauncherPrefs;
 import com.android.launcher3.dagger.ApplicationContext;
@@ -85,6 +86,7 @@ public class QuickstepModelDelegate extends ModelDelegate {
     final PredictorState mHotseatPredictionState = new PredictorState(
             CONTAINER_HOTSEAT_PREDICTION, "hotseat_predictions", DESKTOP_ICON_FLAG);
     @VisibleForTesting
+    @Deprecated // unused with the Flag.enableWidgetPickerRefactor enabled
     final PredictorState mWidgetsRecommendationState = new PredictorState(
             CONTAINER_WIDGETS_PREDICTION, "widgets_prediction", DESKTOP_ICON_FLAG);
 
@@ -256,7 +258,9 @@ public class QuickstepModelDelegate extends ModelDelegate {
     public void validateData() {
         super.validateData();
         mAllPredictionAppsState.requestPredictionUpdate();
-        mWidgetsRecommendationState.requestPredictionUpdate();
+        if (!Flags.enableWidgetPickerRefactor()) {
+            mWidgetsRecommendationState.requestPredictionUpdate();
+        }
     }
 
     @WorkerThread
@@ -278,7 +282,9 @@ public class QuickstepModelDelegate extends ModelDelegate {
     private void destroyPredictors() {
         mAllPredictionAppsState.destroyPredictor();
         mHotseatPredictionState.destroyPredictor();
-        mWidgetsRecommendationState.destroyPredictor();
+        if (!Flags.enableWidgetPickerRefactor()) {
+            mWidgetsRecommendationState.destroyPredictor();
+        }
     }
 
     @WorkerThread
@@ -300,14 +306,16 @@ public class QuickstepModelDelegate extends ModelDelegate {
         // TODO: get bundle
         registerHotseatPredictor(mContext);
 
-        mWidgetsRecommendationState.registerPredictor(mContext,
-                new AppPredictionContext.Builder(mContext)
-                    .setUiSurface("widgets")
-                    .setExtras(getBundleForWidgetPredictions(mContext, mDataModel))
-                    .setPredictedTargetCount(NUM_OF_RECOMMENDED_WIDGETS_PREDICATION)
-                    .build(),
-                mModel,
-                WidgetsPredictionUpdateTask::new);
+        if (!Flags.enableWidgetPickerRefactor()) {
+            mWidgetsRecommendationState.registerPredictor(mContext,
+                    new AppPredictionContext.Builder(mContext)
+                            .setUiSurface("widgets")
+                            .setExtras(getBundleForWidgetPredictions(mContext, mDataModel))
+                            .setPredictedTargetCount(NUM_OF_RECOMMENDED_WIDGETS_PREDICATION)
+                            .build(),
+                    mModel,
+                    WidgetsPredictionUpdateTask::new);
+        }
     }
 
     @WorkerThread

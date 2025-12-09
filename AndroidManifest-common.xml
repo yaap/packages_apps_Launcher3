@@ -56,28 +56,11 @@
     <!-- Floating window -->
     <uses-permission android:name="com.yaap.permission.START_FREEFORM" />
 
-    <!--
-    Permissions required for read/write access to the workspace data. These permission name
-    should not conflict with that defined in other apps, as such an app should embed its package
-    name in the permissions. eq com.mypackage.permission.READ_SETTINGS
-    -->
-    <permission
-        android:name="${applicationId}.permission.READ_SETTINGS"
-        android:protectionLevel="signatureOrSystem"
-        android:label="@string/permlab_read_settings"
-        android:description="@string/permdesc_read_settings"/>
-    <permission
-        android:name="${applicationId}.permission.WRITE_SETTINGS"
-        android:protectionLevel="signatureOrSystem"
-        android:label="@string/permlab_write_settings"
-        android:description="@string/permdesc_write_settings"/>
     <permission
         android:name="${applicationId}.permission.GRID_CONTROL"
         android:knownCerts="@array/grid_control_known_signers"
         android:protectionLevel="signature|knownSigner"/>
 
-    <uses-permission android:name="${applicationId}.permission.READ_SETTINGS" />
-    <uses-permission android:name="${applicationId}.permission.WRITE_SETTINGS" />
     <uses-permission android:name="${applicationId}.permission.GRID_CONTROL" />
 
     <application
@@ -143,8 +126,8 @@
             android:name="com.android.launcher3.LauncherProvider"
             android:authorities="${applicationId}.settings"
             android:exported="true"
-            android:writePermission="${applicationId}.permission.WRITE_SETTINGS"
-            android:readPermission="${applicationId}.permission.READ_SETTINGS" />
+            android:writePermission="android.permission.ACCESS_LAUNCHER_DATA"
+            android:readPermission="android.permission.ACCESS_LAUNCHER_DATA" />
 
         <!--
           The content provider for exposing various launcher grid options.

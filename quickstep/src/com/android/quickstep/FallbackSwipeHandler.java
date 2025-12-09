@@ -67,6 +67,7 @@ import com.android.launcher3.util.DisplayController;
 import com.android.launcher3.util.MSDLPlayerWrapper;
 import com.android.quickstep.fallback.FallbackRecentsView;
 import com.android.quickstep.fallback.RecentsState;
+import com.android.quickstep.util.ActiveGestureLog;
 import com.android.quickstep.util.RectFSpringAnim;
 import com.android.quickstep.util.SurfaceTransaction.SurfaceProperties;
 import com.android.quickstep.util.TransformParams;
@@ -204,7 +205,11 @@ public class FallbackSwipeHandler extends
             mRecentsView.cleanupRemoteTargets();
         }
         mRecentsAnimationController.finish(
-                mAppCanEnterPip /* toRecents */, recentsCallback, true /* sendUserLeaveHint */);
+                /* toHome= */mAppCanEnterPip,
+                recentsCallback,
+                /* sendUserLeaveHint= */ true,
+                /* reason= */ new ActiveGestureLog.CompoundString(
+                        "FallbackSwipeHandler.finishRecentsControllerToHome"));
     }
 
     @Override
@@ -219,14 +224,16 @@ public class FallbackSwipeHandler extends
 
     @Override
     protected void notifyGestureAnimationStartToRecents() {
-        if (mRunningOverHome) {
-            if (DisplayController.getNavigationMode(mContext).hasGestures) {
-                mRecentsView.onGestureAnimationStartOnHome(
-                        mGestureState.getRunningTask().getPlaceholderGroupedTaskInfo(
-                                /* splitTaskIds = */ null));
-            }
-        } else {
+        if (!mRunningOverHome) {
             super.notifyGestureAnimationStartToRecents();
+            return;
+        }
+        if ((DisplayController.getNavigationMode(mContext).hasGestures
+                || mGestureState.isTrackpadGesture())
+                && mRecentsView != null) {
+            mRecentsView.onGestureAnimationStartOnHome(
+                    mGestureState.getRunningTask().getPlaceholderGroupedTaskInfo(
+                            /* splitTaskIds = */ null));
         }
     }
 
@@ -418,7 +425,8 @@ public class FallbackSwipeHandler extends
                 }
 
                 Bundle gestureNavContract = new Bundle();
-                gestureNavContract.putBoolean(EXTRA_ENABLE_GESTURE_CONTRACT, !mIsSwipeForSplit);
+                gestureNavContract.putBoolean(
+                        EXTRA_ENABLE_GESTURE_CONTRACT, mRemoteTargetHandles.length <= 1);
                 gestureNavContract.putParcelable(EXTRA_COMPONENT_NAME, key.getComponent());
                 gestureNavContract.putParcelable(EXTRA_USER, UserHandle.of(key.userId));
                 gestureNavContract.putParcelable(
