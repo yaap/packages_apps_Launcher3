@@ -18,7 +18,6 @@ package com.android.launcher3.icons;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.XmlResourceParser;
-import android.os.Build;
 import android.text.TextUtils;
 import android.util.ArrayMap;
 import android.util.Log;
@@ -59,21 +58,24 @@ public class LauncherIconProvider extends IconProvider {
             ThemeManager themeManager) {
         super(context);
         mThemeManager = themeManager;
-        mThemedIconMap = FeatureFlags.USE_LOCAL_ICON_OVERRIDES.get() ? getThemedIconMap() : DISABLED_MAP;
+        mThemedIconMap = FeatureFlags.USE_LOCAL_ICON_OVERRIDES.get() ? null : DISABLED_MAP;
     }
 
     @Override
     protected ThemeData getThemeDataForPackage(String packageName) {
-        return mThemedIconMap.get(packageName);
+        return getThemedIconMap().get(packageName);
     }
 
     @Override
     public void updateSystemState() {
         super.updateSystemState();
-        mSystemState += "," + mThemeManager.getIconState().toUniqueId() + "," + Build.VERSION.INCREMENTAL;
+        mSystemState += "," + mThemeManager.getIconState().toUniqueId();
     }
 
     private Map<String, ThemeData> getThemedIconMap() {
+        if (mThemedIconMap != null) {
+            return mThemedIconMap;
+        }
         ArrayMap<String, ThemeData> map = new ArrayMap<>();
         Resources res = mContext.getResources();
         try (XmlResourceParser parser = res.getXml(R.xml.grayscale_icon_map)) {
