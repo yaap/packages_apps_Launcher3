@@ -91,7 +91,7 @@ public class TaskOverlayFactory {
                 shortcuts.addAll(menuShortcuts);
             }
         }
-        shortcuts.addAll(TaskViewShortFactory.Companion.getEnabledShortcuts(taskView));
+        //shortcuts.addAll(TaskViewShortFactory.Companion.getEnabledShortcuts(taskView));
         return shortcuts;
     }
 
@@ -134,6 +134,7 @@ public class TaskOverlayFactory {
             TaskShortcutFactory.WELLBEING,
             TaskShortcutFactory.SAVE_APP_PAIR,
             TaskShortcutFactory.SCREENSHOT,
+            TaskShortcutFactory.REMOVE_TASK,
             TaskShortcutFactory.MODAL,
     };
 
