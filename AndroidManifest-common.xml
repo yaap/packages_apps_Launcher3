@@ -53,9 +53,6 @@
     <uses-permission android:name="android.permission.REGISTER_STATS_PULL_ATOM"/>
     <uses-permission android:name="android.permission.INTERACT_ACROSS_USERS"/>
 
-    <!-- Floating window -->
-    <uses-permission android:name="com.yaap.permission.START_FREEFORM" />
-
     <permission
         android:name="${applicationId}.permission.GRID_CONTROL"
         android:knownCerts="@array/grid_control_known_signers"
