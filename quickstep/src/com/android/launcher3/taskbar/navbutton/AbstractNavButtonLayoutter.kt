@@ -123,13 +123,10 @@ abstract class AbstractNavButtonLayoutter(
     /** For ordered layouts, this determines if the order of buttons should be flipped. */
     open fun shouldFlipButtonOrder(): Boolean {
         // convert AOSP's navbar setting to YAAP's
-        if (backButton != null) {
-            val isFlipEnabledBySetting =
-                SettingsCache.INSTANCE.get(backButton.context).getIntValue(NAV_BAR_INVERSE, 0) == 1
+        val isFlipEnabledBySetting =
+            SettingsCache.INSTANCE.get(navButtonContainer.context).getIntValue(NAV_BAR_INVERSE, 0) == 1
 
-            return Utilities.isRtl(resources) xor isFlipEnabledBySetting
-        }
-        return false
+        return Utilities.isRtl(resources) xor isFlipEnabledBySetting
     }
 
     /**
