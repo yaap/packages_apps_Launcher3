@@ -293,6 +293,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
                     mDeviceProfile.getWorkspaceIconProfile().getIconDrawablePaddingPx());
             defaultIconSize = mDeviceProfile.getWorkspaceIconProfile().getIconSizePx();
             setCenterVertically(mDeviceProfile.getWorkspaceIconProfile().getIconCenterVertically());
+            mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DESKTOP_LABELS, true);
         } else if (mDisplay == DISPLAY_ALL_APPS || mDisplay == DISPLAY_PREDICTION_ROW
                 || mDisplay == DISPLAY_SEARCH_RESULT_APP_ROW) {
             setTextSize(TypedValue.COMPLEX_UNIT_PX,
@@ -308,6 +309,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
             setCompoundDrawablePadding(
                     mDeviceProfile.getFolderProfile().getChildDrawablePaddingPx());
             defaultIconSize = mDeviceProfile.getFolderProfile().getChildIconSizePx();
+            mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DESKTOP_LABELS, true);
         } else if (mDisplay == DISPLAY_SEARCH_RESULT) {
             setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     mDeviceProfile.getAllAppsProfile().getIconTextSizePx());
@@ -322,10 +324,8 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
         } else {
             // widget_selection or shortcut_popup
             defaultIconSize = mDeviceProfile.getWorkspaceIconProfile().getIconSizePx();
+            mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DESKTOP_LABELS, true);
         }
-
-        mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DESKTOP_LABELS, true);
-
 
         mIconSize = a.getDimensionPixelSize(R.styleable.BubbleTextView_iconSizeOverride,
                 defaultIconSize);

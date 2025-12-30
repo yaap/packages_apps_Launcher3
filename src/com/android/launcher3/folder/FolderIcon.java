@@ -689,7 +689,9 @@ public class FolderIcon extends FrameLayout implements FloatingIconViewCompanion
     }
 
     public void onTitleChanged(CharSequence title) {
-        mFolderName.applyLabel(title);
+        if (mFolderName.shouldShowLabel()) {
+            mFolderName.applyLabel(title);
+        }
         setContentDescription(getAccessiblityTitle(title));
     }
 
