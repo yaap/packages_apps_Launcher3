@@ -64,6 +64,7 @@
     <string name="browser_name_tor">Tor</string>
     <string name="browser_name_kiwi">Kiwi</string>
     <string name="browser_name_startpage">Startpage</string>
+    <string name="browser_name_pixelsearch">Pixel Search</string>
 
     <!-- Kill App recents action shortcut -->
     <string name="recent_task_option_kill_app">Kill</string>

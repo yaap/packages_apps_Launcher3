@@ -18,6 +18,7 @@
         <item>org.torproject.torbrowser</item>
         <item>com.kiwibrowser.browser</item>
         <item>com.startpage.app</item>
+        <item>rk.android.app.pixelsearch</item>
     </string-array>
 
     <string-array name="qsb_search_fallback_names" translatable="false">
@@ -38,5 +39,6 @@
         <item>@string/browser_name_tor</item>
         <item>@string/browser_name_kiwi</item>
         <item>@string/browser_name_startpage</item>
+        <item>@string/browser_name_pixelsearch</item>
     </string-array>
 </resources>
