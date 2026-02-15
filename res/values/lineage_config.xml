@@ -19,5 +19,5 @@
     <bool name="config_appsListSortSections">false</bool>
 
     <!-- Allow rotation by default -->
-    <bool name="config_allowRotation">false</bool>
+    <bool name="config_allowRotation">true</bool>
 </resources>
