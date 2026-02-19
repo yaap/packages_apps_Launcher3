@@ -134,7 +134,7 @@ public class BaseDepthController {
             mCrossWindowBlursEnabled =
                     CrossWindowBlurListeners.getInstance().isCrossWindowBlurEnabled();
         }
-        mMaxBlurRadius = LauncherPrefs.BLUR_DEPTH.get(mLauncher);
+        mMaxBlurRadius = Utilities.dpToPx(LauncherPrefs.BLUR_DEPTH.get(mLauncher));
         mWallpaperManager = activity.getSystemService(WallpaperManager.class);
 
         MultiPropertyFactory<BaseDepthController> depthProperty =

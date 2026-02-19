@@ -68,6 +68,7 @@ import com.android.launcher3.LauncherPrefs;
 import com.android.launcher3.R;
 import com.android.launcher3.Utilities;
 import com.android.launcher3.qsb.QsbContainerView;
+import com.android.launcher3.settings.preferences.CustomSeekBarPreference;
 import com.android.launcher3.states.RotationHelper;
 import com.android.launcher3.util.DisplayController;
 import com.android.launcher3.util.SettingsCache;
@@ -392,9 +393,20 @@ public class SettingsActivity extends FragmentActivity
                     mShowGoogleAppPref = preference;
                     updateIsGoogleAppEnabled();
                     return true;
+
+                case Utilities.KEY_BLUR_DEPTH:
+                    updateBlurPrefDefault((CustomSeekBarPreference) preference);
+                    return true;
             }
 
             return true;
+        }
+
+        private void updateBlurPrefDefault(CustomSeekBarPreference blurPref) {
+            final Resources res = getContext().getResources();
+            final float px = res.getDimension(R.dimen.max_depth_blur_radius_enhanced);
+            final int dp = Math.round(px / res.getDisplayMetrics().density);
+            blurPref.setDefaultValue(dp);
         }
 
         private void updateIsGoogleAppEnabled() {

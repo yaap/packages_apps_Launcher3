@@ -158,14 +158,14 @@
         android:key="misc_category"
         android:title="@string/category_misc">
 
-         <com.android.launcher3.settings.preferences.CustomSeekBarPreference
+        <com.android.launcher3.settings.preferences.CustomSeekBarPreference
             android:key="pref_blur_depth"
             android:title="@string/background_blur_title"
             android:summary="@string/background_blur_summary"
             android:persistent="true"
-            android:max="150"
+            android:max="80"
             android:min="5"
-            settings:units="px"
+            settings:units="dp"
             android:defaultValue="48" />
 
         <androidx.preference.PreferenceScreen

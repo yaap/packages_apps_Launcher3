@@ -1210,12 +1210,6 @@ public final class Utilities {
         return prefs.getBoolean(KEY_AUTO_KEYABORD, false);
     }
 
-    public static int getBlurRadius(Context context) {
-        SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
-        return prefs.getInt(KEY_BLUR_DEPTH,
-                context.getResources().getInteger(R.integer.max_depth_blur_radius));
-    }
-
     public static boolean getAlwaysShowDots(Context context) {
         SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
         return prefs.getBoolean(KEY_ALWAYS_SHOW_DOTS, false);
