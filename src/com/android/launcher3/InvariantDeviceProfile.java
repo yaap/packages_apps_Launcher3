@@ -130,6 +130,7 @@ public class InvariantDeviceProfile implements OnSharedPreferenceChangeListener 
     public static final String KEY_WORKSPACE_LOCK = "pref_workspace_lock";
     public static final String KEY_ICON_SIZE = "pref_custom_icon_size";
     public static final String KEY_FONT_SIZE = "pref_custom_font_size";
+    public static final String KEY_ALLAPPS_ICON_CUST = "pref_allapps_icon_customization";
 
     // Constants that affects the interpolation curve between statically defined device profile
     // buckets.
@@ -351,6 +352,7 @@ public class InvariantDeviceProfile implements OnSharedPreferenceChangeListener 
             case KEY_FONT_SIZE:
             case KEY_SHOW_DESKTOP_LABELS:
             case KEY_SHOW_DRAWER_LABELS:
+            case KEY_ALLAPPS_ICON_CUST:
                 onConfigChanged();
                 break;
         }

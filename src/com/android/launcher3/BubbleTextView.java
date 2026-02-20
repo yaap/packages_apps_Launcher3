@@ -26,6 +26,7 @@ import static com.android.launcher3.Flags.enableContrastTiles;
 import static com.android.launcher3.Flags.enableScalabilityForDesktopExperience;
 import static com.android.launcher3.InvariantDeviceProfile.KEY_SHOW_DESKTOP_LABELS;
 import static com.android.launcher3.InvariantDeviceProfile.KEY_SHOW_DRAWER_LABELS;
+import static com.android.launcher3.LauncherPrefs.ALLAPPS_ICON_CUSTOMIZATION;
 import static com.android.launcher3.graphics.PreloadIconDelegate.extractPreloadDelegate;
 import static com.android.launcher3.graphics.PreloadIconDelegate.hasPendingAnimationCompleted;
 import static com.android.launcher3.graphics.PreloadIconDelegate.newPendingIcon;
@@ -252,6 +253,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
     private boolean mDisableRelayout = false;
 
     private boolean mShouldShowLabel;
+    private boolean mThemeAllAppsIcons;
 
     private CancellableTask mIconLoadRequest;
 
@@ -300,6 +302,7 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
                     mDeviceProfile.getAllAppsProfile().getIconDrawablePaddingPx());
             defaultIconSize = mDeviceProfile.getAllAppsProfile().getIconSizePx();
             mShouldShowLabel = prefs.getBoolean(KEY_SHOW_DRAWER_LABELS, true);
+            mThemeAllAppsIcons = ALLAPPS_ICON_CUSTOMIZATION.get(context);
         } else if (mDisplay == DISPLAY_FOLDER) {
             setTextSize(TypedValue.COMPLEX_UNIT_PX,
                     mDeviceProfile.getFolderProfile().getChildTextSizePx());
@@ -588,9 +591,16 @@ public class BubbleTextView extends TextView implements ItemInfoUpdateReceiver,
         return flags;
     }
 
+    private boolean displayIsAppDrawer() {
+        return (mDisplay == DISPLAY_ALL_APPS
+                || mDisplay == DISPLAY_PREDICTION_ROW
+                || mDisplay == DISPLAY_SEARCH_RESULT_APP_ROW);
+    }
+
     protected boolean shouldUseTheme() {
         return mDisplay == DISPLAY_WORKSPACE || mDisplay == DISPLAY_FOLDER
-                || mDisplay == DISPLAY_TASKBAR;
+                || mDisplay == DISPLAY_TASKBAR
+		|| (mThemeAllAppsIcons && displayIsAppDrawer());
     }
 
     /**

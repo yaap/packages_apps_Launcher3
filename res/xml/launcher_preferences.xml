@@ -142,6 +142,14 @@
             android:defaultValue="true"
             android:persistent="true" />
 
+        <SwitchPreferenceCompat
+            android:key="pref_allapps_icon_customization"
+            android:title="@string/pref_icon_customization_title"
+            android:summary="@string/pref_icon_customization_summary"
+            android:defaultValue="true"
+            android:persistent="true"
+            launcher:iconSpaceReserved="false" />
+
 <!--
         <com.android.launcher3.settings.preferences.CustomSeekBarPreference
             android:key="pref_app_drawer_opacity"
