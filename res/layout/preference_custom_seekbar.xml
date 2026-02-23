@@ -131,7 +131,16 @@
                 android:layout_marginEnd="3dp"
                 android:layout_toEndOf="@id/minus"
                 android:layout_toStartOf="@id/plus"
-                android:layout_centerVertical="true" />
+                android:layout_centerVertical="true">
+
+                <com.google.android.material.slider.Slider
+                    android:id="@+id/slider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:theme="@style/Theme.MaterialComponents.DayNight"
+                    style="@style/SettingslibSliderStyle.Expressive" />
+
+            </LinearLayout>
         </RelativeLayout>
     </RelativeLayout>
 
