@@ -775,8 +775,11 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
                 wallpaperTargets, nonAppTargets, MODE_OPENING);
         int rotationChange = getRotationChange(appTargets);
         Rect windowTargetBounds = getWindowTargetBounds(appTargets, rotationChange);
+        final int displayWidth = mDeviceProfile.getDeviceProperties().getWidthPx();
+        final int displayHeight = mDeviceProfile.getDeviceProperties().getHeightPx();
         final int[] bottomInsetPos = new int[]{
                 mSystemUiProxy.getHomeVisibilityState().getNavbarInsetPosition()};
+        final int[] cachedNavbarInset = new int[]{bottomInsetPos[0]};
         final RemoteAnimationTarget target = openingTargets.getFirstAppTarget();
         final boolean cropToInset = shouldCropToInset(target);
         if (cropToInset) {
@@ -795,6 +798,7 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
                 true /* isOpening */);
         Rect crop = new Rect();
         Matrix matrix = new Matrix();
+        Rect closingTargetCrop = new Rect();
 
         SurfaceTransactionApplier surfaceApplier =
                 new SurfaceTransactionApplier(floatingView);
@@ -922,11 +926,11 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
 
             @Override
             public void onUpdate(float percent, boolean initOnly) {
-                if (cropToInset && bottomInsetPos[0] != mSystemUiProxy.getHomeVisibilityState()
-                        .getNavbarInsetPosition()) {
-                    final RemoteAnimationTarget target = openingTargets.getFirstAppTarget();
-                    bottomInsetPos[0] = mSystemUiProxy.getHomeVisibilityState()
+                if (cropToInset && bottomInsetPos[0] != cachedNavbarInset[0]) {
+                    cachedNavbarInset[0] = mSystemUiProxy.getHomeVisibilityState()
                             .getNavbarInsetPosition();
+                    bottomInsetPos[0] = cachedNavbarInset[0];
+                    final RemoteAnimationTarget target = openingTargets.getFirstAppTarget();
                     final Rect bounds = target != null
                             ? target.screenSpaceBounds : windowTargetBounds;
                     // Animate to above the taskbar.
@@ -962,8 +966,8 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
                 final int windowCropWidth = crop.width();
                 final int windowCropHeight = crop.height();
                 if (rotationChange != 0) {
-                    Utilities.rotateBounds(crop, mDeviceProfile.getDeviceProperties().getWidthPx(),
-                            mDeviceProfile.getDeviceProperties().getHeightPx(), rotationChange);
+                    Utilities.rotateBounds(crop, displayWidth,
+                            displayHeight, rotationChange);
                 }
 
                 // Scale the size of the icon to match the size of the window crop.
@@ -1010,14 +1014,14 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
                         matrix.setScale(scale, scale);
                         if (rotationChange == 1) {
                             matrix.postTranslate(windowTransY0,
-                                    mDeviceProfile.getDeviceProperties().getWidthPx() - (windowTransX0 + scaledCropWidth));
+                                    displayWidth - (windowTransX0 + scaledCropWidth));
                         } else if (rotationChange == 2) {
                             matrix.postTranslate(
-                                    mDeviceProfile.getDeviceProperties().getWidthPx() - (windowTransX0 + scaledCropWidth),
-                                    mDeviceProfile.getDeviceProperties().getHeightPx() - (windowTransY0 + scaledCropHeight));
+                                    displayWidth - (windowTransX0 + scaledCropWidth),
+                                    displayHeight - (windowTransY0 + scaledCropHeight));
                         } else if (rotationChange == 3) {
                             matrix.postTranslate(
-                                    mDeviceProfile.getDeviceProperties().getHeightPx() - (windowTransY0 + scaledCropHeight),
+                                    displayHeight - (windowTransY0 + scaledCropHeight),
                                     windowTransX0);
                         } else {
                             matrix.postTranslate(windowTransX0, windowTransY0);
@@ -1036,20 +1040,20 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
                         } else {
                             tmpPos.set(target.position.x, target.position.y);
                         }
-                        final Rect crop = new Rect(target.screenSpaceBounds);
-                        crop.offsetTo(0, 0);
+                        closingTargetCrop.set(target.screenSpaceBounds);
+                        closingTargetCrop.offsetTo(0, 0);
 
                         if ((rotationChange % 2) == 1) {
-                            int tmp = crop.right;
-                            crop.right = crop.bottom;
-                            crop.bottom = tmp;
+                            int tmp = closingTargetCrop.right;
+                            closingTargetCrop.right = closingTargetCrop.bottom;
+                            closingTargetCrop.bottom = tmp;
                             tmp = tmpPos.x;
                             tmpPos.x = tmpPos.y;
                             tmpPos.y = tmp;
                         }
                         matrix.setTranslate(tmpPos.x, tmpPos.y);
                         builder.setMatrix(matrix)
-                                .setWindowCrop(crop)
+                                .setWindowCrop(closingTargetCrop)
                                 .setAlpha(1f);
                     }
                 }
@@ -1668,6 +1672,8 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
         Matrix matrix = new Matrix();
         Point tmpPos = new Point();
         Rect tmpRect = new Rect();
+        Rect fallbackCrop = new Rect();
+        SurfaceTransaction transaction = new SurfaceTransaction();
         ValueAnimator closingAnimator = ValueAnimator.ofFloat(0, 1);
         int duration = CLOSING_TRANSITION_DURATION_MS;
         float windowCornerRadius = getWindowCornerRadius(mLauncher);
@@ -1687,7 +1693,6 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
 
             @Override
             public void onUpdate(float percent, boolean initOnly) {
-                SurfaceTransaction transaction = new SurfaceTransaction();
                 for (int i = appTargets.length - 1; i >= 0; i--) {
                     RemoteAnimationTarget target = appTargets[i];
                     SurfaceProperties builder = transaction.forSurface(target.leash);
@@ -1698,14 +1703,14 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
                         tmpPos.set(target.position.x, target.position.y);
                     }
 
-                    final Rect crop = new Rect(target.localBounds);
-                    crop.offsetTo(0, 0);
+                    fallbackCrop.set(target.localBounds);
+                    fallbackCrop.offsetTo(0, 0);
                     if (target.mode == MODE_CLOSING) {
                         tmpRect.set(target.screenSpaceBounds);
                         if ((rotationChange % 2) != 0) {
-                            final int right = crop.right;
-                            crop.right = crop.bottom;
-                            crop.bottom = right;
+                            final int right = fallbackCrop.right;
+                            fallbackCrop.right = fallbackCrop.bottom;
+                            fallbackCrop.bottom = right;
                         }
                         matrix.setScale(mScale.value, mScale.value,
                                 tmpRect.centerX(),
@@ -1713,14 +1718,14 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
                         matrix.postTranslate(0, mDy.value);
                         matrix.postTranslate(tmpPos.x, tmpPos.y);
                         builder.setMatrix(matrix)
-                                .setWindowCrop(crop)
+                                .setWindowCrop(fallbackCrop)
                                 .setAlpha(mAlpha.value)
                                 .setCornerRadius(windowCornerRadius)
                                 .setShadowRadius(mShadowRadius.value);
                     } else if (target.mode == MODE_OPENING) {
                         matrix.setTranslate(tmpPos.x, tmpPos.y);
                         builder.setMatrix(matrix)
-                                .setWindowCrop(crop)
+                                .setWindowCrop(fallbackCrop)
                                 .setAlpha(1f);
                     }
                 }
@@ -2350,6 +2355,7 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
         private final Rect mWindowOriginalBounds = new Rect();
 
         private final Rect mTmpRect = new Rect();
+        private final SurfaceTransaction mTransaction = new SurfaceTransaction();
 
         /**
          * Constructor for SpringAnimRunner
@@ -2392,15 +2398,14 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
         }
 
         public float getCornerRadius(float progress) {
-            return Utilities.mapRange(progress, mStartRadius, mEndRadius);
+            return mStartRadius + progress * (mEndRadius - mStartRadius);
         }
 
         @Override
         public void onUpdate(RectF currentRectF, float progress) {
-            SurfaceTransaction transaction = new SurfaceTransaction();
             for (int i = mAppTargets.length - 1; i >= 0; i--) {
                 RemoteAnimationTarget target = mAppTargets[i];
-                SurfaceProperties builder = transaction.forSurface(target.leash);
+                SurfaceProperties builder = mTransaction.forSurface(target.leash);
 
                 if (target.localBounds != null) {
                     mTmpPos.set(target.localBounds.left, target.localBounds.top);
@@ -2446,7 +2451,7 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
                             .setAlpha(1f);
                 }
             }
-            mSurfaceApplier.scheduleApply(transaction);
+            mSurfaceApplier.scheduleApply(mTransaction);
         }
 
         protected float getWindowAlpha(float progress) {
