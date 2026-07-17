@@ -37,6 +37,7 @@ import com.android.launcher3.DeviceProfile;
 import com.android.launcher3.ExtendedEditText;
 import com.android.launcher3.Insettable;
 import com.android.launcher3.R;
+import com.android.launcher3.Utilities;
 import com.android.launcher3.allapps.ActivityAllAppsContainerView;
 import com.android.launcher3.allapps.AllAppsStore;
 import com.android.launcher3.allapps.BaseAllAppsAdapter.AdapterItem;
@@ -108,9 +109,10 @@ public class AppsSearchContainerLayout extends ExtendedEditText
                 - mAppsView.getActiveRecyclerView().getPaddingRight();
 
         int cellWidth = DeviceProfile.calculateCellWidth(rowWidth,
-                dp.getWorkspaceIconProfile().getCellLayoutBorderSpacePx().x, dp.numShownHotseatIcons);
+                dp.getWorkspaceProfile().getCellLayoutBorderSpacePx().x,
+                dp.getHotseatProfile().getNumShownIcons());
         int iconVisibleSize =
-                Math.round(ICON_VISIBLE_AREA_FACTOR * dp.getWorkspaceIconProfile().getIconSizePx());
+                Math.round(ICON_VISIBLE_AREA_FACTOR * dp.getWorkspaceProfile().getIconSizePx());
         int iconPadding = cellWidth - iconVisibleSize;
 
         int myWidth = rowWidth - iconPadding + getPaddingLeft() + getPaddingRight();
@@ -136,7 +138,7 @@ public class AppsSearchContainerLayout extends ExtendedEditText
     public void initializeSearch(ActivityAllAppsContainerView<?> appsView) {
         mAppsView = appsView;
         mSearchBarController.initialize(
-                new DefaultAppSearchAlgorithm(getContext(), true),
+                new DefaultAppSearchAlgorithm(getContext(), mLauncher.getUiExecutor(), true),
                 this, mLauncher, this);
     }
 
@@ -148,6 +150,12 @@ public class AppsSearchContainerLayout extends ExtendedEditText
     @Override
     public void resetSearch() {
         mSearchBarController.reset();
+    }
+
+    @Override
+    public boolean isSearchQueryEmpty() {
+        String query = Utilities.trim(getEditableText().toString());
+        return query.isEmpty();
     }
 
     @Override
@@ -192,18 +200,7 @@ public class AppsSearchContainerLayout extends ExtendedEditText
     @Override
     public void setInsets(Rect insets) {
         MarginLayoutParams mlp = (MarginLayoutParams) getLayoutParams();
-        DeviceProfile dp = mLauncher.getDeviceProfile();
-        if (dp.shouldShowAllAppsOnSheet()) {
-            // Use bottom_sheet_handle_area_height instead which is what NexusLauncher's
-            // UniversalSearchInputView does. This puts it closer to the bottom sheet handle, as it
-            // makes it flush against the handle area.
-            mlp.topMargin = getResources().getDimensionPixelSize(
-                    R.dimen.bottom_sheet_handle_area_height);
-        } else {
-            // insets.top originates from SystemWindowManagerProxy.normalizeWindowInsets:
-            // max(statusBars.top, android:dimen/status_bar_height_portrait, displayCutout.top)
-            mlp.topMargin = insets.top;
-        }
+        mlp.topMargin = insets.top;
         requestLayout();
     }
 

@@ -26,31 +26,35 @@ import android.widget.LinearLayout
 import android.widget.Space
 import com.android.launcher3.R
 import com.android.launcher3.taskbar.TaskbarActivityContext
-import com.android.launcher3.taskbar.TaskbarManagerImpl.NAV_BAR_INVERSE
-import com.android.launcher3.taskbar.TaskbarManagerImpl.NAV_BAR_LAYOUT
-import com.android.launcher3.util.SettingsCache
 
 class PhonePortraitNavLayoutter(
     resources: Resources,
-    navBarContainer: LinearLayout,
+    navButtonContainer: LinearLayout,
     endContextualContainer: ViewGroup,
     startContextualContainer: ViewGroup,
     imeSwitcher: ImageView?,
     a11yButton: ImageView?,
+    moreOptionsButton: ImageView?,
     space: Space?,
+    backButton: ImageView?,
+    homeButton: ImageView?,
+    recentsButton: ImageView?,
 ) :
     AbstractNavButtonLayoutter(
         resources,
-        navBarContainer,
+        navButtonContainer,
         endContextualContainer,
         startContextualContainer,
         imeSwitcher,
         a11yButton,
+        moreOptionsButton,
         space,
+        backButton,
+        homeButton,
+        recentsButton,
     ) {
 
     override fun layoutButtons(context: TaskbarActivityContext, isA11yButtonPersistent: Boolean) {
-        val layoutMode = SettingsCache.INSTANCE.get(homeButton!!.context).getIntValue(NAV_BAR_LAYOUT, 0)
         val totalWidth = context.deviceProfile.deviceProperties.widthPx
         val homeButtonWidth =
             resources.getDimensionPixelSize(R.dimen.taskbar_phone_home_button_size)
@@ -64,12 +68,6 @@ class PhonePortraitNavLayoutter(
         val sideButtonWidth = contextualButtonWidth * 2
         val navButtonContainerWidth = contentWidth - contextualButtonWidth * 2
 
-        val startFactor = when (layoutMode) {
-            2 -> 0.4f  // left
-            3 -> 1.6f  // right
-            else -> 1f // normal & compact
-        }
-        val marginBase = contextualButtonWidth + contentPadding + roundedCornerContentMargin
         val navContainerParams =
             FrameLayout.LayoutParams(
                 navButtonContainerWidth.toInt(),
@@ -78,8 +76,10 @@ class PhonePortraitNavLayoutter(
         navContainerParams.apply {
             topMargin = 0
             bottomMargin = 0
-            marginEnd = marginBase.toInt()
-            marginStart = (startFactor * marginBase.toFloat()).toInt()
+            marginEnd =
+                (contextualButtonWidth + contentPadding + roundedCornerContentMargin).toInt()
+            marginStart =
+                (contextualButtonWidth + contentPadding + roundedCornerContentMargin).toInt()
         }
 
         // Ensure order of buttons is correct
@@ -91,7 +91,6 @@ class PhonePortraitNavLayoutter(
         // Add the spaces in between the nav buttons
         val spaceInBetween =
             (navButtonContainerWidth - homeButtonWidth - sideButtonWidth * 2) / 2.0f
-        val spaceInBetweenDiv = if (layoutMode == 0) 1 else 4
         for (i in 0 until navButtonContainer.childCount) {
             val navButton = navButtonContainer.getChildAt(i)
             val buttonLayoutParams = navButton.layoutParams as LinearLayout.LayoutParams
@@ -109,8 +108,8 @@ class PhonePortraitNavLayoutter(
                 }
                 else -> {
                     // other buttons
-                    buttonLayoutParams.marginStart = (margin / spaceInBetweenDiv).toInt()
-                    buttonLayoutParams.marginEnd = (margin / spaceInBetweenDiv).toInt()
+                    buttonLayoutParams.marginStart = margin
+                    buttonLayoutParams.marginEnd = margin
                     buttonLayoutParams.width = homeButtonWidth
                 }
             }

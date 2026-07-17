@@ -21,6 +21,7 @@ import static android.view.MotionEvent.ACTION_MOVE;
 import static android.view.MotionEvent.ACTION_POINTER_UP;
 import static android.view.MotionEvent.ACTION_UP;
 
+import static com.android.launcher3.Flags.enableWorkspaceSelection;
 import static com.android.launcher3.LauncherState.ALL_APPS;
 import static com.android.launcher3.LauncherState.NORMAL;
 import static com.android.launcher3.Utilities.shouldEnableMouseInteractionChanges;
@@ -41,6 +42,7 @@ import android.view.View.OnTouchListener;
 import android.view.ViewConfiguration;
 
 import com.android.launcher3.AbstractFloatingView;
+import com.android.launcher3.BoxSelectionHelper;
 import com.android.launcher3.CellLayout;
 import com.android.launcher3.DeviceProfile;
 import com.android.launcher3.Launcher;
@@ -81,6 +83,7 @@ public class WorkspaceTouchListener extends GestureDetector.SimpleOnGestureListe
     private final PowerManager mPm;
 
     private final GestureDetector mGestureDetector;
+    private final BoxSelectionHelper mBoxSelectionHelper;
 
     private final Context mContext;
 
@@ -93,10 +96,18 @@ public class WorkspaceTouchListener extends GestureDetector.SimpleOnGestureListe
         mTouchSlop = 2 * ViewConfiguration.get(launcher).getScaledTouchSlop();
         mPm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
         mGestureDetector = new GestureDetector(mContext, this);
+        mBoxSelectionHelper = enableWorkspaceSelection()
+                ? new BoxSelectionHelper(launcher, workspace)
+                : null;
     }
 
     @Override
     public boolean onTouch(View view, MotionEvent ev) {
+        // TODO(http://b/465503610): Unify touch delegation logic into CustomEventsTouchHandler
+        if (mBoxSelectionHelper != null) {
+            mBoxSelectionHelper.onTouchEvent(ev);
+        }
+
         mGestureDetector.onTouchEvent(ev);
 
         int action = ev.getActionMasked();
@@ -112,8 +123,8 @@ public class WorkspaceTouchListener extends GestureDetector.SimpleOnGestureListe
 
                 mTempRect.set(insets.left, insets.top, dl.getWidth() - insets.right,
                         dl.getHeight() - insets.bottom);
-                mTempRect.inset(dp.mWorkspaceProfile.getEdgeMarginPx(),
-                        dp.mWorkspaceProfile.getEdgeMarginPx());
+                mTempRect.inset(dp.getWorkspaceProfile().getEdgeMarginPx(),
+                        dp.getWorkspaceProfile().getEdgeMarginPx());
                 handleLongPress = mTempRect.contains((int) ev.getX(), (int) ev.getY());
             }
 
@@ -141,8 +152,7 @@ public class WorkspaceTouchListener extends GestureDetector.SimpleOnGestureListe
             mLongPressState = STATE_COMPLETED;
         }
 
-        boolean isInAllAppsBottomSheet = mLauncher.isInState(ALL_APPS)
-                && mLauncher.getDeviceProfile().shouldShowAllAppsOnSheet();
+        boolean isInAllAppsBottomSheet = mLauncher.isInState(ALL_APPS);
 
         final boolean result;
         if (mLongPressState == STATE_COMPLETED) {
