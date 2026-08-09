@@ -31,10 +31,8 @@ import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Outline;
 import android.graphics.Rect;
-import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
-import android.provider.Settings;
 import android.view.View;
 import android.view.ViewOutlineProvider;
 
@@ -51,7 +49,6 @@ import com.android.launcher3.anim.RevealOutlineAnimation;
 import com.android.launcher3.anim.RoundedRectRevealOutlineProvider;
 import com.android.launcher3.util.Executors;
 import com.android.launcher3.util.MultiValueAlpha;
-import com.android.launcher3.util.SettingsCache;
 import com.android.quickstep.NavHandle;
 import com.android.quickstep.TopTaskTracker;
 import com.android.systemui.shared.system.QuickStepContract.SystemUiStateFlags;
@@ -78,8 +75,7 @@ public class StashedHandleViewController implements TaskbarControllers.LoggableT
     public static final int ALPHA_INDEX_NUDGED = 4;
     public static final int ALPHA_INDEX_ALL_SET_TRANSITION = 5;
     public static final int ALPHA_INDEX_CUEBAR_HIDDEN = 6;
-    public static final int ALPHA_INDEX_NAV_HANDLE_HIDDEN = 7;
-    private static final int NUM_ALPHA_CHANNELS = 8;
+    private static final int NUM_ALPHA_CHANNELS = 7;
 
     // Values for long press animations, picked to most closely match navbar spec.
     private static final float SCALE_TOUCH_ANIMATION_SHRINK = 0.85f;
@@ -140,10 +136,6 @@ public class StashedHandleViewController implements TaskbarControllers.LoggableT
     private boolean mBurnInProtectionEnabled;
     private long mBurnInShiftIntervalMs;
 
-    private static final Uri NAVIGATION_HANDLE_HIDDEN_URI =
-            Settings.Secure.getUriFor("navigation_handle_hidden");
-    private SettingsCache.OnChangeListener mNavHandleChangeListener;
-
     public StashedHandleViewController(TaskbarActivityContext activity,
             StashedHandleView stashedHandleView) {
         mActivityRef = new WeakReference<>(activity);
@@ -153,7 +145,6 @@ public class StashedHandleViewController implements TaskbarControllers.LoggableT
         mTaskbarStashedHandleAlpha.setUpdateVisibility(true);
         mStashedHandleView.updateHandleColor(
                 mPrefs.get(STASHED_HANDLE_REGION_IS_DARK), false /* animate */);
-        updateNavHandleVisibility();
         final Resources resources = activity.getResources();
         mStashedHandleHeight = resources.getDimensionPixelSize(
                 R.dimen.taskbar_stashed_handle_height);
@@ -189,8 +180,6 @@ public class StashedHandleViewController implements TaskbarControllers.LoggableT
         mTaskbarStashedHandleAlpha.get(ALPHA_INDEX_STASHED).setValue(
                 activity.isPhoneGestureNavMode() ? 1 : 0);
         mTaskbarStashedHandleHintScale.updateValue(1f);
-
-        initNavHandleSettingsListener();
 
         final int stashedTaskbarHeight = mControllers.taskbarStashController.getStashedHeight();
         mStashedHandleView.setOutlineProvider(new ViewOutlineProvider() {
@@ -276,10 +265,6 @@ public class StashedHandleViewController implements TaskbarControllers.LoggableT
         if (mTaskStackChangeListener != null) {
             TaskStackChangeListeners.getInstance().unregisterTaskStackListener(
                     mTaskStackChangeListener);
-        }
-        if (mNavHandleChangeListener != null) {
-            SettingsCache.INSTANCE.get(mActivity).unregister(
-                    NAVIGATION_HANDLE_HIDDEN_URI, mNavHandleChangeListener);
         }
         stopBurnInTimer();
     }
@@ -525,18 +510,5 @@ public class StashedHandleViewController implements TaskbarControllers.LoggableT
         }
 
         updateTranslationY();
-    }
-
-    private void initNavHandleSettingsListener() {
-        mNavHandleChangeListener = isEnabled -> updateNavHandleVisibility();
-        SettingsCache.INSTANCE.get(mActivity).register(
-                NAVIGATION_HANDLE_HIDDEN_URI, mNavHandleChangeListener);
-    }
-
-    private void updateNavHandleVisibility() {
-        boolean hideHandle = Settings.Secure.getInt(mActivity.getContentResolver(),
-                "navigation_handle_hidden", 0) == 1;
-        mTaskbarStashedHandleAlpha.get(ALPHA_INDEX_NAV_HANDLE_HIDDEN).setValue(
-                hideHandle ? 0 : 1);
     }
 }
