@@ -143,7 +143,6 @@ public class StashedHandleViewController implements TaskbarControllers.LoggableT
     private static final Uri NAVIGATION_HANDLE_HIDDEN_URI =
             Settings.Secure.getUriFor("navigation_handle_hidden");
     private SettingsCache.OnChangeListener mNavHandleChangeListener;
-    private boolean mIsNavHandleHiddenBySetting;
 
     public StashedHandleViewController(TaskbarActivityContext activity,
             StashedHandleView stashedHandleView) {
@@ -477,7 +476,7 @@ public class StashedHandleViewController implements TaskbarControllers.LoggableT
 
     @Override
     public boolean canNavHandleBeLongPressed() {
-        return isStashedHandleVisible() || mIsNavHandleHiddenBySetting;
+        return isStashedHandleVisible();
     }
 
     @Override
@@ -537,7 +536,6 @@ public class StashedHandleViewController implements TaskbarControllers.LoggableT
     private void updateNavHandleVisibility() {
         boolean hideHandle = Settings.Secure.getInt(mActivity.getContentResolver(),
                 "navigation_handle_hidden", 0) == 1;
-        mIsNavHandleHiddenBySetting = hideHandle;
         mTaskbarStashedHandleAlpha.get(ALPHA_INDEX_NAV_HANDLE_HIDDEN).setValue(
                 hideHandle ? 0 : 1);
     }
