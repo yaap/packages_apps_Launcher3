@@ -151,7 +151,6 @@ public class DeviceProfile {
                 false,
                 false,
                 false,
-                false,
                 new Rect(0, 0, 0, 0),
                 new DeviceConfiguration(
                         false,
@@ -1198,7 +1197,6 @@ public class DeviceProfile {
 
         writer.println(prefix + "\tisTablet:" + mDeviceProperties.isLargeScreen());
         writer.println(prefix + "\tisPhone:" + mDeviceProperties.isPhone());
-        writer.println(prefix + "\tisRotationAllowed:" + mDeviceProperties.isRotationAllowed());
         writer.println(prefix + "\ttransposeLayoutWithOrientation:"
                 + mDeviceProperties.getDeviceConfiguration().getTransposeLayoutWithOrientation());
         writer.println(

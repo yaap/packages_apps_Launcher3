@@ -20,13 +20,10 @@ import static com.android.launcher3.logging.StatsLogManager.LAUNCHER_STATE_ALLAP
 
 import android.graphics.Color;
 
-import androidx.core.graphics.ColorUtils;
-
 import com.android.internal.jank.Cuj;
 import com.android.launcher3.DeviceProfile;
 import com.android.launcher3.Flags;
 import com.android.launcher3.Launcher;
-import com.android.launcher3.LauncherPrefs;
 import com.android.launcher3.LauncherState;
 import com.android.launcher3.LauncherUiState;
 import com.android.launcher3.R;
@@ -169,20 +166,11 @@ public class AllAppsState extends LauncherState {
 
     @Override
     public ScrimColors getWorkspaceScrimColor(Launcher launcher) {
-        int backgroundColor;
-        int scrimColor;
-        if (!launcher.getDeviceProfile().shouldShowAllAppsOnSheet()) {
-            // Always use an opaque scrim if there's no sheet.
-            backgroundColor = launcher.getResources().getColor(R.color.materialColorSurfaceDim);
-        } else if (!Flags.allAppsBlur()) {
-            // If there's a sheet but no blur, use the old scrim color.
-            backgroundColor = launcher.getResources().getColor(R.color.widgets_picker_scrim);
-        } else if (Flags.allAppsSurface()) {
+        if (Flags.allAppsSurface()) {
             // No scrim.
             return super.getWorkspaceScrimColor(launcher);
-        } else {
-            backgroundColor = Themes.getAttrColor(launcher, R.attr.allAppsScrimColor);
         }
+        int backgroundColor = Themes.getAttrColor(launcher, R.attr.allAppsScrimColor);
         return new ScrimColors(backgroundColor, /* foregroundColor */ Color.TRANSPARENT);
     }
 }

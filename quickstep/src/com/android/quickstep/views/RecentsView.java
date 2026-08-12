@@ -1033,7 +1033,7 @@ public abstract class RecentsView<
     protected void onWindowVisibilityChanged(int visibility) {
         super.onWindowVisibilityChanged(visibility);
         updateTaskStackListenerState();
-        if (visibility != VISIBLE && enableOverviewBackgroundWallpaperBlur()) {
+        if (visibility != VISIBLE) {
             mBlurUtils.setDrawLiveTileBelowRecents(false);
         }
     }
@@ -2316,7 +2316,6 @@ public abstract class RecentsView<
         outRect.offset(
                 -(primaryScroll - (selectedPageScroll + getOffsetFromScrollPosition(selectedPage))),
                 (int) (showAsGrid() && !isTopRow ? mTopBottomRowHeightDiff : 0));
-        return outRect;
     }
 
     /** Gets the last computed task size */

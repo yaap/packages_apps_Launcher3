@@ -690,12 +690,6 @@ public class Launcher extends StatefulActivity<LauncherState>
     }
 
     private void updateFixedLandscape() {
-        if (getDeviceProfile().getDeviceProperties().isRotationAllowed()) {
-            LauncherPrefs.get(this).put(FIXED_LANDSCAPE_MODE, false);
-        } else if (getDeviceProfile().getDeviceProperties().isLargeScreen()) {
-            // Tablet do not use fixed landscape mode, make sure it can't be activated by mistake
-            LauncherPrefs.get(this).put(FIXED_LANDSCAPE_MODE, false);
-        }
         getRotationHelper().setFixedLandscape(
                 Objects.requireNonNull(mDeviceProfile.inv).isFixedLandscape
         );

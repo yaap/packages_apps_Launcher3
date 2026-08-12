@@ -26,7 +26,6 @@ import android.provider.SearchIndexablesProvider
 import com.android.launcher3.InvariantDeviceProfile
 import com.android.launcher3.InvariantDeviceProfile.TYPE_TABLET
 import com.android.launcher3.R
-import com.android.launcher3.util.DisplayController
 import com.android.launcher3.util.XmlElement.Companion.getRootElement
 
 @TargetApi(Build.VERSION_CODES.O)
@@ -68,18 +67,12 @@ class LauncherSearchIndexablesProvider : SearchIndexablesProvider() {
         return InvariantDeviceProfile.INSTANCE.get(context).deviceType == TYPE_TABLET
     }
 
-    fun isRotationAllowed(): Boolean {
-        return DisplayController.INSTANCE.get(context).info.isRotationAllowed
-    }
-
     override fun queryRawData(projection: Array<String>) =
         MatrixCursor(SearchIndexablesContract.INDEXABLES_RAW_COLUMNS)
 
     override fun queryNonIndexableKeys(projection: Array<String>): Cursor {
         val cursor = MatrixCursor(SearchIndexablesContract.NON_INDEXABLES_KEYS_COLUMNS)
-        if (!isDeviceTablet() && !isRotationAllowed()) {
-            cursor.addRow(arrayOf(ALLOW_ROTATION_KEY))
-        } else {
+        if (isDeviceTablet()) {
             cursor.addRow(arrayOf(FIXED_LANDSCAPE_KEY))
         }
         val ctx = context!!

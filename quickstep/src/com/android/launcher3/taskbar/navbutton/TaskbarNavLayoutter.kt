@@ -110,7 +110,7 @@ class TaskbarNavLayoutter(
             )
         navButtonParams.apply {
             gravity = Gravity.END or Gravity.CENTER_VERTICAL
-            marginEnd = (endFactor * navMarginEnd.toFloat()).toInt()
+            marginEnd = navMarginEnd
         }
         navButtonContainer.orientation = LinearLayout.HORIZONTAL
         navButtonContainer.layoutParams = navButtonParams
@@ -128,26 +128,18 @@ class TaskbarNavLayoutter(
                 navButtonContainer.addView(recentsButton)
             }
         }
+    }
 
-        // Add the spaces in between the nav buttons
-        val spaceInBetween = resources.getDimensionPixelSize(R.dimen.taskbar_button_space_inbetween)
-        val spaceInBetweenDiv = if (layoutMode == 0) 1 else 4
-        for (i in 0 until navButtonContainer.childCount) {
-            val navButton = navButtonContainer.getChildAt(i)
-            val buttonLayoutParams = navButton.layoutParams as LinearLayout.LayoutParams
-            buttonLayoutParams.weight = 0f
-            when (i) {
-                0 -> {
-                    buttonLayoutParams.marginEnd = spaceInBetween / 2
-                }
-                navButtonContainer.childCount - 1 -> {
-                    buttonLayoutParams.marginStart = spaceInBetween / 2
-                }
-                else -> {
-                    buttonLayoutParams.marginStart = (spaceInBetween / 2) / spaceInBetweenDiv
-                    buttonLayoutParams.marginEnd = (spaceInBetween / 2) / spaceInBetweenDiv
-                }
-            }
+    private fun calculateNavMarginEnd(
+        context: TaskbarActivityContext,
+        isA11yButtonPersistent: Boolean,
+    ): Int {
+        var marginEnd =
+            resources.getDimension(context.deviceProfile.inv.inlineNavButtonsEndSpacing).toInt()
+
+        val bottomRect = context.display.cutout?.boundingRectBottom
+        if (bottomRect != null && !bottomRect.isEmpty) {
+            marginEnd = bottomRect.width()
         }
 
         if (isA11yButtonPersistent && marginEnd < endContextualContainer.width) {

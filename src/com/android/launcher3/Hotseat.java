@@ -28,6 +28,7 @@ import android.content.Context;
 import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewDebug;
@@ -39,7 +40,6 @@ import androidx.annotation.Nullable;
 
 import com.android.launcher3.ShortcutAndWidgetContainer.TranslationProvider;
 import com.android.launcher3.celllayout.CellLayoutLayoutParams;
-import com.android.launcher3.dagger.LauncherComponentProvider;
 import com.android.launcher3.dragndrop.SystemDragItemInfo;
 import com.android.launcher3.homescreenfiles.HomeScreenFilesUtilsKt;
 import com.android.launcher3.model.data.ItemInfo;
@@ -109,7 +109,6 @@ public class Hotseat extends CellLayout implements Insettable {
 
     public Hotseat(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        mQsb = LauncherComponentProvider.get(context).getQsbWidgetFactory().createView(this);
 
         mQsb = LayoutInflater.from(context).inflate(R.layout.search_container_hotseat, this, false);
         addView(mQsb);
@@ -340,7 +339,7 @@ public class Hotseat extends CellLayout implements Insettable {
 
         DeviceProfile dp = mActivity.getDeviceProfile();
         
-        int qsbWidth = dp.isQsbInline
+        int qsbWidth = dp.getHotseatProfile().isQsbInline()
                 ? dp.getHotseatProfile().getQsbWidth()
                 : getShortcutsAndWidgets().getMeasuredWidth();
 

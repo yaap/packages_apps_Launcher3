@@ -291,7 +291,7 @@ public interface TaskShortcutFactory {
 
         public RemoveTaskSystemShortcut(int iconResId, int textResId,
                 RecentsViewContainer container, TaskContainer taskContainer) {
-            super(iconResId, textResId, container, taskContainer.getTaskView().getFirstItemInfo(),
+            super(iconResId, textResId, container, taskContainer.getItemInfo(),
                     taskContainer.getTaskView());
             mTaskContainer = taskContainer;
         }
@@ -308,7 +308,7 @@ public interface TaskShortcutFactory {
             IActivityManager iam = ActivityManagerNative.getDefault();
             try {
                 iam.forceStopPackage(packageName, UserHandle.USER_CURRENT);
-                String title = TaskUtils.getTitle(
+                String title = TaskUtils.INSTANCE.getTitle(
                         taskView.getContext(), mTaskContainer.getTask()).toString();
                 String text = String.format(
                         mTarget.asContext().getString(R.string.recents_app_killed), title);
@@ -316,13 +316,13 @@ public interface TaskShortcutFactory {
 
                 RecentsView<?, ?> recentsView = taskView.getRecentsView();
                 if (recentsView != null) {
-                    recentsView.dismissTaskView(taskView, true, true);
+                    recentsView.dismissTaskView(taskView, true);
                 }
             } catch (RemoteException e) { }
             RecentsView<?, ?> recentsView = taskView.getRecentsView();
             if (recentsView != null) {
                 dismissTaskMenuView();
-                recentsView.dismissTaskView(taskView, true, true);
+                recentsView.dismissTaskView(taskView, true);
             }
         }
     }

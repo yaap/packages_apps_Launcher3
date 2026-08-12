@@ -46,7 +46,6 @@ data class DeviceProperties(
     val isPhone: Boolean,
     val isTwoPanels: Boolean,
     val isLandscape: Boolean,
-    val isRotationAllowed: Boolean,
     val insets: Rect,
     val deviceConfiguration: DeviceConfiguration,
     val taskbarConfiguration: TaskbarConfiguration,
@@ -63,7 +62,6 @@ data class DeviceProperties(
             deviceConfiguration: DeviceConfiguration,
             isTaskbarDrawnInProcess: Boolean,
         ): DeviceProperties {
-            val isRotationAllowed = info.isRotationAllowed()
             val isLargeScreen = info.isLargeScreen(windowBounds)
             val windowX = windowBounds.bounds.left
             val windowY = windowBounds.bounds.top
@@ -88,7 +86,6 @@ data class DeviceProperties(
                 isPhone = !isLargeScreen,
                 isTwoPanels = isLargeScreen && deviceConfiguration.isMultiDisplay,
                 isLandscape = windowBounds.isLandscape,
-                isRotationAllowed = isRotationAllowed,
                 insets = windowBounds.insets,
                 deviceConfiguration = deviceConfiguration,
                 taskbarConfiguration =

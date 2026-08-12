@@ -733,7 +733,7 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
             alpha.setDuration(CONTENT_ALPHA_DURATION);
             alpha.setInterpolator(LINEAR);
 
-            if (!mDeviceProfile.getDeviceProperties().isTablet()) {
+            if (!mDeviceProfile.getDeviceProperties().isLargeScreen()) {
                 appsView.setLayerType(View.LAYER_TYPE_HARDWARE, null);
                 alpha.addListener(new AnimatorListenerAdapter() {
                     @Override
@@ -1036,8 +1036,8 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
                 final int windowCropWidth = crop.width();
                 final int windowCropHeight = crop.height();
                 if (rotationChange != 0) {
-                    Utilities.rotateBounds(crop, displayWidth,
-                            displayHeight, rotationChange);
+                    Utilities.rotateBounds(crop, mDeviceProfile.getDeviceProperties().getWidthPx(),
+                            mDeviceProfile.getDeviceProperties().getHeightPx(), rotationChange);
                 }
 
                 // Scale the size of the icon to match the size of the window crop.
@@ -1084,14 +1084,14 @@ public class QuickstepTransitionManager implements OnDeviceProfileChangeListener
                         matrix.setScale(scale, scale);
                         if (rotationChange == 1) {
                             matrix.postTranslate(windowTransY0,
-                                    displayWidth - (windowTransX0 + scaledCropWidth));
+                                    mDeviceProfile.getDeviceProperties().getWidthPx() - (windowTransX0 + scaledCropWidth));
                         } else if (rotationChange == 2) {
                             matrix.postTranslate(
-                                    displayWidth - (windowTransX0 + scaledCropWidth),
-                                    displayHeight - (windowTransY0 + scaledCropHeight));
+                                    mDeviceProfile.getDeviceProperties().getWidthPx() - (windowTransX0 + scaledCropWidth),
+                                    mDeviceProfile.getDeviceProperties().getHeightPx() - (windowTransY0 + scaledCropHeight));
                         } else if (rotationChange == 3) {
                             matrix.postTranslate(
-                                    displayHeight - (windowTransY0 + scaledCropHeight),
+                                    mDeviceProfile.getDeviceProperties().getHeightPx() - (windowTransY0 + scaledCropHeight),
                                     windowTransX0);
                         } else {
                             matrix.postTranslate(windowTransX0, windowTransY0);
