@@ -44,6 +44,11 @@ import com.android.quickstep.split.SplitSelectStateController;
  */
 public interface RecentsViewContainer extends ActivityContext, RecentsViewContainerInteractor {
 
+    /** Returns whether app bubbles are supported on this recents surface. */
+    default boolean areAppBubblesSupported() {
+        return false;
+    }
+
     /**
      * Returns an instance of an implementation of RecentsViewContainer
      * @param context will find instance of recentsViewContainer from given context.

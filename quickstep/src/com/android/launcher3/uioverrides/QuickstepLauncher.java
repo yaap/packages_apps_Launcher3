@@ -563,6 +563,11 @@ public class QuickstepLauncher extends Launcher implements RecentsViewContainer,
         return shortcuts.stream();
     }
 
+    @Override
+    public boolean areAppBubblesSupported() {
+        return mBubbleFeatureConfig != null && mBubbleFeatureConfig.areAppBubblesSupported();
+    }
+
     private boolean canContainerHavePinContextMenu(int container) {
         return container == CONTAINER_ALL_APPS
                 || container == CONTAINER_ALL_APPS_PREDICTION

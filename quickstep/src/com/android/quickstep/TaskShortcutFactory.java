@@ -128,6 +128,18 @@ public interface TaskShortcutFactory {
         }
     };
 
+    TaskShortcutFactory BUBBLE = new TaskShortcutFactory() {
+        @Override
+        public List<SystemShortcut> getShortcuts(RecentsViewContainer container,
+                TaskContainer taskContainer) {
+            if (!container.areAppBubblesSupported()) {
+                return null;
+            }
+            return createSingletonShortcutList(SystemShortcut.BUBBLE_SHORTCUT.getShortcut(
+                    container, taskContainer.getItemInfo(), taskContainer.getTaskView()));
+        }
+    };
+
     class SplitSelectSystemShortcut extends SystemShortcut {
         private final TaskContainer mTaskContainer;
         private final SplitPositionOption mSplitPositionOption;
