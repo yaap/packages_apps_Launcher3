@@ -820,6 +820,8 @@ public class ActivityAllAppsContainerView<T extends Context & ActivityContext>
             invalidateHeader();
         }
         getSearchView().setBackgroundResource(R.drawable.bg_all_apps_searchbox);
+        getSearchView().getBackground().mutate().setAlpha(
+                LauncherPrefs.APP_DRAWER_OPACITY.get(mContext) * 255 / 100);
         if (mSearchUiManager.getEditText() == null) {
             return;
         }
