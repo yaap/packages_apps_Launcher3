@@ -19,6 +19,8 @@
         <item>com.kiwibrowser.browser</item>
         <item>com.startpage.app</item>
         <item>rk.android.app.pixelsearch</item>
+        <item>eu.weblibre.gecko</item>
+        <item>eu.weblibre.gecko.alpha</item>
     </string-array>
 
     <string-array name="qsb_search_fallback_names" translatable="false">
@@ -40,5 +42,7 @@
         <item>@string/browser_name_kiwi</item>
         <item>@string/browser_name_startpage</item>
         <item>@string/browser_name_pixelsearch</item>
+        <item>@string/browser_name_weblibre</item>
+        <item>@string/browser_name_weblibre_alpha</item>
     </string-array>
 </resources>
