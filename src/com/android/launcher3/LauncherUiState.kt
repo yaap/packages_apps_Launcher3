@@ -31,6 +31,7 @@ class LauncherUiState {
     @Volatile var launcherState: LauncherState = LauncherState.NORMAL
     @Volatile var isOverlayShown = false
     @Volatile var taskbarAlignmentChannelAlpha = 0f
+    @Volatile var hideHomescreenBehindDrawer = false
 
     val splitScreenUiState = SplitScreenUiState()
     val deviceProfileRef = _deviceProfileRef.asListenable()

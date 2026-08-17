@@ -98,6 +98,10 @@
     <string name="pref_auto_keyboard_title">Auto keyboard</string>
     <string name="pref_auto_keyboard_summary">Start searching when the drawer is expanded</string>
 
+    <!-- Hide homescreen -->
+    <string name="pref_hide_homescreen_behind_drawer_title">Hide homescreen behind drawer</string>
+    <string name="pref_hide_homescreen_behind_drawer_summary">Hide the home screen contents (but not wallpaper) when the app drawer is open</string>
+
     <!-- Hide labels -->
     <string name="desktop_show_labels">Show icon labels on desktop</string>
     <string name="drawer_show_labels">Show icon labels in drawer</string>

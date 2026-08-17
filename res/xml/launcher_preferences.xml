@@ -124,6 +124,13 @@
             android:persistent="true" />
 
         <SwitchPreferenceCompat
+            android:key="pref_hide_homescreen_behind_drawer"
+            android:title="@string/pref_hide_homescreen_behind_drawer_title"
+            android:summary="@string/pref_hide_homescreen_behind_drawer_summary"
+            android:defaultValue="false"
+            android:persistent="true" />
+
+        <SwitchPreferenceCompat
             android:key="pref_drawer_show_labels"
             android:title="@string/drawer_show_labels"
             android:defaultValue="true"

@@ -157,6 +157,8 @@ public final class Utilities {
     public static final String KEY_APP_DRAWER_OPACITY = "pref_app_drawer_opacity";
     public static final String KEY_FORCE_MONOCHROME_ICONS = "pref_forced_monochrome_icons";
     public static final String KEY_AUTO_KEYABORD = "pref_auto_keyboard";
+    public static final String KEY_HIDE_HOMESCREEN_BEHIND_DRAWER =
+            "pref_hide_homescreen_behind_drawer";
     public static final String KEY_BLUR_DEPTH = "pref_blur_depth";
     public static final String KEY_MINUS_ONE = "pref_enable_minus_one";
     public static final String KEY_ALWAYS_SHOW_DOTS = "pref_always_show_dots";
@@ -1082,6 +1084,11 @@ public final class Utilities {
     public static boolean enableAutoIme(Context context) {
         SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
         return prefs.getBoolean(KEY_AUTO_KEYABORD, false);
+    }
+
+    public static boolean shouldHideHomescreenBehindDrawer(Context context) {
+        SharedPreferences prefs = LauncherPrefs.getPrefs(context.getApplicationContext());
+        return prefs.getBoolean(KEY_HIDE_HOMESCREEN_BEHIND_DRAWER, false);
     }
 
     public static boolean getAlwaysShowDots(Context context) {

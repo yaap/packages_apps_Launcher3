@@ -415,6 +415,10 @@ public class Launcher extends StatefulActivity<LauncherState>
                         case Utilities.KEY_BLUR_DEPTH:
                             mNeedsRestart = true;
                             break;
+                        case Utilities.KEY_HIDE_HOMESCREEN_BEHIND_DRAWER:
+                            mLauncherUiState.setHideHomescreenBehindDrawer(
+                                    Utilities.shouldHideHomescreenBehindDrawer(Launcher.this));
+                            break;
                         case Utilities.KEY_ALWAYS_SHOW_DOTS:
                             updateAlwaysShowDotsSetting();
                             break;
@@ -448,6 +452,8 @@ public class Launcher extends StatefulActivity<LauncherState>
         initDeviceProfile(idp);
         idp.addOnChangeListener(this);
         mSharedPrefs = LauncherPrefs.getPrefs(this);
+        mLauncherUiState.setHideHomescreenBehindDrawer(
+                Utilities.shouldHideHomescreenBehindDrawer(this));
         mAccessibilityDelegate = createAccessibilityDelegate();
 
         initDragController();

@@ -15,6 +15,8 @@
  */
 package com.android.launcher3.uioverrides.states;
 
+import static com.android.app.animation.Interpolators.DECELERATE_2;
+import static com.android.launcher3.Utilities.shouldHideHomescreenBehindDrawer;
 import static com.android.launcher3.Utilities.shouldReduceWorkspaceBlurUsage;
 import static com.android.launcher3.logging.StatsLogManager.LAUNCHER_STATE_ALLAPPS;
 
@@ -139,9 +141,33 @@ public class AllAppsState extends LauncherState {
     }
 
     @Override
+    public PageAlphaProvider getWorkspacePageAlphaProvider(Launcher launcher) {
+        PageAlphaProvider superPageAlphaProvider = super.getWorkspacePageAlphaProvider(launcher);
+        return new PageAlphaProvider(DECELERATE_2) {
+            @Override
+            public float getPageAlpha(int pageIndex) {
+                return isWorkspaceVisible(launcher.getDeviceProfile(), launcher)
+                        ? superPageAlphaProvider.getPageAlpha(pageIndex)
+                        : 0;
+            }
+        };
+    }
+
+    @Override
     public int getVisibleElements(LauncherUiState launcherUiState) {
+        boolean hideHomescreen = launcherUiState.getHideHomescreenBehindDrawer()
+                && !launcherUiState.getDeviceProfileRef().getValue().getDeviceProperties()
+                        .isLargeScreen();
+        if (hideHomescreen) {
+            return Flags.allAppsSurface() ? 0 : ALL_APPS_CONTENT;
+        }
         return Flags.allAppsSurface() ? HOTSEAT_ICONS
                 : ALL_APPS_CONTENT | FLOATING_SEARCH_BAR | HOTSEAT_ICONS;
+    }
+
+    private static boolean isWorkspaceVisible(DeviceProfile deviceProfile, Launcher launcher) {
+        return deviceProfile.getDeviceProperties().isLargeScreen()
+                || !shouldHideHomescreenBehindDrawer(launcher);
     }
 
     @Override

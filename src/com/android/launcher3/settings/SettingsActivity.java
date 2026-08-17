@@ -373,6 +373,9 @@ public class SettingsActivity extends FragmentActivity
                     );
                     return !info.isLargeScreen(info.realBounds);
 
+                case Utilities.KEY_HIDE_HOMESCREEN_BEHIND_DRAWER:
+                    return !info.isLargeScreen(info.realBounds);
+
                 case Utilities.KEY_DOCK_SEARCH:
                     mShowGoogleBarPref = preference;
                     updateIsGoogleAppEnabled();
