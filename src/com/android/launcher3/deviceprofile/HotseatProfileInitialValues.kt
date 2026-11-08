@@ -169,10 +169,10 @@ data class HotseatProfileInitialValues(
 
             val hotseatQsbHeight = qsbHeight
             val hotseatQsbShadowHeight =
-+                if (qsbHeight > 0) res.getDimensionPixelSize(R.dimen.qsb_shadow_height) else 0
+                if (qsbHeight > 0) res.getDimensionPixelSize(R.dimen.qsb_shadow_height) else 0
 
             var hotseatQsbSpace: Int =
-+                if (qsbHeight > 0) responsiveHotseatSpec.hotseatQsbSpace else 0
+                if (qsbHeight > 0) responsiveHotseatSpec.hotseatQsbSpace else 0
             val hotseatBarBottomSpace: Int = responsiveHotseatSpec.edgePadding
             var minQsbMargin = res.getDimensionPixelSize(R.dimen.min_qsb_margin)
 
@@ -290,10 +290,10 @@ data class HotseatProfileInitialValues(
                 res.getDimensionPixelSize(R.dimen.dynamic_grid_hotseat_side_padding)
             val hotseatQsbHeight = qsbHeight
             val hotseatQsbShadowHeight =
-+                if (qsbHeight > 0) res.getDimensionPixelSize(R.dimen.qsb_shadow_height) else 0
+                if (qsbHeight > 0) res.getDimensionPixelSize(R.dimen.qsb_shadow_height) else 0
             
             var hotseatQsbSpace =
-+                if (qsbHeight > 0) pxFromDp(inv.hotseatQsbSpace[typeIndex], metrics) else 0
+                if (qsbHeight > 0) pxFromDp(inv.hotseatQsbSpace[typeIndex], metrics) else 0
             var hotseatBarBottomSpace = pxFromDp(inv.hotseatBarBottomSpace[typeIndex], metrics)
 
             var minQsbMargin = res.getDimensionPixelSize(R.dimen.min_qsb_margin)
