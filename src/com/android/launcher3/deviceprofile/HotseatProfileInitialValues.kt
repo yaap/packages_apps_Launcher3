@@ -171,7 +171,8 @@ data class HotseatProfileInitialValues(
             val hotseatQsbShadowHeight =
 +                if (qsbHeight > 0) res.getDimensionPixelSize(R.dimen.qsb_shadow_height) else 0
 
-            var hotseatQsbSpace: Int = responsiveHotseatSpec.hotseatQsbSpace
+            var hotseatQsbSpace: Int =
++                if (qsbHeight > 0) responsiveHotseatSpec.hotseatQsbSpace else 0
             val hotseatBarBottomSpace: Int = responsiveHotseatSpec.edgePadding
             var minQsbMargin = res.getDimensionPixelSize(R.dimen.min_qsb_margin)
 
@@ -199,7 +200,6 @@ data class HotseatProfileInitialValues(
             // qsbVisualHeight is the total height of the QSB view, we leave some space at the top
             // and bottom for shadows, similar to the icon shadows.
             // This (2 * hotseatQsbShadowHeight) is to account for the top space and the bottom.
-            if (qsbHeight <= 0) hotseatQsbSpace = 0
             val qsbVisualHeight = hotseatQsbHeight - (2 * hotseatQsbShadowHeight)
             return HotseatProfileInitialValues(
                 areNavButtonsInline = areNavButtonsInline,
@@ -292,7 +292,8 @@ data class HotseatProfileInitialValues(
             val hotseatQsbShadowHeight =
 +                if (qsbHeight > 0) res.getDimensionPixelSize(R.dimen.qsb_shadow_height) else 0
             
-            var hotseatQsbSpace = pxFromDp(inv.hotseatQsbSpace[typeIndex], metrics)
+            var hotseatQsbSpace =
++                if (qsbHeight > 0) pxFromDp(inv.hotseatQsbSpace[typeIndex], metrics) else 0
             var hotseatBarBottomSpace = pxFromDp(inv.hotseatBarBottomSpace[typeIndex], metrics)
 
             var minQsbMargin = res.getDimensionPixelSize(R.dimen.min_qsb_margin)
@@ -325,7 +326,6 @@ data class HotseatProfileInitialValues(
 
             val barEdgePaddingPx = hotseatBarEdgePaddingPx
             val barWorkspaceSpacePx = hotseatBarWorkspaceSpacePx
-            if (qsbHeight <= 0) hotseatQsbSpace = 0
             val qsbVisualHeight = hotseatQsbHeight - 2 * hotseatQsbShadowHeight
             return HotseatProfileInitialValues(
                 areNavButtonsInline = areNavButtonsInline,
